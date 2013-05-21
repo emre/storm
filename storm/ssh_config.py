@@ -106,3 +106,9 @@ class ConfigParser(object):
 
         return file_content
 
+    def write_to_ssh_config(self):
+        f = open(self.ssh_config_file, 'w+')
+        f.write(self.dump())
+        f.close()
+
+        return self
