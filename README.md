@@ -71,5 +71,15 @@ $ storm delete_all
 all entries deleted.
 ```
 
+### known issues ###
+There are some reports on mac and oh my zsh setups that "command not found: storm" for main storm script.
+If you get this, make sure you have storm in your PATH.
+
+example:
+```
+export PATH=$PATH:/usr/local/share/python/; storm 
+```
+
+
 ### contributors ###
 <a href="http://github.com/ras0ir">Samed Beyribey</a> - PKGBUILD for Archlinux and testing excessive ssh configs.</a>
