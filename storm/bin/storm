@@ -54,7 +54,7 @@ def edit(name, host, user, port=22, id_file=""):
     try:
         result = storm_.edit_entry(name, host, user, port, id_file)
         return get_formatted_message(
-            '{0} edit successfully.'.format(
+            '"{0}" updated successfully.'.format(
                 name
             ), 'success')
     except StormValueError as error:

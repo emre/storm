@@ -1,8 +1,8 @@
 from distutils.core import setup
 
 setup(
-    name='storm',
-    version='0.1',
+    name='stormssh',
+    version='0.2',
     packages=['storm'],
     url='http://github.com/emre/storm',
     license='MIT',
