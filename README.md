@@ -64,3 +64,9 @@ Listing hosts:
   vps -> 22@emreyilmaz.me:22
   netscaler -> root@127.0.0.1:8081
 ```
+
+**deleting all hosts**
+```
+$ storm delete_all
+all entries deleted.
+```
