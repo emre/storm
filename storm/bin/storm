@@ -1,0 +1,72 @@
+#!/usr/bin/python
+
+from manage import Manager
+from storm import Storm
+from storm.exceptions import StormValueError
+
+from termcolor import colored
+
+manager = Manager()
+storm_ = Storm()
+
+
+def get_formatted_message(message, format_type):
+
+    def fixed_width(text, size):
+        text_width = len(text)
+        if size > text_width:
+            for i in range(text_width, size):
+                text = text + " "
+
+        return text
+
+    format_typed = fixed_width(format_type, 8)
+    all_message = ""
+    message = " %s" % message
+    if format_type == 'info':
+        all_message = colored(format_typed, 'white', 'on_grey')
+        all_message += message
+
+    if format_type == 'error':
+        all_message = colored(format_typed, 'white', 'on_red')
+        all_message += message
+    if format_type == 'success':
+        all_message = colored(format_typed, 'white', 'on_green')
+        all_message += message
+
+    return all_message
+
+
+@manager.command
+def add(name, host, user, port=22):
+    """
+    Adds a new entry to sshconfig.
+    """
+    try:
+        result = storm_.add_entry(name, host, user, port)
+        return get_formatted_message('{0} added to your ssh config. you can connect it by typing "ssh {0}".'.format(
+            name
+        ), 'success')
+    except StormValueError as error:
+        return get_formatted_message(error, 'error')
+
+
+@manager.command
+def edit(name, host, user, port=22):
+    """
+    Edits the related entry already defined in ssh config.
+    """
+    try:
+        result = storm_.edit_entry(name, host, user, port)
+        return get_formatted_message(
+            '{0} edit successfully.'.format(
+                name
+            ), 'success')
+    except StormValueError as error:
+        return get_formatted_message(error, 'error')
+
+
+manager.main()
+
+
+

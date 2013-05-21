@@ -74,14 +74,29 @@ class ConfigParser(object):
         for entry in config.__dict__.get("_config"):
             host_item = {
                 'host': entry["host"][0],
-                'options': entry["config"],
+                'options': entry.get("config"),
             }
 
             # minor bug in paramiko.SSHConfig that duplicates "Host *" entries.
-            if len(entry["config"]) > 0:
+            if entry.get("config") and len(entry.get("config")) > 0:
                 self.config_data.append(host_item)
 
         return self.config_data
+
+    def add_host(self, host, options):
+        self.config_data.append({
+            'host': host,
+            'options': options,
+        })
+
+        return self
+
+    def update_host(self, host, options):
+        for index, host_entry in enumerate(self.config_data):
+            if host_entry.get("host") == host:
+                self.config_data[index]["options"] = options
+
+        return self
 
     def dump(self):
         if len(self.config_data) < 1:
