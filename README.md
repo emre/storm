@@ -72,4 +72,4 @@ all entries deleted.
 ```
 
 ### contributors ###
-<a href="github.com/ras0ir">Samed Beyribey</a> - PKGBUILD for Archlinux and testing excessive ssh configs.</a>
+<a href="http://github.com/ras0ir">Samed Beyribey</a> - PKGBUILD for Archlinux and testing excessive ssh configs.</a>
