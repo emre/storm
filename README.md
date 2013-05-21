@@ -1,7 +1,9 @@
 storm
 =====
 
-storm is a command line tool to manage your hosts at sshconfig file.
+storm is a command line tool to manage your hosts at sshconfig.
+
+<img src="https://raw.github.com/emre/storm/master/ss.png">
 
 ### installation ###
 
