@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
 from os.path import expanduser
+from os.path import exists
 from paramiko.config import SSHConfig
 from exceptions import StormValueError
 
@@ -62,7 +63,11 @@ class ConfigParser(object):
     def __init__(self, ssh_config_file=None):
         if not ssh_config_file:
             ssh_config_file = self.get_default_ssh_config_file()
+
         self.ssh_config_file = ssh_config_file
+
+        if not exists(self.ssh_config_file):
+            open(self.ssh_config_file, 'w+').close()
 
         self.config_data = []
 
@@ -71,6 +76,7 @@ class ConfigParser(object):
 
     def load(self):
         config = StormConfig()
+
         config.parse(open(self.ssh_config_file))
         for entry in config.__dict__.get("_config"):
             host_item = {
