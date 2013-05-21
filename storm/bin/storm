@@ -37,12 +37,12 @@ def get_formatted_message(message, format_type):
 
 
 @manager.command
-def add(name, host, user, port=22):
+def add(name, host, user, port=22, id_file=""):
     """
     Adds a new entry to sshconfig.
     """
     try:
-        result = storm_.add_entry(name, host, user, port)
+        result = storm_.add_entry(name, host, user, port, id_file)
         return get_formatted_message('{0} added to your ssh config. you can connect it by typing "ssh {0}".'.format(
             name
         ), 'success')
@@ -51,12 +51,12 @@ def add(name, host, user, port=22):
 
 
 @manager.command
-def edit(name, host, user, port=22):
+def edit(name, host, user, port=22, id_file=None):
     """
     Edits the related entry already defined in ssh config.
     """
     try:
-        result = storm_.edit_entry(name, host, user, port)
+        result = storm_.edit_entry(name, host, user, port, id_file)
         return get_formatted_message(
             '{0} edit successfully.'.format(
                 name
@@ -94,8 +94,6 @@ def delete_all():
         storm_.delete_all_entries()
         return get_formatted_message('all entries deleted.', 'success')
     except Exception as error:
-        import traceback
-        print traceback.print_exc()
         return get_formatted_message(str(error), 'error')
 
 
