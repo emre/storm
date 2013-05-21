@@ -1,9 +1,5 @@
 #!/usr/bin/python
 
-import sys
-
-sys.path.append("../..")
-
 from manage import Manager
 from storm import Storm
 from storm.exceptions import StormValueError
@@ -51,7 +47,7 @@ def add(name, host, user, port=22, id_file=""):
 
 
 @manager.command
-def edit(name, host, user, port=22, id_file=None):
+def edit(name, host, user, port=22, id_file=""):
     """
     Edits the related entry already defined in ssh config.
     """

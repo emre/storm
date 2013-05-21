@@ -56,14 +56,14 @@ class Storm(object):
 
     def get_options(self, host, user, port, id_file):
         options = {
-            'Hostname': host,
+            'hostname': host,
             'user': user,
             'port': port,
         }
 
         if id_file:
             options.update({
-                'IdentityFile': id_file,
+                'identityfile': id_file,
             })
 
         return options

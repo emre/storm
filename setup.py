@@ -10,6 +10,6 @@ setup(
     author_email='mail@emreyilmaz.me',
     description='Management commands to ssh config files.',
     scripts=[
-        'bin/storm'
+        'storm/bin/storm'
     ],
 )
