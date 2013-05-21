@@ -31,14 +31,28 @@ class Storm(object):
 
         return True
 
-    def delete_entry(self):
-        raise NotImplementedError
+    def delete_entry(self, name):
+        self.ssh_config.delete_host(name)
+        self.ssh_config.write_to_ssh_config()
+
+        return True
 
     def list_entries(self):
-        raise NotImplementedError
+        result = "Listing hosts:\n"
+        for host in self.ssh_config.config_data:
+            result += "  {0} -> {1}@{2}:{3}\n".format(
+                host.get("host"),
+                host.get("options").get("user"),
+                host.get("options").get("hostname"),
+                host.get("options").get("port"),
+            )
 
-    def delete_all(self):
-        raise NotImplementedError
+        return result
+
+    def delete_all_entries(self):
+        self.ssh_config.delete_all_hosts()
+
+        return True
 
     def get_options(self, host, user, port):
         return {

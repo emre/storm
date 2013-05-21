@@ -2,6 +2,7 @@
 
 from os.path import expanduser
 from paramiko.config import SSHConfig
+from exceptions import StormValueError
 
 
 class StormConfig(SSHConfig):
@@ -98,6 +99,23 @@ class ConfigParser(object):
 
         return self
 
+    def delete_host(self, host):
+        found = 0
+        for index, host_entry in enumerate(self.config_data):
+            if host_entry.get("host") == host:
+                del self.config_data[index]
+                found += 1
+
+        if found == 0:
+            raise StormValueError('No host found')
+        return self
+
+    def delete_all_hosts(self):
+        self.config_data = []
+        self.write_to_ssh_config()
+
+        return self
+
     def dump(self):
         if len(self.config_data) < 1:
             return
@@ -123,7 +141,9 @@ class ConfigParser(object):
 
     def write_to_ssh_config(self):
         f = open(self.ssh_config_file, 'w+')
-        f.write(self.dump())
+        data = self.dump()
+        if data:
+            f.write(data)
         f.close()
 
         return self
