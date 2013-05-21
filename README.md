@@ -72,8 +72,7 @@ all entries deleted.
 ```
 
 ### known issues ###
-There are some reports on mac and oh my zsh setups that "command not found: storm" for main storm script.
-If you get this, make sure you have storm in your PATH.
+If you use zsh on mac and getting "command not found: storm" for main storm script, make sure you have storm in your PATH.
 
 example:
 ```
