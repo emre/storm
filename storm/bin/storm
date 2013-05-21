@@ -66,6 +66,9 @@ def edit(name, host, user, port=22):
 
 @manager.command
 def delete(name):
+    """
+    Deletes a single host.
+    """
     try:
         result = storm_.delete_entry(name)
         return get_formatted_message('hostname "{0}" deleted successfully.'.format(name), 'success')
@@ -74,6 +77,9 @@ def delete(name):
 
 @manager.command
 def list():
+    """
+    Lists all hosts from ssh config.
+    """
     try:
         return storm_.list_entries()
     except Exception as error:
@@ -81,6 +87,9 @@ def list():
 
 @manager.command
 def delete_all():
+    """
+    Deletes all hosts from ssh config.
+    """
     try:
         storm_.delete_all_entries()
         return get_formatted_message('all entries deleted.', 'success')
