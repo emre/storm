@@ -37,17 +37,13 @@ class Storm(object):
 
         return True
 
-    def list_entries(self):
-        result = "Listing hosts:\n"
-        for host in self.ssh_config.config_data:
-            result += "  {0} -> {1}@{2}:{3}\n".format(
-                host.get("host"),
-                host.get("options").get("user"),
-                host.get("options").get("hostname"),
-                host.get("options").get("port"),
-            )
+    def list_entries(self, order=False):
+        if order:
+            from operator import itemgetter
+            config_data = sorted(self.ssh_config.config_data, key=itemgetter("host"))
+            return config_data
 
-        return result
+        return self.ssh_config.config_data
 
     def delete_all_entries(self):
         self.ssh_config.delete_all_hosts()

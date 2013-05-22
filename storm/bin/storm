@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+
 from manage import Manager
 from storm import Storm
 from storm.exceptions import StormValueError
@@ -77,7 +78,20 @@ def list():
     Lists all hosts from ssh config.
     """
     try:
-        return storm_.list_entries()
+        result = 'listing entries:\n'
+        for host in storm_.list_entries(order=True):
+
+            if ' ' in host.get("options").get("hostname"):
+                host["options"]["hostname"] = host["options"]["hostname"].replace(" ", "|")
+
+            result += "  {0} -> {1}@{2}:{3}\n".format(
+                host["host"],
+                host.get("options").get("user"),
+                host.get("options").get("hostname"),
+                host.get("options").get("port")
+            )
+
+        return result
     except Exception as error:
         return get_formatted_message(str(error), 'error')
 
