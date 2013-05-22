@@ -7,7 +7,8 @@ arch=('any')
 url="https://github.com/emre/storm"
 license=('GPL')
 makedepends=('git')
-depends=('python2-managepy-git' 'python2-paramiko' 'python2-termcolor')
+depends=('python2-managepy-git' 'python2-paramiko' 'python2-termcolor' 
+    'argparse')
 
 _gitroot=git://github.com/emre/storm.git
 _gitname=storm
