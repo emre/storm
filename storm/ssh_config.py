@@ -82,7 +82,7 @@ class ConfigParser(object):
             for name in entry['host']:
                 host_item = {
                     'host': name,
-                        'options': entry.get("config"),
+                    'options': entry.get("config"),
                 }
 
                 # minor bug in paramiko.SSHConfig that duplicates 
