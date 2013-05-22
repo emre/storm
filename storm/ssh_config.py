@@ -17,7 +17,9 @@ class StormConfig(SSHConfig):
         host = {"host": ['*'], "config": {}}
         for line in file_obj:
             line = line.rstrip('\n').lstrip()
-            if (line == '') or (line[0] == '#'):
+            #Comment handling. Ignore anything after 1st #
+            line = line.split('#')[0]
+            if (line == ''):
                 continue
             if '=' in line:
                 # Ensure ProxyCommand gets properly split
@@ -36,7 +38,6 @@ class StormConfig(SSHConfig):
                     raise Exception('Unparsable line: %r' % line)
                 key = line[:i].lower()
                 value = line[i:].lstrip()
-
             if key == 'host':
                 self._config.append(host)
                 value = value.split()
@@ -49,7 +50,6 @@ class StormConfig(SSHConfig):
                     host['config'][key].append(value)
                 else:
                     host['config'][key] = [value]
-
             elif key not in host['config']:
                 host['config'].update({key: value})
         self._config.append(host)
@@ -79,14 +79,16 @@ class ConfigParser(object):
 
         config.parse(open(self.ssh_config_file))
         for entry in config.__dict__.get("_config"):
-            host_item = {
-                'host': entry["host"][0],
-                'options': entry.get("config"),
-            }
+            for name in entry['host']:
+                host_item = {
+                    'host': name,
+                        'options': entry.get("config"),
+                }
 
-            # minor bug in paramiko.SSHConfig that duplicates "Host *" entries.
-            if entry.get("config") and len(entry.get("config")) > 0:
-                self.config_data.append(host_item)
+                # minor bug in paramiko.SSHConfig that duplicates 
+                #"Host *" entries.
+                if entry.get("config") and len(entry.get("config")) > 0:
+                    self.config_data.append(host_item)
 
         return self.config_data
 

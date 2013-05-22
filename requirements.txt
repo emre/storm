@@ -1,3 +1,4 @@
 manage.py==0.1b3
 paramiko==1.10.1
 termcolor
+argparse

@@ -16,4 +16,5 @@ setup(
         "paramiko",
         "manage.py",
         "termcolor",
+        "argparse",
     ],)
