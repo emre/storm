@@ -3,7 +3,7 @@
 
 from manage import Manager
 from storm import Storm
-from storm.exceptions import StormValueError
+from storm.exceptions import StormValueError, NoHostname
 
 from termcolor import colored
 
@@ -80,7 +80,17 @@ def list():
     try:
         result = 'listing entries:\n'
         for host in storm_.list_entries(order=True):
-
+            if not host.get("options").get("hostname"):
+                if host["host"] == '*':
+                    host.get("options")['hostname'] = 'ALL'
+                    result += "  {0} -> {1}\n".format(
+                        host["host"],
+                        host.get("options").get("hostname"))
+                    for k in host.get("options"):              
+                        result += '\t'+k+': '+host.get("options")[k]+'\n'
+                    continue
+                else:
+                    raise NoHostname(host['host'])
             if ' ' in host.get("options").get("hostname"):
                 host["options"]["hostname"] = host["options"]["hostname"].replace(" ", "|")
 
