@@ -11,16 +11,16 @@ manager = Manager()
 storm_ = Storm()
 
 
+def fixed_width(text, size):
+    text_width = len(text)
+    if size > text_width:
+        for i in range(text_width, size):
+            text = text + " "
+
+    return text
+
+
 def get_formatted_message(message, format_type):
-
-    def fixed_width(text, size):
-        text_width = len(text)
-        if size > text_width:
-            for i in range(text_width, size):
-                text = text + " "
-
-        return text
-
     format_typed = fixed_width(format_type, 8)
     all_message = ""
     message = " %s" % message
@@ -79,18 +79,25 @@ def list():
     """
     try:
         result = 'listing entries:\n'
-        for host in storm_.list_entries(order=True):
+        result_stack = ""
+        for host in storm_.list_entries(True):
+            if not host.get("host") == "*":
+                result += "  {0} -> {1}@{2}:{3}\n".format(
+                    host["host"],
+                    host.get("options").get("user"),
+                    host.get("options").get("hostname"),
+                    host.get("options").get("port")
+                )
+            else:
+                result_stack = "  (*) -> "
+                for key, value in host.get("options").iteritems():
+                    result_stack += "{0}:{1}, ".format(
+                        key,
+                        value,
+                    )
+                result_stack = result_stack[0:-2] + "\n"
 
-            if ' ' in host.get("options").get("hostname"):
-                host["options"]["hostname"] = host["options"]["hostname"].replace(" ", "|")
-
-            result += "  {0} -> {1}@{2}:{3}\n".format(
-                host["host"],
-                host.get("options").get("user"),
-                host.get("options").get("hostname"),
-                host.get("options").get("port")
-            )
-
+        result += result_stack
         return result
     except Exception as error:
         return get_formatted_message(str(error), 'error')
