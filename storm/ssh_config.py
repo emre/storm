@@ -1,5 +1,7 @@
 # -*- coding: utf8 -*-
 
+from os import makedirs
+from os.path import dirname
 from os.path import expanduser
 from os.path import exists
 from paramiko.config import SSHConfig
@@ -67,6 +69,8 @@ class ConfigParser(object):
         self.ssh_config_file = ssh_config_file
 
         if not exists(self.ssh_config_file):
+            if not exists(dirname(self.ssh_config_file)):
+                makedirs(dirname(self.ssh_config_file))
             open(self.ssh_config_file, 'w+').close()
 
         self.config_data = []
