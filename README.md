@@ -72,5 +72,7 @@ example:
 
 ## contributors
 
--   <a href="http://github.com/ras0ir">Samed Beyribey</a> - PKGBUILD for Archlinux and testing excessive ssh configs.</a>
+-   <a href="http://github.com/ras0ir">@ras0ir</a> - PKGBUILD for Archlinux and testing excessive ssh configs.</a>
 -   <a href="http://github.com/benvand">@benvand</a>
+-   <a href="http://github.com/Bengt">@Bengt</a>
+-   <a href="http://github.com/emre">@henrysher</a>
