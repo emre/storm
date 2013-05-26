@@ -75,4 +75,4 @@ example:
 -   <a href="http://github.com/ras0ir">@ras0ir</a> - PKGBUILD for Archlinux and testing excessive ssh configs.</a>
 -   <a href="http://github.com/benvand">@benvand</a>
 -   <a href="http://github.com/Bengt">@Bengt</a>
--   <a href="http://github.com/emre">@henrysher</a>
+-   <a href="http://github.com/henrysher">@henrysher</a>
