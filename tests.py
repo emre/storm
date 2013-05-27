@@ -23,8 +23,7 @@ class StormTests(unittest.TestCase):
         self.storm = Storm('/tmp/ssh_config')
 
     def test_config_load(self):
-        self.assertEqual(len(self.storm.ssh_config.config_data), 2)
-        self.assertEqual(self.storm.ssh_config.config_data[0]["options"]["identitiesonly"], 'yes')
+        self.assertEqual(self.storm.ssh_config.config_data[1]["options"]["identitiesonly"], 'yes')
 
     def test_config_dump(self):
         self.storm.ssh_config.write_to_ssh_config()
@@ -34,14 +33,16 @@ class StormTests(unittest.TestCase):
 
     def test_update_host(self):
         self.storm.ssh_config.update_host("netscaler", {"hostname": "2.2.2.2"})
-        self.assertEqual(self.storm.ssh_config.config_data[1]["options"]["hostname"], '2.2.2.2')
+        self.assertEqual(self.storm.ssh_config.config_data[4]["options"]["hostname"], '2.2.2.2')
 
     def test_add_host(self):
         self.storm.add_entry('google', 'google.com', 'root', '22', '/tmp/tmp.pub')
         self.storm.ssh_config.write_to_ssh_config()
 
-        self.assertEqual(len(self.storm.ssh_config.config_data), 3)
-        self.assertEqual(self.storm.ssh_config.config_data[2]["options"]["hostname"], 'google.com')
+        for item in self.storm.ssh_config.config_data:
+            if item.get("host") == 'google':
+                self.assertEqual(item.get("options").get("port"), '22')
+                self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub')
 
     def test_edit_host(self):
 
@@ -51,8 +52,9 @@ class StormTests(unittest.TestCase):
         self.storm.edit_entry('google', 'google.com', 'root', '23', '/tmp/tmp.pub')
         self.storm.ssh_config.write_to_ssh_config()
 
-        self.assertEqual(len(self.storm.ssh_config.config_data), 3)
-        self.assertEqual(self.storm.ssh_config.config_data[2]["options"]["port"], '23')
+        for item in self.storm.ssh_config.config_data:
+            if item.get("host") == 'google':
+                self.assertEqual(item.get("options").get("port"), '23')
 
     def test_delete_host(self):
         self.storm.delete_entry('netscaler')
