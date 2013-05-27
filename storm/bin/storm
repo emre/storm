@@ -86,7 +86,7 @@ def list():
                     host["host"],
                     host.get("options").get("user"),
                     host.get("options").get("hostname"),
-                    host.get("options").get("port")
+                    host.get("options").get("port", 22)
                 )
             else:
                 result_stack = "  (*) -> "
