@@ -107,19 +107,22 @@ class ConfigParser(object):
                 self.config_data.append(entry)
                 continue
 
-            for name in entry['host']:
-                host_item = {
-                    'host': name,
-                    'options': entry.get("config"),
-                    'type': 'entry',
-                    'order': entry.get("order"),
-                }
+            host_item = {
+                'host': entry["host"][0],
+                'options': entry.get("config"),
+                'type': 'entry',
+                'order': entry.get("order"),
+            }
 
-                # minor bug in paramiko.SSHConfig that duplicates 
-                #"Host *" entries.
-                if entry.get("config") and len(entry.get("config")) > 0:
-                    self.config_data.append(host_item)
+            if len(entry["host"]) > 1:
+                host_item.update({
+                    'host': " ".join(entry["host"]),
+                })
 
+            # minor bug in paramiko.SSHConfig that duplicates
+            #"Host *" entries.
+            if entry.get("config") and len(entry.get("config")) > 0:
+                self.config_data.append(host_item)
         return self.config_data
 
     def add_host(self, host, options):
