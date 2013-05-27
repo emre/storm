@@ -5,6 +5,8 @@ from os.path import dirname
 from os.path import expanduser
 from os.path import exists
 from paramiko.config import SSHConfig
+from operator import itemgetter
+
 from exceptions import StormValueError
 
 
@@ -16,13 +18,23 @@ class StormConfig(SSHConfig):
         @param file_obj: a file-like object to read the config file from
         @type file_obj: file
         """
-        host = {"host": ['*'], "config": {}}
+        order = 1
+        host = {"host": ['*'], "config": {},}
         for line in file_obj:
             line = line.rstrip('\n').lstrip()
-            #Comment handling. Ignore anything after 1st #
-            line = line.split('#')[0]
-            if (line == ''):
+            if line == '':
                 continue
+
+            if line.startswith('#'):
+                self._config.append({
+                    'type': 'comment',
+                    'value': line,
+                    'host': '',
+                    'order': order,
+                })
+                order += 1
+                continue
+
             if '=' in line:
                 # Ensure ProxyCommand gets properly split
                 if line.lower().strip().startswith('proxycommand'):
@@ -43,7 +55,8 @@ class StormConfig(SSHConfig):
             if key == 'host':
                 self._config.append(host)
                 value = value.split()
-                host = {key: value, 'config': {}}
+                host = {key: value, 'config': {}, 'type': 'entry', 'order': order}
+                order += 1
             #identityfile is a special case, since it is allowed to be
             # specified multiple times and they should be tried in order
             # of specification.
@@ -83,10 +96,16 @@ class ConfigParser(object):
 
         config.parse(open(self.ssh_config_file))
         for entry in config.__dict__.get("_config"):
+            if entry.get("type") == 'comment':
+                self.config_data.append(entry)
+                continue
+
             for name in entry['host']:
                 host_item = {
                     'host': name,
                     'options': entry.get("config"),
+                    'type': 'entry',
+                    'order': entry.get("order"),
                 }
 
                 # minor bug in paramiko.SSHConfig that duplicates 
@@ -100,6 +119,7 @@ class ConfigParser(object):
         self.config_data.append({
             'host': host,
             'options': options,
+            'order': self.get_last_index(),
         })
 
         return self
@@ -133,21 +153,26 @@ class ConfigParser(object):
             return
 
         file_content = ""
+        self.config_data = sorted(self.config_data, key=itemgetter("order"))
+
         for host_item in self.config_data:
-            host_item_content = "Host {0}\n".format(host_item.get("host"))
-            for key, value in host_item.get("options").iteritems():
-                if isinstance(value, list):
-                    sub_content = ""
-                    for value_ in value:
-                        sub_content += "    {0} {1}\n".format(
-                            key, value_
+            if host_item.get("type") == 'comment':
+                file_content += host_item.get("value") + "\n"
+            else:
+                host_item_content = "Host {0}\n".format(host_item.get("host"))
+                for key, value in host_item.get("options").iteritems():
+                    if isinstance(value, list):
+                        sub_content = ""
+                        for value_ in value:
+                            sub_content += "    {0} {1}\n".format(
+                                key, value_
+                            )
+                        host_item_content += sub_content
+                    else:
+                        host_item_content += "    {0} {1}\n".format(
+                            key, value
                         )
-                    host_item_content += sub_content
-                else:
-                    host_item_content += "    {0} {1}\n".format(
-                        key, value
-                    )
-            file_content += host_item_content
+                file_content += host_item_content
 
         return file_content
 
@@ -159,3 +184,14 @@ class ConfigParser(object):
         f.close()
 
         return self
+
+    def get_last_index(self):
+        last_index = 0
+        indexes = []
+        for item in self.config_data:
+            if item.get("order"):
+                indexes.append(item.get("order"))
+        if len(indexes) > 0:
+            last_index = max(indexes)
+
+        return last_index

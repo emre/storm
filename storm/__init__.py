@@ -3,6 +3,8 @@
 from ssh_config import ConfigParser
 from exceptions import StormValueError
 
+from operator import itemgetter
+
 
 class Storm(object):
 
@@ -39,7 +41,6 @@ class Storm(object):
 
     def list_entries(self, order=False):
         if order:
-            from operator import itemgetter
             config_data = sorted(self.ssh_config.config_data, key=itemgetter("host"))
             return config_data
 

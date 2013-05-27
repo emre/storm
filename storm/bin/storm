@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-
 from manage import Manager
 from storm import Storm
 from storm.exceptions import StormValueError
@@ -81,21 +80,23 @@ def list():
         result = 'listing entries:\n'
         result_stack = ""
         for host in storm_.list_entries(True):
-            if not host.get("host") == "*":
-                result += "  {0} -> {1}@{2}:{3}\n".format(
-                    host["host"],
-                    host.get("options").get("user"),
-                    host.get("options").get("hostname"),
-                    host.get("options").get("port", 22)
-                )
-            else:
-                result_stack = "  (*) -> "
-                for key, value in host.get("options").iteritems():
-                    result_stack += "{0}:{1}, ".format(
-                        key,
-                        value,
+
+            if host.get("type") == 'entry':
+                if not host.get("host") == "*":
+                    result += "  {0} -> {1}@{2}:{3}\n".format(
+                        host["host"],
+                        host.get("options").get("user"),
+                        host.get("options").get("hostname"),
+                        host.get("options").get("port", 22)
                     )
-                result_stack = result_stack[0:-2] + "\n"
+                else:
+                    result_stack = "  (*) -> "
+                    for key, value in host.get("options").iteritems():
+                        result_stack += "{0}:{1}, ".format(
+                            key,
+                            value,
+                        )
+                    result_stack = result_stack[0:-2] + "\n"
 
         result += result_stack
         return result
