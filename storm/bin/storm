@@ -52,6 +52,8 @@ def edit(name, host, user, port=22, id_file=""):
     Edits the related entry already defined in ssh config.
     """
     try:
+        if ',' in name:
+            name = " ".join(name.split(","))
         result = storm_.edit_entry(name, host, user, port, id_file)
         return get_formatted_message(
             '"{0}" updated successfully.'.format(
