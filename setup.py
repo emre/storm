@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='stormssh',
-    version='0.2.7',
+    version='0.2.9',
     packages=['storm'],
     url='http://github.com/emre/storm',
     license='MIT',
