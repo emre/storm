@@ -76,3 +76,4 @@ example:
 -   <a href="http://github.com/benvand">@benvand</a>
 -   <a href="http://github.com/Bengt">@Bengt</a>
 -   <a href="http://github.com/henrysher">@henrysher</a>
+-   <a href="http://github.com/playpauseandstop">@playpauseandstop</a>
