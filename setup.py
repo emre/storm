@@ -1,3 +1,5 @@
+import sys
+
 from distutils.core import setup
 
 setup(
@@ -12,9 +14,9 @@ setup(
     scripts=[
         'storm/bin/storm'
     ],
-    install_requires=[
+    install_requires=list(filter(None, [
         "paramiko",
         "manage.py",
         "termcolor",
-        "argparse",
-    ],)
+        "argparse" if sys.version_info[:2] < (2, 7) else None,
+    ])),)
