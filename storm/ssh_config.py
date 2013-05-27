@@ -23,6 +23,13 @@ class StormConfig(SSHConfig):
         for line in file_obj:
             line = line.rstrip('\n').lstrip()
             if line == '':
+                self._config.append({
+                    'type': 'empty_line',
+                    'value': line,
+                    'host': '',
+                    'order': order,
+                })
+                order += 1
                 continue
 
             if line.startswith('#'):
@@ -96,7 +103,7 @@ class ConfigParser(object):
 
         config.parse(open(self.ssh_config_file))
         for entry in config.__dict__.get("_config"):
-            if entry.get("type") == 'comment':
+            if entry.get("type") in ["comment", "empty_line"]:
                 self.config_data.append(entry)
                 continue
 
@@ -156,7 +163,7 @@ class ConfigParser(object):
         self.config_data = sorted(self.config_data, key=itemgetter("order"))
 
         for host_item in self.config_data:
-            if host_item.get("type") == 'comment':
+            if host_item.get("type") in ['comment', 'empty_line']:
                 file_content += host_item.get("value") + "\n"
             else:
                 host_item_content = "Host {0}\n".format(host_item.get("host"))
