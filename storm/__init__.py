@@ -51,6 +51,9 @@ class Storm(object):
 
         return True
 
+    def search_host(self, search_string):
+        return self.ssh_config.search_host(search_string)
+
     def get_options(self, host, user, port, id_file):
         options = {
             'hostname': host,

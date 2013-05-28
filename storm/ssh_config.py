@@ -6,6 +6,7 @@ from os.path import expanduser
 from os.path import exists
 from paramiko.config import SSHConfig
 from operator import itemgetter
+import getpass
 
 from exceptions import StormValueError
 
@@ -140,6 +141,27 @@ class ConfigParser(object):
                 self.config_data[index]["options"] = options
 
         return self
+
+    def search_host(self, search_string):
+        results = []
+        for host_entry in self.config_data:
+            if host_entry.get("type") == 'entry':
+                searchable_information = host_entry.get("host")
+                for key, value in host_entry.get("options").items():
+                    if isinstance(value, list):
+                        value = " ".join(value)
+
+                    searchable_information += " " + value
+
+                if search_string in searchable_information:
+                    results.append("  {0} -> {1}@{2}:{3}\n".format(
+                        host_entry.get("host"),
+                        host_entry.get("options").get("user", getpass.getuser()),
+                        host_entry.get("options").get("hostname"),
+                        host_entry.get("options").get("port", 22),
+                    ))
+
+        return results
 
     def delete_host(self, host):
         found = 0

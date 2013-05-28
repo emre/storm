@@ -1,7 +1,10 @@
 import unittest
 import os
+import getpass
 
 from storm import Storm
+from storm.ssh_uri_parser import parse
+from storm.exceptions import StormInvalidPortError
 
 
 class StormTests(unittest.TestCase):
@@ -64,6 +67,25 @@ class StormTests(unittest.TestCase):
     def test99_delete_all(self):
         self.storm.delete_all_entries()
         self.assertEqual(len(self.storm.ssh_config.config_data), 0)
+
+    def test_uri_parser(self):
+        user = getpass.getuser()
+        TEST_STRINGS = [
+            ('root@emreyilmaz.me:22', ('root', 'emreyilmaz.me', 22)),
+            ('emreyilmaz.me', (user, 'emreyilmaz.me', 22)),
+            ('emreyilmaz.me:22', (user, 'emreyilmaz.me', 22)),
+            ('root@emreyilmaz.me', ('root', 'emreyilmaz.me', 22))
+        ]
+
+        for uri in TEST_STRINGS:
+            self.assertEqual(parse(uri[0]), uri[1])
+
+        # false strings
+        self.assertRaises(StormInvalidPortError, parse, 'root@emreyilmaz.me:string-port')
+
+    def test_search_host(self):
+        results = self.storm.ssh_config.search_host("netsca")
+        self.assertEqual(len(results), 1)
 
     def tearDown(self):
         os.unlink('/tmp/ssh_config')
