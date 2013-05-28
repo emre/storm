@@ -52,7 +52,17 @@ class Storm(object):
         return True
 
     def search_host(self, search_string):
-        return self.ssh_config.search_host(search_string)
+        results = self.ssh_config.search_host(search_string)
+        formatted_results = []
+        for host_entry in results:
+            formatted_results.append("  {0} -> {1}@{2}:{3}\n".format(
+                host_entry.get("host"),
+                host_entry.get("options").get("user", getpass.getuser()),
+                host_entry.get("options").get("hostname"),
+                host_entry.get("options").get("port", 22),
+            ))
+
+        return formatted_results
 
     def get_options(self, host, user, port, id_file):
         options = {

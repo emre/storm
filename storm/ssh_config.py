@@ -150,16 +150,13 @@ class ConfigParser(object):
                 for key, value in host_entry.get("options").items():
                     if isinstance(value, list):
                         value = " ".join(value)
+                    if isinstance(value, int):
+                        value = str(value)
 
                     searchable_information += " " + value
 
                 if search_string in searchable_information:
-                    results.append("  {0} -> {1}@{2}:{3}\n".format(
-                        host_entry.get("host"),
-                        host_entry.get("options").get("user", getpass.getuser()),
-                        host_entry.get("options").get("hostname"),
-                        host_entry.get("options").get("port", 22),
-                    ))
+                    results.append(host_entry)
 
         return results
 
