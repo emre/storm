@@ -123,8 +123,6 @@ def search(search_text):
         return message
 
     except Exception as error:
-        import traceback
-        print traceback.print_exc()
         return get_formatted_message(str(error), 'error')
 
 
