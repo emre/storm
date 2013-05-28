@@ -21,24 +21,24 @@ or download add storm directory to the your `$PATH`. E.g.
 
 ### adding hosts
 
-    $ storm add [-h] [--port PORT] [--id_file ID_FILE] name host user
+    $ storm add [-h]  [--id_file ID_FILE] name connection_uri
 
-Where `-h`, `id_file` and `port` are optional arguments.
+Where `-h`, `id_file` are optional arguments.
 
 example:
 
-    $ storm add my_vps emreyilmaz.me root
+    $ storm add my_vps root@emreyilmaz.me:22
     my_vps added to your ssh config. you can connect it by typing "ssh my_vps".
 
 ### modifying hosts
 
-    storm edit [-h] [--port PORT] [--id_file ID_FILE] name host user
+    storm edit [-h] [--id_file ID_FILE] name connection_uri
 
-Where `-h`, `id_file` and `port` are optional arguments.
+Where `-h`, `id_file` are optional arguments.
 
 example:
 
-    $ storm edit my_vps emreyilmaz.me emre --port=88
+    $ storm edit my_vps emre@emreyilmaz.me:2400
     "my_vps" updated successfully.
 
 ### deleting a single host
@@ -49,6 +49,12 @@ example:
 
     $ storm delete my_vps
     success hostname "my_vps" deleted successfully.
+    
+### searching hosts
+    $ storm search git
+    Listing results for git:
+      github -> emre@github.com:22
+
 
 ### listing hosts
 
@@ -69,6 +75,14 @@ If you use zsh on a mac and get "command not found: storm" for main storm script
 example:
 
     $ export PATH=$PATH:/usr/local/share/python/; storm
+    
+## connection_uri format
+
+    - user@server:port
+    - server:port
+    - server
+        
+defaults for user -> $USER, port -> 22
 
 ## contributors
 
