@@ -83,3 +83,5 @@ class Storm(object):
             if host_.get("host") == host:
                 return True
         return False
+
+__version__ = '0.3.5'
