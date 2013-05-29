@@ -6,9 +6,12 @@ from storm.exceptions import StormValueError
 from storm.ssh_uri_parser import parse
 
 from termcolor import colored
+import getpass
 
 manager = Manager()
 storm_ = Storm()
+
+default_user = getpass.getuser()
 
 
 def fixed_width(text, size):
@@ -91,17 +94,25 @@ def list():
                 if not host.get("host") == "*":
                     result += "  {0} -> {1}@{2}:{3}\n".format(
                         host["host"],
-                        host.get("options").get("user"),
-                        host.get("options").get("hostname"),
+                        host.get("options").get("user", default_user),
+                        host.get("options").get("hostname", "[hostname_not_specified]"),
                         host.get("options").get("port", 22)
                     )
                 else:
                     result_stack = "  (*) -> "
                     for key, value in host.get("options").iteritems():
-                        result_stack += "{0}:{1}, ".format(
-                            key,
-                            value,
-                        )
+                        value_to_str = ""
+                        if isinstance(value, type([])):
+                            result_stack += "{0}:\n".format(key)
+                            for value_ in value:
+                                result_stack += "    {0}\n".format(
+                                    value_
+                                )
+                        else:
+                            result_stack += "    {0}:{1}\n".format(
+                                key,
+                                value,
+                            )
                     result_stack = result_stack[0:-2] + "\n"
 
         result += result_stack
