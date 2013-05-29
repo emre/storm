@@ -9,6 +9,7 @@ from operator import itemgetter
 import getpass
 
 from exceptions import StormValueError
+from paramiko.config import proxy_re
 
 
 class StormConfig(SSHConfig):
