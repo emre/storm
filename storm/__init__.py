@@ -5,6 +5,8 @@ from exceptions import StormValueError
 
 from operator import itemgetter
 
+import getpass
+
 
 class Storm(object):
 
