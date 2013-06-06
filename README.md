@@ -16,6 +16,8 @@ or download add storm directory to the your `$PATH`. E.g.
 
     $ git clone git://github.com/emre/storm.git
     $ export PATH=$PATH:`pwd`/storm/storm/bin/; storm
+    
+You have install the <a href="https://github.com/emre/storm/blob/master/requirements.txt">dependencies</a> first. 
 
 ## getting started
 
