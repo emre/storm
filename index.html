@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Storm by emre</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Storm</h1>
+        <p class="header">Manage your SSH like a boss.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/emre/storm/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/emre/storm/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/emre/storm">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/emre">emre</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="storm" class="anchor" href="#storm"><span class="octicon octicon-link"></span></a>storm</h1>
+
+<p>storm is a command line tool to manage your ssh connections.</p>
+
+<p><img src="https://raw.github.com/emre/storm/master/ss.png"></p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>installation</h2>
+
+<pre><code>$ [sudo] pip install stormssh
+</code></pre>
+
+<p>or if you like 90s:</p>
+
+<pre><code>$ [sudo] easy_install stormssh
+</code></pre>
+
+<p>or download add storm directory to the your <code>$PATH</code>. E.g.</p>
+
+<pre><code>$ git clone git://github.com/emre/storm.git
+$ export PATH=$PATH:`pwd`/storm/storm/bin/; storm
+</code></pre>
+
+<p>and install <a href="https://github.com/emre/storm/blob/master/requirements.txt">dependencies</a>. </p>
+
+<h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>getting started</h2>
+
+<h3>
+<a name="adding-hosts" class="anchor" href="#adding-hosts"><span class="octicon octicon-link"></span></a>adding hosts</h3>
+
+<pre><code>$ storm add [-h]  [--id_file ID_FILE] name connection_uri
+</code></pre>
+
+<p>Where <code>-h</code>, <code>id_file</code> are optional arguments.</p>
+
+<p>example:</p>
+
+<pre><code>$ storm add my_vps root@emreyilmaz.me:22
+my_vps added to your ssh config. you can connect it by typing "ssh my_vps".
+</code></pre>
+
+<h3>
+<a name="modifying-hosts" class="anchor" href="#modifying-hosts"><span class="octicon octicon-link"></span></a>modifying hosts</h3>
+
+<pre><code>storm edit [-h] [--id_file ID_FILE] name connection_uri
+</code></pre>
+
+<p>Where <code>-h</code>, <code>id_file</code> are optional arguments.</p>
+
+<p>example:</p>
+
+<pre><code>$ storm edit my_vps emre@emreyilmaz.me:2400
+"my_vps" updated successfully.
+</code></pre>
+
+<h3>
+<a name="deleting-a-single-host" class="anchor" href="#deleting-a-single-host"><span class="octicon octicon-link"></span></a>deleting a single host</h3>
+
+<pre><code>$ storm delete name
+</code></pre>
+
+<p>example:</p>
+
+<pre><code>$ storm delete my_vps
+success hostname "my_vps" deleted successfully.
+</code></pre>
+
+<h3>
+<a name="searching-hosts" class="anchor" href="#searching-hosts"><span class="octicon octicon-link"></span></a>searching hosts</h3>
+
+<pre><code>$ storm search git
+Listing results for git:
+  github -&gt; emre@github.com:22
+</code></pre>
+
+<h3>
+<a name="listing-hosts" class="anchor" href="#listing-hosts"><span class="octicon octicon-link"></span></a>listing hosts</h3>
+
+<pre><code>$ storm list
+Listing hosts:
+  vps -&gt; 22@emreyilmaz.me:22
+  netscaler -&gt; root@127.0.0.1:8081
+</code></pre>
+
+<h3>
+<a name="deleting-all-hosts" class="anchor" href="#deleting-all-hosts"><span class="octicon octicon-link"></span></a>deleting all hosts</h3>
+
+<pre><code>$ storm delete_all
+all entries deleted.
+</code></pre>
+
+<h2>
+<a name="known-issues" class="anchor" href="#known-issues"><span class="octicon octicon-link"></span></a>known issues</h2>
+
+<p>If you use zsh on a mac and get "command not found: storm" for main storm script, make sure you have storm in your PATH.</p>
+
+<p>example:</p>
+
+<pre><code>$ export PATH=$PATH:/usr/local/share/python/; storm
+</code></pre>
+
+<h2>
+<a name="connection_uri-format" class="anchor" href="#connection_uri-format"><span class="octicon octicon-link"></span></a>connection_uri format</h2>
+
+<pre><code>- user@server:port
+- server:port
+- server
+</code></pre>
+
+<p>defaults for user -&gt; $USER, port -&gt; 22</p>
+
+<p>/see <a href="https://github.com/emre/storm/blob/master/storm/ssh_uri_parser.py">ssh_uri_parser</a> for further look.</p>
+
+<h2>
+<a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>contributors</h2>
+
+<ul>
+<li>  <a href="http://github.com/ras0ir">@ras0ir</a> - PKGBUILD for Archlinux and testing excessive ssh configs.</li>
+<li>  <a href="http://github.com/benvand">@benvand</a>
+</li>
+<li>  <a href="http://github.com/Bengt">@Bengt</a>
+</li>
+<li>  <a href="http://github.com/henrysher">@henrysher</a>
+</li>
+<li>  <a href="http://github.com/playpauseandstop">@playpauseandstop</a> </li>
+</ul>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
