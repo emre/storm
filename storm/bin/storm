@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-
 try:
     from manage import Manager
 except ImportError:
@@ -11,6 +10,7 @@ except ImportError:
         raise Exception('manage.py library is not installed.')
 
 from storm import Storm
+from storm import __version__
 from storm.exceptions import StormValueError
 from storm.ssh_uri_parser import parse
 
@@ -43,6 +43,14 @@ def get_formatted_message(message, format_type):
         all_message = colored(format_typed, 'white', 'on_green')
 
     return all_message+message
+
+
+@manager.command
+def version():
+    """
+    prints the working storm(ssh) version.
+    """
+    return __version__
 
 
 @manager.command
@@ -83,6 +91,7 @@ def edit(name, connection_uri, id_file=""):
     except StormValueError as error:
         return get_formatted_message(error, 'error')
 
+
 @manager.command
 def delete(name):
     """
@@ -93,6 +102,7 @@ def delete(name):
         return get_formatted_message('hostname "{0}" deleted successfully.'.format(name), 'success')
     except StormValueError as error:
         return get_formatted_message(error, 'error')
+
 
 @manager.command
 def list():
@@ -133,6 +143,7 @@ def list():
         return result
     except Exception as error:
         return get_formatted_message(str(error), 'error')
+
 
 @manager.command
 def search(search_text):
