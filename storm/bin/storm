@@ -1,7 +1,15 @@
 #!/usr/bin/python
 
 
-from manage import Manager
+try:
+    from manage import Manager
+except ImportError:
+    # since manage.py library changed its api, try to import with the old syntax.
+    try:
+        from manager import Manager
+    except ImportError:
+        raise Exception('manage.py library is not installed.')
+
 from storm import Storm
 from storm.exceptions import StormValueError
 from storm.ssh_uri_parser import parse
