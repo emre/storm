@@ -27,7 +27,7 @@ def fixed_width(text, size):
     text_width = len(text)
     if size > text_width:
         for i in range(text_width, size):
-            text = text + " "
+            text += " "
 
     return text
 
