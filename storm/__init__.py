@@ -16,22 +16,22 @@ class Storm(object):
         self.ssh_config = ConfigParser(ssh_config_file)
         self.ssh_config.load()
 
-    def add_entry(self, name, host, user, port, id_file):
+    def add_entry(self, name, host, user, port, id_file, custom_options=[]):
         if self.is_host_in(name):
             raise StormValueError('{0} is already in your sshconfig. use storm edit command to modify.'.format(name))
 
-        options = self.get_options(host, user, port, id_file)
+        options = self.get_options(host, user, port, id_file, custom_options)
 
         self.ssh_config.add_host(name, options)
         self.ssh_config.write_to_ssh_config()
 
         return True
 
-    def edit_entry(self, name, host, user, port, id_file):
+    def edit_entry(self, name, host, user, port, id_file, custom_options=[]):
         if not self.is_host_in(name):
             raise StormValueError('{0} doesn\'t exists in your sshconfig. use storm add command to add.'.format(name))
 
-        options = self.get_options(host, user, port, id_file)
+        options = self.get_options(host, user, port, id_file, custom_options)
         self.ssh_config.update_host(name, options)
         self.ssh_config.write_to_ssh_config()
 
@@ -68,7 +68,7 @@ class Storm(object):
 
         return formatted_results
 
-    def get_options(self, host, user, port, id_file):
+    def get_options(self, host, user, port, id_file, custom_options):
         options = {
             'hostname': host,
             'user': user,
@@ -79,6 +79,14 @@ class Storm(object):
             options.update({
                 'identityfile': id_file,
             })
+
+        if len(custom_options) > 0:
+            for custom_option in custom_options:
+                if '=' in custom_option:
+                    key, value = custom_option.split("=")[0:2]
+                options.update({
+                    key: value,
+                })
 
         return options
 
