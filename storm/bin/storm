@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
+
 import getpass
+import __builtin__
 
 from storm import Storm
 from storm import __version__
@@ -98,18 +100,36 @@ def list():
     Lists all hosts from ssh config.
     """
     try:
-        result = 'listing entries:\n'
+        result = colored('listing entries:\n\n', 'white')
         result_stack = ""
         for host in storm_.list_entries(True):
 
             if host.get("type") == 'entry':
                 if not host.get("host") == "*":
-                    result += "  {0} -> {1}@{2}:{3}\n".format(
-                        host["host"],
+                    result += "    {0} -> {1}@{2}:{3}".format(
+                        colored(host["host"], 'white'),
                         host.get("options").get("user", default_user),
                         host.get("options").get("hostname", "[hostname_not_specified]"),
                         host.get("options").get("port", 22)
                     )
+
+                    extra = False
+                    for key, value in host.get("options").iteritems():
+
+                        if not key in ["user", "hostname", "port"]:
+                            if not extra:
+                                custom_options = colored('\n\t[custom options] ', 'white')
+                                result += " {0}".format(custom_options)
+                            extra = True
+
+                            if isinstance(value, __builtin__.list):
+                                value = ",".join(value)
+
+                            result += "{0}={1} ".format(key, value)
+                    if extra:
+                        result = result[0:-1]
+
+                    result += "\n\n"
                 else:
                     result_stack = "  (*) -> "
                     for key, value in host.get("options").iteritems():
@@ -141,9 +161,11 @@ def search(search_text):
         results = storm_.search_host(search_text)
         if len(results) == 0:
             print ('no results found.')
-        message = 'Listing results for {0}:\n'.format(search_text)
-        message += "".join(results)
-        print message
+
+        if len(results) > 0:
+            message = 'Listing results for {0}:\n'.format(search_text)
+            message += "".join(results)
+            print message
     except Exception as error:
         print get_formatted_message(str(error), 'error')
 

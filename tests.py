@@ -87,6 +87,32 @@ class StormTests(unittest.TestCase):
         results = self.storm.ssh_config.search_host("netsca")
         self.assertEqual(len(results), 1)
 
+    def test_custom_options(self):
+        custom_options= [
+            "StrictHostKeyChecking=no",
+            "UserKnownHostsFile=/dev/null",
+        ]
+        self.storm.add_entry('host_with_custom_option', 'emre.io', 'emre', 22, None, custom_options=custom_options)
+        self.storm.ssh_config.write_to_ssh_config()
+
+        for item in self.storm.ssh_config.config_data:
+            if item.get("host") == 'host_with_custom_option':
+                self.assertEqual(item.get("options").get("StrictHostKeyChecking"), 'no')
+                self.assertEqual(item.get("options").get("UserKnownHostsFile"), '/dev/null')
+
+        custom_options = [
+            "StrictHostKeyChecking=yes",
+            "UserKnownHostsFile=/home/emre/foo",
+        ]
+        self.storm.edit_entry('host_with_custom_option', 'emre.io', 'emre', 22, None, custom_options=custom_options)
+        self.storm.ssh_config.write_to_ssh_config()
+
+        for item in self.storm.ssh_config.config_data:
+            if item.get("host") == 'host_with_custom_option':
+                self.assertEqual(item.get("options").get("StrictHostKeyChecking"), 'yes')
+                self.assertEqual(item.get("options").get("UserKnownHostsFile"), '/home/emre/foo')
+
+
     def tearDown(self):
         os.unlink('/tmp/ssh_config')
 
