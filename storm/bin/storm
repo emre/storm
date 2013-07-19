@@ -26,7 +26,7 @@ default_user = getpass.getuser()
 def fixed_width(text, size):
     text_width = len(text)
     if size > text_width:
-        for i in range(text_width, size):
+        for _ in range(text_width, size):
             text += " "
 
     return text
@@ -65,7 +65,7 @@ def add(name, connection_uri, id_file=""):
             raise StormValueError('invalid value: "@" cannot be used in name.')
 
         user, host, port = parse(connection_uri)
-        result = storm_.add_entry(name, host, user, port, id_file)
+        storm_.add_entry(name, host, user, port, id_file)
         return get_formatted_message('{0} added to your ssh config. you can connect it by typing "ssh {0}".'.format(
             name
         ), 'success')
@@ -83,7 +83,7 @@ def edit(name, connection_uri, id_file=""):
             name = " ".join(name.split(","))
 
         user, host, port = parse(connection_uri)
-        result = storm_.edit_entry(name, host, user, port, id_file)
+        storm_.edit_entry(name, host, user, port, id_file)
         return get_formatted_message(
             '"{0}" updated successfully.'.format(
                 name
@@ -98,7 +98,7 @@ def delete(name):
     Deletes a single host.
     """
     try:
-        result = storm_.delete_entry(name)
+        storm_.delete_entry(name)
         return get_formatted_message('hostname "{0}" deleted successfully.'.format(name), 'success')
     except StormValueError as error:
         return get_formatted_message(error, 'error')
@@ -125,7 +125,6 @@ def list():
                 else:
                     result_stack = "  (*) -> "
                     for key, value in host.get("options").iteritems():
-                        value_to_str = ""
                         if isinstance(value, type([])):
                             result_stack += "{0}:\n".format(key)
                             for value_ in value:
@@ -175,6 +174,4 @@ def delete_all():
 
 
 manager.main()
-
-
 
