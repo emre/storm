@@ -146,18 +146,20 @@ class ConfigParser(object):
     def search_host(self, search_string):
         results = []
         for host_entry in self.config_data:
-            if host_entry.get("type") == 'entry':
-                searchable_information = host_entry.get("host")
-                for key, value in host_entry.get("options").items():
-                    if isinstance(value, list):
-                        value = " ".join(value)
-                    if isinstance(value, int):
-                        value = str(value)
+            if host_entry.get("type") != 'entry':
+                continue
 
-                    searchable_information += " " + value
+            searchable_information = host_entry.get("host")
+            for key, value in host_entry.get("options").items():
+                if isinstance(value, list):
+                    value = " ".join(value)
+                if isinstance(value, int):
+                    value = str(value)
 
-                if search_string in searchable_information:
-                    results.append(host_entry)
+                searchable_information += " " + value
+
+            if search_string in searchable_information:
+                results.append(host_entry)
 
         return results
 
@@ -188,31 +190,29 @@ class ConfigParser(object):
         for host_item in self.config_data:
             if host_item.get("type") in ['comment', 'empty_line']:
                 file_content += host_item.get("value") + "\n"
-            else:
-                host_item_content = "Host {0}\n".format(host_item.get("host"))
-                for key, value in host_item.get("options").iteritems():
-                    if isinstance(value, list):
-                        sub_content = ""
-                        for value_ in value:
-                            sub_content += "    {0} {1}\n".format(
-                                key, value_
-                            )
-                        host_item_content += sub_content
-                    else:
-                        host_item_content += "    {0} {1}\n".format(
-                            key, value
+                continue
+            host_item_content = "Host {0}\n".format(host_item.get("host"))
+            for key, value in host_item.get("options").iteritems():
+                if isinstance(value, list):
+                    sub_content = ""
+                    for value_ in value:
+                        sub_content += "    {0} {1}\n".format(
+                            key, value_
                         )
-                file_content += host_item_content
+                    host_item_content += sub_content
+                else:
+                    host_item_content += "    {0} {1}\n".format(
+                        key, value
+                    )
+            file_content += host_item_content
 
         return file_content
 
     def write_to_ssh_config(self):
-        f = open(self.ssh_config_file, 'w+')
-        data = self.dump()
-        if data:
-            f.write(data)
-        f.close()
-
+        with open(self.ssh_config_file, 'w+') as f:
+            data = self.dump()
+            if data:
+                f.write(data)
         return self
 
     def get_last_index(self):
