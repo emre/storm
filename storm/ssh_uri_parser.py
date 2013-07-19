@@ -2,7 +2,6 @@
 
 import getpass
 import re
-import urlparse
 
 from exceptions import StormInvalidPortError
 
