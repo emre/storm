@@ -6,7 +6,6 @@ from os.path import expanduser
 from os.path import exists
 from paramiko.config import SSHConfig
 from operator import itemgetter
-import getpass
 
 from exceptions import StormValueError
 from paramiko.config import proxy_re
