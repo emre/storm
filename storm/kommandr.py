@@ -13,16 +13,6 @@ from itertools import izip_longest
 from storm_config_parser import get_storm_config
 import textwrap
 
-MAIN_STORM_METHODS = [
-    'add',
-    'edit',
-    'version',
-    'list',
-    'search',
-    'delete',
-    'delete_all,'
-]
-
 
 class AliasedSubParsersAction(argparse._SubParsersAction):
 
