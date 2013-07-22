@@ -4,11 +4,58 @@
 Simple module helps you convert your oridnary functions into cool
 command-line interfaces using :py:module:``argparse`` in backyard.
 """
+
 import sys
 import inspect
 import argparse
 from functools import wraps
 from itertools import izip_longest
+from storm_config_parser import get_storm_config
+import textwrap
+
+MAIN_STORM_METHODS = [
+    'add',
+    'edit',
+    'version',
+    'list',
+    'search',
+    'delete',
+    'delete_all,'
+]
+
+
+class AliasedSubParsersAction(argparse._SubParsersAction):
+
+    class _AliasedPseudoAction(argparse.Action):
+        def __init__(self, name, aliases, help):
+            dest = name
+            if aliases:
+                dest += ' (%s)' % '-'.join(aliases)
+            sup = super(AliasedSubParsersAction._AliasedPseudoAction, self)
+            sup.__init__(option_strings=[], dest=dest, help=help)
+
+    def add_parser(self, name, **kwargs):
+        if 'aliases' in kwargs:
+            aliases = kwargs['aliases']
+            del kwargs['aliases']
+        else:
+            aliases = []
+
+        parser = super(AliasedSubParsersAction, self).add_parser(name, **kwargs)
+
+        # Make the aliases work.
+        if aliases:
+            for alias in aliases:
+                self._name_parser_map[alias] = parser
+
+        # Make the help text reflect them, first removing old help entry.
+        if 'help' in kwargs:
+            help = kwargs.pop('help')
+            self._choices_actions.pop()
+            pseudo_action = self._AliasedPseudoAction(name, aliases, help)
+            self._choices_actions.append(pseudo_action)
+
+        return parser
 
 
 class prog(object):
@@ -28,9 +75,16 @@ class prog(object):
         :param type: dict
 
         """
-        self.parser = argparse.ArgumentParser(**kwargs)
+        kwargs.update({
+            'formatter_class': argparse.RawTextHelpFormatter,
+            'epilog': "storm is a command line tool to manage ssh connections.\n"\
+                      "get more information at: github.com/emre/storm",
+        })
 
-        self.subparsers = self.parser.add_subparsers()
+        self.parser = argparse.ArgumentParser(**kwargs)
+        self.parser.register('action', 'parsers', AliasedSubParsersAction)
+        self.parser.formatter_class.width = 300
+        self.subparsers = self.parser.add_subparsers(title="commands", metavar="COMMAND")
 
     def command(self, *args, **kwargs):
         """Convenient decorator simply creates corresponding command"""
@@ -71,7 +125,16 @@ class prog(object):
         :param type: dict
 
         """
-        subparser = self.subparsers.add_parser(name or func.__name__, **kwargs)
+        func_pointer = name or func.__name__
+        storm_config = get_storm_config()
+        aliases, additional_kwarg = None, None
+        if 'aliases' in storm_config:
+            for command, alias_list in storm_config.get("aliases").iteritems():
+                if func_pointer == command:
+                    aliases = alias_list
+                    break
+
+        subparser = self.subparsers.add_parser(name or func.__name__, aliases=aliases, help=func.__doc__.strip())
         spec = inspect.getargspec(func)
         opts = reversed(list(izip_longest(reversed(spec.args or []),
                                           reversed(spec.defaults or []),
@@ -96,7 +159,9 @@ class prog(object):
             else:
                 args = options or ['--%s' % k]
                 kwargs.update({'default': v, 'dest': k})
+
             arg = subparser.add_argument(*args, **kwargs)
+
         subparser.set_defaults(**{self._COMMAND_FLAG: func})
         return func
 
@@ -117,6 +182,7 @@ class prog(object):
 
         """
         self.execute(sys.argv[1:])
+
 
 main = prog()
 arg = main.arg

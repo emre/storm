@@ -112,7 +112,6 @@ class StormTests(unittest.TestCase):
                 self.assertEqual(item.get("options").get("StrictHostKeyChecking"), 'yes')
                 self.assertEqual(item.get("options").get("UserKnownHostsFile"), '/home/emre/foo')
 
-
     def tearDown(self):
         os.unlink('/tmp/ssh_config')
 
