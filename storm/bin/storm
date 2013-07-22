@@ -72,7 +72,7 @@ def add(name, connection_uri, id_file="", o=[]):
 @command('edit')
 def edit(name, connection_uri, id_file="", o=[]):
     """
-    Edits the related entry already defined in ssh config.
+    Edits the related entry in ssh config.
     """
     try:
         if ',' in name:
@@ -159,7 +159,7 @@ def list():
 @command('search')
 def search(search_text):
     """
-    searches entries by given search text.
+    Searches entries by given search text.
     """
     try:
         results = storm_.search_host(search_text)
