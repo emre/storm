@@ -95,7 +95,8 @@ defaults for user -> $USER, port -> 22
 -   <a href="http://github.com/benvand">@benvand</a>
 -   <a href="http://github.com/Bengt">@Bengt</a>
 -   <a href="http://github.com/henrysher">@henrysher</a>
--   <a href="http://github.com/playpauseandstop">@playpauseandstop</a> 
+-   <a href="http://github.com/playpauseandstop">@playpauseandstop</a>
+-   <a href="http://github.com/abhinav-upadhyay">@abhinav-upadhyay</a>
 
 ## donations
 <a href="http://flattr.com/thing/1368936/emrestorm-on-GitHub" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
