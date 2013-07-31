@@ -89,6 +89,9 @@ defaults for user -> $USER, port -> 22
 
 /see <a href="https://github.com/emre/storm/blob/master/storm/ssh_uri_parser.py">ssh_uri_parser</a> for further look.
 
+## tools/libraries using storm
+-   <a href="https://github.com/emre/storm-indicator">storm-indicator</a> (indicator for ubuntu/unity.)
+
 ## contributors
 
 -   <a href="http://github.com/ras0ir">@ras0ir</a> - PKGBUILD for Archlinux and testing excessive ssh configs.</a>
