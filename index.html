@@ -123,6 +123,33 @@ Listing hosts:
 all entries deleted.
 </code></pre>
 
+<h3>
+<a name="custom-ssh-config-directives" class="anchor" href="#custom-ssh-config-directives"><span class="octicon octicon-link"></span></a>custom ssh config directives</h3>
+
+<p>storm does not wrap/cover all of the SSHConfig directives since there is a billion of them. But,
+other than adding it manually to your ssh config file, you can use --o parameter to accomplish this.</p>
+
+<p>It works both add and edit sub commands.</p>
+
+<pre><code>$ storm add web-prod web@webprod.com --o "StrictHostKeyChecking=no" --o "UserKnownHostsFile=/dev/null" 
+</code></pre>
+
+<h3>
+<a name="aliases-for-sub-commands" class="anchor" href="#aliases-for-sub-commands"><span class="octicon octicon-link"></span></a>aliases for sub commands</h3>
+
+<p>create a config file in: /home/$user/.stormssh/config</p>
+
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">"aliases"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"add"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"create"</span><span class="p">,</span> <span class="s2">"touch"</span><span class="p">],</span>
+        <span class="s2">"delete"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"rm"</span><span class="p">]</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+
+<p><strong>all user defined aliases can be seen in storm --help output.</strong></p>
+
 <h2>
 <a name="known-issues" class="anchor" href="#known-issues"><span class="octicon octicon-link"></span></a>known issues</h2>
 
@@ -146,6 +173,11 @@ all entries deleted.
 <p>/see <a href="https://github.com/emre/storm/blob/master/storm/ssh_uri_parser.py">ssh_uri_parser</a> for further look.</p>
 
 <h2>
+<a name="toolslibraries-using-storm" class="anchor" href="#toolslibraries-using-storm"><span class="octicon octicon-link"></span></a>tools/libraries using storm</h2>
+
+<ul>
+<li>  <a href="https://github.com/emre/storm-indicator">storm-indicator</a> (indicator for ubuntu/unity.)</li>
+</ul><h2>
 <a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>contributors</h2>
 
 <ul>
@@ -156,9 +188,14 @@ all entries deleted.
 </li>
 <li>  <a href="http://github.com/henrysher">@henrysher</a>
 </li>
-<li>  <a href="http://github.com/playpauseandstop">@playpauseandstop</a> </li>
-<li>  <a href="http://github.com/abhinav-upadhyay">@abhinav-upadhyay</a> </li>
-</ul>
+<li>  <a href="http://github.com/playpauseandstop">@playpauseandstop</a>
+</li>
+<li>  <a href="http://github.com/abhinav-upadhyay">@abhinav-upadhyay</a>
+</li>
+</ul><h2>
+<a name="donations" class="anchor" href="#donations"><span class="octicon octicon-link"></span></a>donations</h2>
+
+<p><a href="http://flattr.com/thing/1368936/emrestorm-on-GitHub" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a></p>
       </section>
       <footer>
         <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
