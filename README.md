@@ -70,6 +70,31 @@ example:
 
     $ storm delete_all
     all entries deleted.
+    
+### custom ssh config directives
+
+storm does not wrap/cover all of the SSHConfig directives since there is a billion of them. But,
+other than adding it manually to your ssh config file, you can use --o parameter to accomplish this.
+
+It works both add and edit sub commands.
+
+    $ storm add web-prod web@webprod.com --o "StrictHostKeyChecking=no" --o "UserKnownHostsFile=/dev/null" 
+    
+### aliases for sub commands
+
+create a config file in: /home/$user/.stormssh/config
+
+```javascript
+{
+    "aliases": {
+        "add": ["create", "touch"],
+        "delete": ["rm"]
+    }
+
+}
+```
+
+**all user defined aliases can be seen in storm --help output.**
 
 ## known issues
 
