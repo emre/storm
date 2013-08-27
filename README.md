@@ -1,6 +1,6 @@
 # storm
 
-<img src= "https://pypip.in/v/stormssh/badge.png"> &nbsp; <img src="https://pypip.in/d/stormssh/badge.png">
+<img src="https://api.travis-ci.org/goldsmith/Wikipedia.png?branch=master"> &nbsp; <img src= "https://pypip.in/v/stormssh/badge.png"> &nbsp; <img src="https://pypip.in/d/stormssh/badge.png">
 
 storm is a command line tool to manage your ssh connections.
 
