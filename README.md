@@ -118,6 +118,7 @@ defaults for user -> $USER, port -> 22
 
 ## tools/libraries using storm
 -   <a href="https://github.com/emre/storm-indicator">storm-indicator</a> (indicator for ubuntu/unity.)
+-   <a href="https://github.com/emre/storm-gui">stormssh</a> (wxpython interface to stormssh)
 
 ## contributors
 
