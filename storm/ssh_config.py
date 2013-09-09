@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
 from os import makedirs
+from os import chmod
 from os.path import dirname
 from os.path import expanduser
 from os.path import exists
@@ -93,6 +94,7 @@ class ConfigParser(object):
             if not exists(dirname(self.ssh_config_file)):
                 makedirs(dirname(self.ssh_config_file))
             open(self.ssh_config_file, 'w+').close()
+            chmod(self.ssh_config_file, 0o600)
 
         self.config_data = []
 
