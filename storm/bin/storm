@@ -80,7 +80,7 @@ def edit(name, connection_uri, id_file="", o=[]):
 
         user, host, port = parse(connection_uri)
 
-        storm_.edit_entry(name, host, user, port, id_file)
+        storm_.edit_entry(name, host, user, port, id_file, o)
         print get_formatted_message(
             '"{0}" updated successfully.'.format(
                 name
