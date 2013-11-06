@@ -21,7 +21,7 @@ class StormConfig(SSHConfig):
         @type file_obj: file
         """
         order = 1
-        host = {"host": ['*'], "config": {},}
+        host = {"host": ['*'], "config": {}, }
         for line in file_obj:
             line = line.rstrip('\n').lstrip()
             if line == '':

@@ -88,7 +88,7 @@ class StormTests(unittest.TestCase):
         self.assertEqual(len(results), 1)
 
     def test_custom_options(self):
-        custom_options= [
+        custom_options = [
             "StrictHostKeyChecking=no",
             "UserKnownHostsFile=/dev/null",
         ]
