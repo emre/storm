@@ -92,7 +92,9 @@ class StormTests(unittest.TestCase):
             "StrictHostKeyChecking=no",
             "UserKnownHostsFile=/dev/null",
         ]
-        self.storm.add_entry('host_with_custom_option', 'emre.io', 'emre', 22, None, custom_options=custom_options)
+        self.storm.add_entry('host_with_custom_option',
+                             'emre.io', 'emre', 22,
+                             None, custom_options=custom_options)
         self.storm.ssh_config.write_to_ssh_config()
 
         for item in self.storm.ssh_config.config_data:
@@ -104,7 +106,9 @@ class StormTests(unittest.TestCase):
             "StrictHostKeyChecking=yes",
             "UserKnownHostsFile=/home/emre/foo",
         ]
-        self.storm.edit_entry('host_with_custom_option', 'emre.io', 'emre', 22, None, custom_options=custom_options)
+        self.storm.edit_entry('host_with_custom_option',
+                              'emre.io', 'emre', 22,
+                              None, custom_options=custom_options)
         self.storm.ssh_config.write_to_ssh_config()
 
         for item in self.storm.ssh_config.config_data:
