@@ -67,7 +67,7 @@ class prog(object):
         """
         kwargs.update({
             'formatter_class': argparse.RawTextHelpFormatter,
-            'epilog': "storm is a command line tool to manage ssh connections.\n"\
+            'epilog': "storm is a command line tool to manage ssh connections.\n"
                       "get more information at: github.com/emre/storm",
         })
 
@@ -124,7 +124,9 @@ class prog(object):
                     aliases = alias_list
                     break
 
-        subparser = self.subparsers.add_parser(name or func.__name__, aliases=aliases, help=func.__doc__.strip())
+        subparser = self.subparsers.add_parser(name or func.__name__,
+                                               aliases=aliases,
+                                               help=func.__doc__.strip())
         spec = inspect.getargspec(func)
         opts = reversed(list(izip_longest(reversed(spec.args or []),
                                           reversed(spec.defaults or []),
