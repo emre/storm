@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='stormssh',
-    version='0.4.8',
+    version='0.5',
     packages=['storm'],
     url='http://github.com/emre/storm',
     license='MIT',
