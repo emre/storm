@@ -7,10 +7,11 @@ import sys
 import getpass
 import __builtin__
 
-from storm import Storm
-from storm import __version__
+from storm import Storm, __version__
 from storm.exceptions import StormValueError
 from storm.ssh_uri_parser import parse
+from storm import web as _web
+
 from storm.kommandr import *
 
 from termcolor import colored
@@ -187,6 +188,12 @@ def delete_all():
         print get_formatted_message('all entries deleted.', 'success')
     except Exception as error:
         print get_formatted_message(str(error), 'error')
+
+
+@command('web')
+def web(port=9002, debug=False):
+    """Starts the web UI."""
+    _web.run(port, debug)
 
 
 if __name__ == '__main__':
