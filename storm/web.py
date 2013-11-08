@@ -17,6 +17,7 @@ def render(template):
         content = fobj.read()
     return make_response(content)
 
+
 @app.route('/')
 def index():
     return render('index.html')
@@ -37,17 +38,18 @@ def add():
         else:
             id_file = ''
 
-        # validate name
         if '@' in name:
-            return jsonify(message='invalid value: "@" cannot be used in name.'), 400
+            msg = 'invalid value: "@" cannot be used in name.'
+            return jsonify(message=msg), 400
 
         user, host, port = parse(connection_uri)
-
         storm_.add_entry(name, host, user, port, id_file)
 
-        return jsonify(success=True), 201
-    except (TypeError, StormValueError):
-        return jsonify(success=False), 400
+        return '', 201
+    except StormValueError as exc:
+        return jsonify(message=exc.message)
+    except (KeyError, TypeError):
+        return '', 400
 
 
 @app.route('/edit', methods=['PUT'])
@@ -64,11 +66,11 @@ def edit():
 
         storm_.edit_entry(name, host, user, port, id_file)
 
-        return jsonify(success=True), 200
-    except StormValueError:
-        return jsonify(success=False), 404
-    except TypeError:
-        return jsonify(success=False), 400
+        return '', 200
+    except StormValueError as exc:
+        return jsonify(message=exc.message), 404
+    except (KeyError, TypeError):
+        return '', 400
 
 
 @app.route('/delete', methods=['DELETE'])
@@ -76,18 +78,20 @@ def delete():
     try:
         name = request.json['name']
         storm_.delete_entry(name)
-        return jsonify(success=True), 200
+        return '', 200
+    except StormValueError as exc:
+        return jsonify(message=exc.message), 404
     except (TypeError, StormValueError):
-        return jsonify(success=False), 400
+        return '', 400
 
 
 @app.route('/delete_all', methods=['DELETE'])
 def delete_all():
     try:
         storm_.delete_all_entries()
-        return jsonify(success=True), 200
+        return '', 200
     except StormValueError:
-        return jsonify(success=False), 400
+        return '', 400
 
 
 def run(port, debug):
