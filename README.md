@@ -131,6 +131,8 @@ defaults for user -> $USER, port -> 22
 -   <a href="http://github.com/abhinav-upadhyay">@abhinav-upadhyay</a>
 -   <a href="http://github.com/aleno">@aleno<a/>
 -   <a href="http://github.com/cihann">@cihann</a>
+-   <a href="http://github.com/f">@f</a>
+
 
 ## donations
 <a href="http://flattr.com/thing/1368936/emrestorm-on-GitHub" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
