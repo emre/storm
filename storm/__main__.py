@@ -193,8 +193,6 @@ def delete_all():
 @command('web')
 def web(port=9002, debug=False):
     """Starts the web UI."""
-    import os
-    print(__file__)
     _web.run(port, debug)
 
 
