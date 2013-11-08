@@ -1,6 +1,6 @@
 import sys
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='stormssh',
@@ -11,9 +11,11 @@ setup(
     author='Emre Yilmaz',
     author_email='mail@emreyilmaz.me',
     description='Management commands to ssh config files.',
-    scripts=[
-        'storm/bin/storm'
-    ],
+    entry_points={
+        'console_scripts': [
+            'storm = storm.__main__:main',
+        ],
+    },
     install_requires=list(filter(None, [
         "paramiko",
         "termcolor",
