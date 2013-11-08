@@ -99,6 +99,18 @@ create a config file in: /home/$user/.stormssh/config
 
 **all user defined aliases can be seen in storm --help output.**
 
+## web ui
+
+*added in version: 0.5*
+
+you can also use the web ui instead of commandline interface:
+
+```sh
+$ storm web
+$ storm web --port 3333
+$ storm web --debug True
+```
+
 ## known issues
 
 If you use zsh on a mac and get "command not found: storm" for main storm script, make sure you have storm in your PATH.
