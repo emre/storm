@@ -7,7 +7,7 @@ from operator import itemgetter
 
 import getpass
 
-__version__ = '0.4.8'
+__version__ = '0.5'
 
 
 class Storm(object):

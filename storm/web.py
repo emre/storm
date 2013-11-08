@@ -12,7 +12,8 @@ storm_ = Storm()
 
 
 def render(template):
-    path = os.path.join('storm', 'templates', template)
+    static_dir = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(static_dir, 'templates', template)
     with open(path) as fobj:
         content = fobj.read()
     return make_response(content)
