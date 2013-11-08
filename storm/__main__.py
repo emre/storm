@@ -193,6 +193,8 @@ def delete_all():
 @command('web')
 def web(port=9002, debug=False):
     """Starts the web UI."""
+    import os
+    os.chdir(os.path.join(os.path.dirname(__file__), '..'))
     _web.run(port, debug)
 
 

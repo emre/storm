@@ -12,6 +12,9 @@ setup(
     author_email='mail@emreyilmaz.me',
     description='Management commands to ssh config files.',
     data_files=[
+        ('storm/templates', [
+            'storm/templates/index.html'
+        ]),
         ('storm/static/css', [
             'storm/static/css/style.css'
         ]),
