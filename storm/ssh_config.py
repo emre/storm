@@ -9,7 +9,6 @@ from paramiko.config import SSHConfig
 from operator import itemgetter
 
 from exceptions import StormValueError
-from paramiko.config import proxy_re
 
 
 class StormConfig(SSHConfig):
@@ -47,6 +46,7 @@ class StormConfig(SSHConfig):
             if '=' in line:
                 # Ensure ProxyCommand gets properly split
                 if line.lower().strip().startswith('proxycommand'):
+                    proxy_re = re.compile(r"^(proxycommand)\s*=*\s*(.*)", re.I)
                     match = proxy_re.match(line)
                     key, value = match.group(1).lower(), match.group(2)
                 else:
