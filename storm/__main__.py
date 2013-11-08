@@ -1,12 +1,17 @@
+# -*- coding: utf8 -*-
+
 #!/usr/bin/python
+
+import sys
 
 import getpass
 import __builtin__
 
-from storm import Storm
-from storm import __version__
+from storm import Storm, __version__
 from storm.exceptions import StormValueError
 from storm.ssh_uri_parser import parse
+from storm import web as _web
+
 from storm.kommandr import *
 
 from termcolor import colored
@@ -59,12 +64,12 @@ def add(name, connection_uri, id_file="", o=[]):
         user, host, port = parse(connection_uri)
 
         storm_.add_entry(name, host, user, port, id_file, o)
-        
+
         print get_formatted_message('{0} added to your ssh config. you can connect it by typing "ssh {0}".'.format(
 
             name
         ), 'success')
-        
+
     except StormValueError as error:
         print get_formatted_message(error, 'error')
 
@@ -185,8 +190,12 @@ def delete_all():
         print get_formatted_message(str(error), 'error')
 
 
+@command('web')
+def web(port=9002, debug=False):
+    """Starts the web UI."""
+    _web.run(port, debug)
 
-main()
 
-
+if __name__ == '__main__':
+    sys.exit(main())
 

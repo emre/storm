@@ -1,4 +1,5 @@
-# storm
+<img src="https://raw.github.com/f/storm/master/resources/logos/storm-logo.png" height="80">
+---
 
 <img src="https://api.travis-ci.org/emre/storm.png?branch=master"> &nbsp; <img src= "https://pypip.in/v/stormssh/badge.png"> &nbsp; <img src="https://pypip.in/d/stormssh/badge.png">
 
@@ -98,6 +99,18 @@ create a config file in: /home/$user/.stormssh/config
 
 **all user defined aliases can be seen in storm --help output.**
 
+## web ui
+
+*added in version: 0.5*
+
+you can also use the web ui instead of commandline interface:
+
+```sh
+$ storm web
+$ storm web --port 3333
+$ storm web --debug True
+```
+
 ## known issues
 
 If you use zsh on a mac and get "command not found: storm" for main storm script, make sure you have storm in your PATH.
@@ -129,6 +142,9 @@ defaults for user -> $USER, port -> 22
 -   <a href="http://github.com/playpauseandstop">@playpauseandstop</a>
 -   <a href="http://github.com/abhinav-upadhyay">@abhinav-upadhyay</a>
 -   <a href="http://github.com/aleno">@aleno<a/>
+-   <a href="http://github.com/cihann">@cihann</a>
+-   <a href="http://github.com/f">@f</a>
+
 
 ## donations
 <a href="http://flattr.com/thing/1368936/emrestorm-on-GitHub" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>

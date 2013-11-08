@@ -95,4 +95,3 @@ class Storm(object):
             if host_.get("host") == host:
                 return True
         return False
-
