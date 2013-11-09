@@ -5,7 +5,7 @@
 
 storm is a command line tool to manage your ssh connections.
 
-<img src="https://raw.github.com/emre/storm/master/ss.png">
+![Storm](https://raw.github.com/emre/storm/master/resources/screenshot.png)
 
 ## installation
 
