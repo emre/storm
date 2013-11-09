@@ -84,6 +84,7 @@ other than adding it manually to your ssh config file, you can use **--o** param
 It works both add and edit sub commands.
 
 .. code-block:: bash
+
     $ storm add web-prod web@webprod.com --o "StrictHostKeyChecking=no" --o "UserKnownHostsFile=/dev/null"
 
 command aliases
