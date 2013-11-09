@@ -1,3 +1,2 @@
 paramiko==1.10.1
 termcolor
-argparse
