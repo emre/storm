@@ -1,7 +1,9 @@
 <img src="https://raw.github.com/f/storm/master/resources/logos/storm-logo.png" height="80">
 ---
 
-<img src="https://api.travis-ci.org/emre/storm.png?branch=master"> &nbsp; <img src= "https://pypip.in/v/stormssh/badge.png"> &nbsp; <img src="https://pypip.in/d/stormssh/badge.png">
+<img src="https://api.travis-ci.org/emre/storm.png?branch=master"> &nbsp; <img src= "https://pypip.in/v/stormssh/badge.png"> &nbsp; <img src="https://pypip.in/d/stormssh/badge.png"> 
+
+
 
 storm is a command line tool to manage your ssh connections.
 
@@ -136,3 +138,7 @@ defaults for user -> $USER, port -> 22
 
 ## donations
 <a href="http://flattr.com/thing/1368936/emrestorm-on-GitHub" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
+
+## analytics
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/emre/storm/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
