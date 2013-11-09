@@ -1,6 +1,6 @@
-import unittest
-import os
 import getpass
+import os
+import unittest
 
 from storm import Storm
 from storm.ssh_uri_parser import parse
@@ -19,9 +19,8 @@ class StormTests(unittest.TestCase):
 
         """
 
-        f = open('/tmp/ssh_config', 'w+')
-        f.write(FAKE_SSH_CONFIG)
-        f.close()
+        with open('/tmp/ssh_config', 'w+') as f:
+            f.write(FAKE_SSH_CONFIG)
 
         self.storm = Storm('/tmp/ssh_config')
 
@@ -31,8 +30,8 @@ class StormTests(unittest.TestCase):
     def test_config_dump(self):
         self.storm.ssh_config.write_to_ssh_config()
 
-        for search_str in ["hostname 1.1.1.1", "Host netscaler", "Host *"]:
-            self.assertEqual(True, search_str in open('/tmp/ssh_config').read())
+        for search_str in ("hostname 1.1.1.1", "Host netscaler", "Host *"):
+            self.assertIn(search_str, open('/tmp/ssh_config').read())
 
     def test_update_host(self):
         self.storm.ssh_config.update_host("netscaler", {"hostname": "2.2.2.2"})
@@ -88,10 +87,10 @@ class StormTests(unittest.TestCase):
         self.assertEqual(len(results), 1)
 
     def test_custom_options(self):
-        custom_options = [
+        custom_options = (
             "StrictHostKeyChecking=no",
             "UserKnownHostsFile=/dev/null",
-        ]
+        )
         self.storm.add_entry('host_with_custom_option',
                              'emre.io', 'emre', 22,
                              None, custom_options=custom_options)
@@ -102,10 +101,10 @@ class StormTests(unittest.TestCase):
                 self.assertEqual(item.get("options").get("StrictHostKeyChecking"), 'no')
                 self.assertEqual(item.get("options").get("UserKnownHostsFile"), '/dev/null')
 
-        custom_options = [
+        custom_options = (
             "StrictHostKeyChecking=yes",
             "UserKnownHostsFile=/home/emre/foo",
-        ]
+        )
         self.storm.edit_entry('host_with_custom_option',
                               'emre.io', 'emre', 22,
                               None, custom_options=custom_options)
