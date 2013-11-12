@@ -75,7 +75,7 @@ def edit():
         return response(status=400)
 
 
-@app.route('/delete', methods=['DELETE'])
+@app.route('/delete', methods=['POST'])
 def delete():
     try:
         name = request.json['name']

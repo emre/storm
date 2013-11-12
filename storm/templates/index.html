@@ -21,7 +21,7 @@
     </section>
     <section id="list">
       <article ng-repeat="server in servers" class="editing-{{server.editing}} filtered-{{filtered($index, filter)}}">
-        <label><code>{{server.title}}</code></label>
+        <label><code>{{server.host}}</code></label>
         <code>
           {{server.uri}}
           <span class="custom">{{server.params}}</span>
