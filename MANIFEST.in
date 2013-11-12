@@ -1,0 +1,2 @@
+recursive-include storm/templates *.html
+recursive-include storm/static *.js *.css
