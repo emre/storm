@@ -88,15 +88,6 @@ def delete():
         return response(status=400)
 
 
-@app.route('/delete_all', methods=['DELETE'])
-def delete_all():
-    try:
-        storm_.delete_all_entries()
-        return response()
-    except StormValueError:
-        return response(status=400)
-
-
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
