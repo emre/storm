@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" ng-app>
+<head>
+  <meta charset="UTF-8">
+  <title>Storm SSH: Manage your SSH like a boss.</title>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="static/css/style.css">
+  <script src="static/js/core/angular.min.js"></script>
+  <script src="static/js/main.js"></script>
+</head>
+<body>
+  <div id="main" ng-controller="Storm" class="list-{{servers.length}} {{state.position}}">
+    <header>
+      <figure id="logo">storm</figure>
+      <small>v{{version}}</small>
+      <input type="text" class="total" ng-model="filter" placeholder="{{servers.length}} connection{{servers.plural}} found, filter here.">
+
+    </header>
+    <section id="notfound">
+      No SSH entry found, add one!
+    </section>
+    <section id="list">
+      <article ng-repeat="server in servers" class="editing-{{server.editing}} filtered-{{filtered($index, filter)}}">
+        <label><code>{{server.host}}</code></label>
+        <code>
+          {{server.uri}}
+          <span class="custom">{{server.params}}</span>
+        </code>
+        <div class="actions">
+          <button class="edit" ng-click="edit(server, $index)">Edit</button>
+          <button class="delete" ng-click="delete(server)">Delete</button>
+        </div>
+      </article>
+    </section>
+    <footer class="top">
+      <header ng-dblclick="toggleTop()">
+        <h2 draggable="true">{{state.action}} ssh entry:</h2>
+      </header>
+      <section>
+        <form ng-submit="save()">
+          <input type="text" id="title" placeholder="$ ssh ..." ng-model="title">
+          <input type="text" placeholder="-> connection uri" ng-model="uri">
+          <input type="submit" class="subm">
+        </form>
+      </section>
+    </footer>
+  </div>
+</body>
+</html>
