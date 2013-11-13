@@ -51,11 +51,11 @@ function Storm($scope, $http) {
         return $scope.title == server.title;
       }
     }).length;
+
     if (search > 0) {
       alert("you already have an entry for this server!");
       return focus();
     }
-
 
     if ($scope.state.editIndex > -1) {
       $http.put('/edit', JSON.stringify({name: $scope.title, connection_uri: $scope.uri})).
