@@ -58,6 +58,7 @@ function Storm($scope, $http) {
     }
 
     if ($scope.state.editIndex > -1) {
+      $scope.isDisabled = false;
       $http.put('/edit', JSON.stringify({name: $scope.title, connection_uri: $scope.uri})).
         success(function(data, status) {
           if (status == 200) {
@@ -77,6 +78,7 @@ function Storm($scope, $http) {
         }).error(function () {
           alert("something wrong...");
         });
+
     } else {
       $http.post('/add', JSON.stringify({name: $scope.title, connection_uri: $scope.uri})).
         success(function (data, status) {
@@ -122,6 +124,7 @@ function Storm($scope, $http) {
   };
 
   $scope.edit = function (server, index) {
+    $scope.isDisabled = true;
     $scope.state.editIndex = index;
     $scope.state.action = "edit " + server.host;
     $scope.title = server.host;
