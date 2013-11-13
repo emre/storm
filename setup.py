@@ -8,7 +8,7 @@ setup(
     packages=find_packages(),
     package_data={'storm': ['templates/*.html', 'static/css/*.css',
                             'static/css/themes/storm/*.css', 'static/css/themes/storm/img/*.png',
-                            'static/js/*.js', 'static/js/core/*.js']},
+                            'static/js/*.js', 'static/js/core/*.js', 'static/favicon.ico']},
     include_package_data=True,
     url='http://github.com/emre/storm',
     license='MIT',
