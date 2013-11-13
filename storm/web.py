@@ -31,7 +31,7 @@ def index():
 
 @app.route('/list', methods=['GET'])
 def list_keys():
-    return response(json.dumps(storm_.list_entries(True)))
+    return response(json.dumps(storm_.list_entries(True, only_servers=True)))
 
 
 @app.route('/add', methods=['POST'])
