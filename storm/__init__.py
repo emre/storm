@@ -43,9 +43,19 @@ class Storm(object):
 
         return True
 
-    def list_entries(self, order=False):
+    def list_entries(self, order=False, only_servers=False):
+
+        server_list = self.ssh_config.config_data
+
+        # required for the web api.
+        if only_servers:
+            server_list = []
+            for entry in self.ssh_config.config_data:
+                if entry.get("type") == 'entry':
+                    server_list.append(entry)
+
         if order:
-            config_data = sorted(self.ssh_config.config_data, key=itemgetter("host"))
+            config_data = sorted(server_list, key=itemgetter("host"))
             return config_data
 
         return self.ssh_config.config_data
