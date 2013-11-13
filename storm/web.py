@@ -1,7 +1,8 @@
 import json
 import os.path
 
-from flask import Flask, Response, make_response, jsonify, request
+from flask import (Flask, Response, make_response, jsonify, request,
+                   send_from_directory)
 
 from storm import Storm
 from storm.ssh_uri_parser import parse
@@ -96,5 +97,14 @@ def delete_all():
         return response(status=400)
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico',
+                               mimetype='image/vnd.microsoft.icon')
+
+
 def run(port, debug):
+    port = int(port)
+    debug = bool(debug)
     app.run(port=port, debug=debug)
