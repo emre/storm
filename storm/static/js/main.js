@@ -117,7 +117,7 @@ function Storm($scope, $http) {
   $scope.filtered = function (index, filter) {
     if (!filter) return true;
     if (filter && filter.length == 0) return false;
-    return $scope.servers[index].title.indexOf(filter) > -1
+    return $scope.servers[index].host.indexOf(filter) > -1
         || $scope.servers[index].uri.indexOf(filter) > -1;
   };
 
