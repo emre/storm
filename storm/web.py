@@ -9,7 +9,10 @@ from storm.ssh_uri_parser import parse
 from storm.exceptions import StormValueError
 
 app = Flask(__name__)
-storm_ = Storm()
+
+
+def get_storm():
+    return Storm()
 
 
 def render(template):
@@ -31,11 +34,14 @@ def index():
 
 @app.route('/list', methods=['GET'])
 def list_keys():
+    storm_ = get_storm()
     return response(json.dumps(storm_.list_entries(True, only_servers=True)))
 
 
 @app.route('/add', methods=['POST'])
 def add():
+    storm_ = get_storm()
+
     try:
         name = request.json['name']
         connection_uri = request.json['connection_uri']
@@ -59,6 +65,8 @@ def add():
 
 @app.route('/edit', methods=['PUT'])
 def edit():
+    storm_ = get_storm()
+
     try:
         name = request.json['name']
         connection_uri = request.json['connection_uri']
@@ -78,6 +86,8 @@ def edit():
 
 @app.route('/delete', methods=['POST'])
 def delete():
+    storm_ = get_storm()
+
     try:
         name = request.json['name']
         storm_.delete_entry(name)

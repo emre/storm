@@ -45,20 +45,19 @@ class Storm(object):
 
     def list_entries(self, order=False, only_servers=False):
 
-        server_list = self.ssh_config.config_data
+        config_data = self.ssh_config.config_data
 
         # required for the web api.
         if only_servers:
-            server_list = []
-            for entry in self.ssh_config.config_data:
-                if entry.get("type") == 'entry':
-                    server_list.append(entry)
+            for index, value in enumerate(config_data):
+                print value
+                if value.get('type') and  value.get("type") != 'entry':
+                    del config_data[index]
 
         if order:
-            config_data = sorted(server_list, key=itemgetter("host"))
-            return config_data
+            config_data = sorted(config_data, key=itemgetter("host"))
 
-        return self.ssh_config.config_data
+        return config_data
 
     def delete_all_entries(self):
         self.ssh_config.delete_all_hosts()
