@@ -4,8 +4,7 @@ stormssh
 
 storm is a command line tool to manage your ssh connections.
 
-
-
+`project page <https://github.com/emre/storm/>`_
 
 
 **features**
