@@ -1,4 +1,4 @@
-<img src="https://raw.github.com/f/storm/master/resources/logos/storm-logo.png" height="80">
+<img src="https://raw.github.com/emre/storm/master/resources/logos/storm-logo.png" height="80">
 ---
 
 <img src="https://api.travis-ci.org/emre/storm.png?branch=master"> &nbsp; <img src= "https://pypip.in/v/stormssh/badge.png"> &nbsp; <img src="https://pypip.in/d/stormssh/badge.png">
