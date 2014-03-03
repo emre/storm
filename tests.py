@@ -37,7 +37,7 @@ class StormTests(unittest.TestCase):
             self.assertIn(search_str, open('/tmp/ssh_config').read())
 
     def test_update_host(self):
-        self.storm.ssh_config.update_host("netscaler", {"hostname": "2.2.2.2"})
+        self.storm.ssh_config.update_host("netscaler", hostname="2.2.2.2")
         self.assertEqual(self.storm.ssh_config.config_data[4]["options"]["hostname"], '2.2.2.2')
 
     def test_add_host(self):
@@ -54,12 +54,23 @@ class StormTests(unittest.TestCase):
         self.storm.add_entry('google', 'google.com', 'root', '22', '/tmp/tmp.pub')
         self.storm.ssh_config.write_to_ssh_config()
 
-        self.storm.edit_entry('google', 'google.com', 'root', '23', '/tmp/tmp.pub')
+        self.storm.edit_entry('google', port=23)
         self.storm.ssh_config.write_to_ssh_config()
 
         for item in self.storm.ssh_config.config_data:
             if item.get("host") == 'google':
-                self.assertEqual(item.get("options").get("port"), '23')
+                self.assertEqual(item.get("options").get("port"), 23)
+
+    def test_edit_by_hostname_regexp(self):
+        self.storm.add_entry('google-01', 'google.com', 'root', '22', '/tmp/tmp.pub')
+        self.storm.add_entry('google-02', 'google.com', 'root', '23', '/tmp/tmp.pub')
+        self.storm.ssh_config.write_to_ssh_config()
+
+        self.storm.edit_entry('google-[0-2]', identityfile='/tmp/tmp.pub1')
+
+        for item in self.storm.ssh_config.config_data:
+            if item.get("hostname") == 'google.com':
+                self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub1')
 
     def test_delete_host(self):
         self.storm.delete_entry('netscaler')
@@ -108,9 +119,7 @@ class StormTests(unittest.TestCase):
             "StrictHostKeyChecking=yes",
             "UserKnownHostsFile=/home/emre/foo",
         )
-        self.storm.edit_entry('host_with_custom_option',
-                              'emre.io', 'emre', 22,
-                              None, custom_options=custom_options)
+        self.storm.edit_entry('host_with_custom_option', StrictHostKeyChecking='yes', UserKnownHostsFile="/home/emre/foo")
         self.storm.ssh_config.write_to_ssh_config()
 
         for item in self.storm.ssh_config.config_data:

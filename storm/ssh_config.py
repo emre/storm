@@ -137,10 +137,11 @@ class ConfigParser(object):
 
         return self
 
-    def update_host(self, host, options):
-        for index, host_entry in enumerate(self.config_data):
-            if host_entry.get("host") == host:
-                self.config_data[index]["options"] = options
+    def update_host(self, host, **kwargs):
+        import re
+        for index, hostentry in enumerate(self.config_data):
+            if hostentry.get("host") == host or re.match(host, hostentry.get("host")):
+                self.config_data[index]["options"].update(kwargs)
 
         return self
 

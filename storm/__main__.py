@@ -75,7 +75,7 @@ def add(name, connection_uri, id_file="", o=[]):
 
 
 @command('edit')
-def edit(name, connection_uri, id_file="", o=[]):
+def edit(name, connection_uri="", id_file="",  o=[]):
     """
     Edits the related entry in ssh config.
     """
@@ -84,8 +84,22 @@ def edit(name, connection_uri, id_file="", o=[]):
             name = " ".join(name.split(","))
 
         user, host, port = parse(connection_uri)
+        
+        settings = {}
+        settings.setdefault("user", user)
+        settings.setdefault("port", port)
 
-        storm_.edit_entry(name, host, user, port, id_file, o)
+        if id_file: 
+            settings["identityfile"] = id_file
+
+        if connection_uri: 
+            settings["hostname"] = connection_uri
+
+        for option in o:
+            k,v = option.split("=")
+            settings[k] = v 
+
+        storm_.edit_entry(name, **settings)
         print get_formatted_message(
             '"{0}" updated successfully.'.format(
                 name
