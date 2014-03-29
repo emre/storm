@@ -87,11 +87,10 @@ function Storm($scope, $http) {
               title: $scope.title,
               uri: $scope.uri
             });
-            plural();
             $scope.title = $scope.uri = "";
             $scope.state.action = "add new";
             focus();
-            fetch();
+            fetch(plural);
           } else {
             alert("something wrong...");
           }
@@ -146,7 +145,7 @@ function Storm($scope, $http) {
   };
 
   $scope.servers = [];
-  fetch();
+  fetch(plural);
 
   $scope.reset();
 }
