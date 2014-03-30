@@ -61,6 +61,19 @@ class StormTests(unittest.TestCase):
             if item.get("host") == 'google':
                 self.assertEqual(item.get("options").get("port"), '23')
 
+    def test_edit_by_hostname_regexp(self):
+        import re
+        self.storm.add_entry('google-01', 'google.com', 'root', '22', '/tmp/tmp.pub')
+        self.storm.add_entry('google-02', 'google.com', 'root', '23', '/tmp/tmp.pub')
+        self.storm.ssh_config.write_to_ssh_config()
+
+        self.storm.update_entry('google-[0-2]', port='24', identityfile='/tmp/tmp.pub1')
+
+        for item in self.storm.ssh_config.config_data:
+            if re.match(r"google*", item.get("host")):
+                self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub1')
+                self.assertEqual(item.get("options").get("port"), '24')
+
     def test_delete_host(self):
         self.storm.delete_entry('netscaler')
         for host in self.storm.ssh_config.config_data:
