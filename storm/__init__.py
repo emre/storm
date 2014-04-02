@@ -37,6 +37,15 @@ class Storm(object):
 
         return True
 
+    def update_entry(self, name, **kwargs):
+        if not self.is_host_in(name):
+            raise StormValueError('{0} doesn\'t exists in your sshconfig. use storm add command to add.'.format(name))
+
+        self.ssh_config.update_host(name, kwargs)
+        self.ssh_config.write_to_ssh_config()
+
+        return True
+
     def delete_entry(self, name):
         self.ssh_config.delete_host(name)
         self.ssh_config.write_to_ssh_config()
@@ -100,7 +109,8 @@ class Storm(object):
         return options
 
     def is_host_in(self, host):
+        import re
         for host_ in self.ssh_config.config_data:
-            if host_.get("host") == host:
+            if host_.get("host") == host or re.match(host, host_.get("host")):
                 return True
         return False
