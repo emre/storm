@@ -34,7 +34,8 @@ class StormTests(unittest.TestCase):
         self.storm.ssh_config.write_to_ssh_config()
 
         for search_str in ("hostname 1.1.1.1", "Host netscaler", "Host *"):
-            self.assertIn(search_str, open('/tmp/ssh_config').read())
+            with open('/tmp/ssh_config') as fd:
+                self.assertIn(search_str, fd.read())
 
     def test_update_host(self):
         self.storm.ssh_config.update_host("netscaler", {"hostname": "2.2.2.2"})
