@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
-from ssh_config import ConfigParser
-from exceptions import StormValueError
+from .ssh_config import ConfigParser
+from .exceptions import StormValueError
 
 from operator import itemgetter
 
@@ -59,7 +59,7 @@ class Storm(object):
         # required for the web api.
         if only_servers:
             for index, value in enumerate(config_data):
-                print value
+                print(value)
                 if value.get('type') and  value.get("type") != 'entry':
                     del config_data[index]
 

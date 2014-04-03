@@ -9,9 +9,13 @@ import sys
 import inspect
 import argparse
 from functools import wraps
-from itertools import izip_longest
-from storm_config_parser import get_storm_config
+try:
+    from itertools import izip_longest
+except ImportError:
+    from itertools import zip_longest as izip_longest
+from .storm_config_parser import get_storm_config
 import textwrap
+import collections
 
 
 class AliasedSubParsersAction(argparse._SubParsersAction):
@@ -75,10 +79,11 @@ class prog(object):
         self.parser.register('action', 'parsers', AliasedSubParsersAction)
         self.parser.formatter_class.width = 300
         self.subparsers = self.parser.add_subparsers(title="commands", metavar="COMMAND")
+        self.subparsers.required = True
 
     def command(self, *args, **kwargs):
         """Convenient decorator simply creates corresponding command"""
-        if len(args) == 1 and callable(args[0]):
+        if len(args) == 1 and isinstance(args[0], collections.Callable):
             return self._generate_command(args[0])
         else:
             def _command(func):
@@ -119,7 +124,7 @@ class prog(object):
         storm_config = get_storm_config()
         aliases, additional_kwarg = None, None
         if 'aliases' in storm_config:
-            for command, alias_list in storm_config.get("aliases").iteritems():
+            for command, alias_list in storm_config.get("aliases").items():
                 if func_pointer == command:
                     aliases = alias_list
                     break
@@ -138,7 +143,7 @@ class prog(object):
             args = list(args)
             is_positional = isinstance(v, self._POSITIONAL)
             options = [arg for arg in args if arg.startswith('-')]
-            if isinstance(v, list):
+            if isinstance(v, collections.Sequence):
                 kwargs.update({
                     'action': 'append',
                 })
