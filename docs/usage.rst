@@ -33,6 +33,21 @@ example::
     $ storm edit my_vps emre@emreyilmaz.me:2400
     "my_vps" updated successfully.
 
+updating multiple hosts all at once using regular expressions
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+::
+
+    storm update [-h] [--connection_uri CONNECTION_URI] [--id_file ID_FILE] name
+
+
+Where `-h`, `id_file` and `connection_uri` are optional arguments.
+
+example::
+
+    $ storm update my_vps-[1-5] --o user=emre
+    "my_vps-[1-5]" updated successfully.
+
 
 deleting hosts
 ++++++++++++++
