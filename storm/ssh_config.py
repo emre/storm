@@ -153,7 +153,7 @@ class ConfigParser(object):
                 continue
 
             searchable_information = host_entry.get("host")
-            for key, value in list(host_entry.get("options").items()):
+            for key, value in host_entry.get("options").items():
                 if isinstance(value, list):
                     value = " ".join(value)
                 if isinstance(value, int):
