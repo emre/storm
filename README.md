@@ -27,7 +27,7 @@ $ [sudo] easy_install stormssh
 
 ####usage & documentation
 
-<a href='http://storm.readthedocs.org/en/latest/'>http://storm.readthedocs.org</a>
+<a href='http://stormssh.readthedocs.org/'>http://stormssh.readthedocs.org/</a>
 
 #### screens
 
