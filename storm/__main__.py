@@ -2,6 +2,7 @@
 
 #!/usr/bin/python
 
+from __future__ import print_function
 import sys
 
 import getpass
@@ -71,7 +72,7 @@ def add(name, connection_uri, id_file="", o=[]):
         ), 'success'))
 
     except StormValueError as error:
-        print(get_formatted_message(error, 'error'))
+        print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 
 @command('edit')
@@ -91,7 +92,7 @@ def edit(name, connection_uri, id_file="", o=[]):
                 name
             ), 'success'))
     except StormValueError as error:
-        print(get_formatted_message(error, 'error'))
+        print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('update')
 def update(name, connection_uri="", id_file="", o=[]):
@@ -121,7 +122,7 @@ def update(name, connection_uri="", id_file="", o=[]):
                 name
             ), 'success'))
     except StormValueError as error:
-        print(get_formatted_message(error, 'error'))
+        print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('delete')
 def delete(name):
@@ -132,7 +133,7 @@ def delete(name):
         storm_.delete_entry(name)
         print(get_formatted_message('hostname "{0}" deleted successfully.'.format(name), 'success'))
     except StormValueError as error:
-        print(get_formatted_message(error, 'error'))
+        print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('list')
 def list():
@@ -189,7 +190,7 @@ def list():
         result += result_stack
         print(result)
     except Exception as error:
-        print(get_formatted_message(str(error), 'error'))
+        print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
 @command('search')
 def search(search_text):
@@ -206,7 +207,7 @@ def search(search_text):
             message += "".join(results)
             print(message)
     except Exception as error:
-        print(get_formatted_message(str(error), 'error'))
+        print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
 @command('delete_all')
 def delete_all():
@@ -217,7 +218,7 @@ def delete_all():
         storm_.delete_all_entries()
         print(get_formatted_message('all entries deleted.', 'success'))
     except Exception as error:
-        print(get_formatted_message(str(error), 'error'))
+        print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
 
 @command('web')

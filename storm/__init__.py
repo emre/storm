@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 
+from __future__ import print_function
 from .ssh_config import ConfigParser
 from .exceptions import StormValueError
 
