@@ -7,6 +7,7 @@ import sys
 
 import getpass
 import collections
+import six
 
 from storm import Storm, __version__
 from storm.exceptions import StormValueError
@@ -155,7 +156,7 @@ def list():
                     )
 
                     extra = False
-                    for key, value in host.get("options").items():
+                    for key, value in six.iteritems(host.get("options")):
 
                         if not key in ["user", "hostname", "port"]:
                             if not extra:
@@ -173,7 +174,7 @@ def list():
                     result += "\n\n"
                 else:
                     result_stack = "  (*) -> "
-                    for key, value in host.get("options").items():
+                    for key, value in six.iteritems(host.get("options")):
                         if isinstance(value, type([])):
                             result_stack += "{0}:\n".format(key)
                             for value_ in value:

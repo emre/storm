@@ -16,6 +16,7 @@ except ImportError:
 from .storm_config_parser import get_storm_config
 import textwrap
 import collections
+import six
 
 
 class AliasedSubParsersAction(argparse._SubParsersAction):
@@ -124,7 +125,7 @@ class prog(object):
         storm_config = get_storm_config()
         aliases, additional_kwarg = None, None
         if 'aliases' in storm_config:
-            for command, alias_list in storm_config.get("aliases").items():
+            for command, alias_list in six.iteritems(storm_config.get("aliases")):
                 if func_pointer == command:
                     aliases = alias_list
                     break
