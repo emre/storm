@@ -7,8 +7,9 @@ from os.path import expanduser
 from os.path import exists
 from paramiko.config import SSHConfig
 from operator import itemgetter
+import six
 
-from exceptions import StormValueError
+from .exceptions import StormValueError
 
 
 class StormConfig(SSHConfig):
@@ -104,7 +105,8 @@ class ConfigParser(object):
     def load(self):
         config = StormConfig()
 
-        config.parse(open(self.ssh_config_file))
+        with open(self.ssh_config_file) as fd:
+            config.parse(fd)
         for entry in config.__dict__.get("_config"):
             if entry.get("type") in ["comment", "empty_line"]:
                 self.config_data.append(entry)
@@ -152,7 +154,7 @@ class ConfigParser(object):
                 continue
 
             searchable_information = host_entry.get("host")
-            for key, value in host_entry.get("options").items():
+            for key, value in six.iteritems(host_entry.get("options")):
                 if isinstance(value, list):
                     value = " ".join(value)
                 if isinstance(value, int):
@@ -194,7 +196,7 @@ class ConfigParser(object):
                 file_content += host_item.get("value") + "\n"
                 continue
             host_item_content = "Host {0}\n".format(host_item.get("host"))
-            for key, value in host_item.get("options").iteritems():
+            for key, value in six.iteritems(host_item.get("options")):
                 if isinstance(value, list):
                     sub_content = ""
                     for value_ in value:

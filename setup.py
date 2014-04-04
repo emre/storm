@@ -25,6 +25,7 @@ setup(
         "termcolor",
         "flask",
         "argparse" if sys.version_info[:2] < (2, 7) else None,
+        "six",
     ])),
     classifiers=(
         'Development Status :: 5 - Production/Stable',
@@ -34,6 +35,7 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3'
         'License :: OSI Approved :: MIT License',
         'Topic :: System :: Systems Administration',
     ),

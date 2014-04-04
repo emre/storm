@@ -3,7 +3,7 @@
 import getpass
 import re
 
-from exceptions import StormInvalidPortError
+from .exceptions import StormInvalidPortError
 
 
 def parse(uri, user=None, port=22):
