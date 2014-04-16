@@ -13,10 +13,12 @@ try:
     from itertools import izip_longest
 except ImportError:
     from itertools import zip_longest as izip_longest
-from .storm_config_parser import get_storm_config
 import textwrap
 import collections
+
 import six
+
+from .storm_config_parser import get_storm_config
 
 
 class AliasedSubParsersAction(argparse._SubParsersAction):

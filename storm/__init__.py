@@ -1,6 +1,7 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 from __future__ import print_function
+
 from .ssh_config import ConfigParser
 from .exceptions import StormValueError
 
@@ -8,7 +9,7 @@ from operator import itemgetter
 
 import getpass
 
-__version__ = '0.5.3'
+__version__ = '0.6'
 
 
 class Storm(object):

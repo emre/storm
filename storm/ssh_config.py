@@ -1,12 +1,13 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 from os import makedirs
 from os import chmod
 from os.path import dirname
 from os.path import expanduser
 from os.path import exists
-from paramiko.config import SSHConfig
 from operator import itemgetter
+
+from paramiko.config import SSHConfig
 import six
 
 from .exceptions import StormValueError
