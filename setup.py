@@ -27,7 +27,7 @@ setup(
         "argparse" if sys.version_info[:2] < (2, 7) else None,
         "six",
     ])),
-    classifiers=(
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
@@ -41,5 +41,5 @@ setup(
         'Programming Language :: Python :: 3 :: 3.4',
         'License :: OSI Approved :: MIT License',
         'Topic :: System :: Systems Administration',
-    ),
+    ]
 )
