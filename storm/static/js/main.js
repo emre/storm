@@ -127,7 +127,7 @@ function Storm($scope, $http) {
     $scope.state.editIndex = index;
     $scope.state.action = "edit " + server.host;
     $scope.title = server.host;
-    $scope.uri = urify(server.options.username, server.options.hostname, server.options.port);
+    $scope.uri = urify(server.options.user, server.options.hostname, server.options.port);
     $scope.reset();
     server.editing = true;
     focus();
