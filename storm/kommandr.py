@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Simple module helps you convert your oridnary functions into cool
+Simple module helps you convert your ordinary functions into cool
 command-line interfaces using :py:module:``argparse`` in backyard.
 """
 
