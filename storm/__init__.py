@@ -60,10 +60,12 @@ class Storm(object):
 
         # required for the web api.
         if only_servers:
+            new_config_data = []
             for index, value in enumerate(config_data):
-                print(value)
-                if value.get('type') and value.get("type") != 'entry' or value.get("host") == '*':
-                    del config_data[index]
+                if value.get("type") == 'entry' and value.get("host") != '*':
+                    new_config_data.append(value)
+
+            config_data = new_config_data
 
         if order:
             config_data = sorted(config_data, key=itemgetter("host"))
