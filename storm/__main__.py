@@ -187,7 +187,7 @@ def list():
                                 key,
                                 value,
                             )
-                    result_stack = result_stack[0:-2] + "\n"
+                    result_stack = result_stack[0:-1] + "\n"
 
         result += result_stack
         print(result)
