@@ -62,7 +62,7 @@ class Storm(object):
         if only_servers:
             for index, value in enumerate(config_data):
                 print(value)
-                if value.get('type') and  value.get("type") != 'entry':
+                if value.get('type') and value.get("type") != 'entry' or value.get("host") == '*':
                     del config_data[index]
 
         if order:
