@@ -224,9 +224,9 @@ def delete_all():
 
 
 @command('web')
-def web(port=9002, debug=False):
+def web(port=9002, debug=False, ssh_config=None):
     """Starts the web UI."""
-    _web.run(port, debug)
+    _web.run(port, debug, ssh_config)
 
 
 if __name__ == '__main__':

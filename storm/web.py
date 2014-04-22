@@ -11,10 +11,6 @@ from storm.exceptions import StormValueError
 app = Flask(__name__)
 
 
-def get_storm():
-    return Storm()
-
-
 def render(template):
     static_dir = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(static_dir, 'templates', template)
@@ -34,13 +30,13 @@ def index():
 
 @app.route('/list', methods=['GET'])
 def list_keys():
-    storm_ = get_storm()
+    storm_ = app.get_storm()
     return response(json.dumps(storm_.list_entries(True, only_servers=True)))
 
 
 @app.route('/add', methods=['POST'])
 def add():
-    storm_ = get_storm()
+    storm_ = app.get_storm()
 
     try:
         name = request.json['name']
@@ -65,7 +61,7 @@ def add():
 
 @app.route('/edit', methods=['PUT'])
 def edit():
-    storm_ = get_storm()
+    storm_ = app.get_storm()
 
     try:
         name = request.json['name']
@@ -86,7 +82,7 @@ def edit():
 
 @app.route('/delete', methods=['POST'])
 def delete():
-    storm_ = get_storm()
+    storm_ = app.get_storm()
 
     try:
         name = request.json['name']
@@ -105,7 +101,16 @@ def favicon():
                                mimetype='image/vnd.microsoft.icon')
 
 
-def run(port, debug):
+def run(port, debug, ssh_config=None):
     port = int(port)
     debug = bool(debug)
+
+    # in order to make web interface testable, ssh_config_file should be an argument.
+    # is there a better way?
+
+    def get_storm():
+        return Storm(ssh_config)
+
+    app.get_storm = get_storm
+
     app.run(port=port, debug=debug)
