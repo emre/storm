@@ -19,6 +19,7 @@ import collections
 import six
 
 from .storm_config_parser import get_storm_config
+from . import __version__
 
 
 class AliasedSubParsersAction(argparse._SubParsersAction):
@@ -81,6 +82,8 @@ class prog(object):
         self.parser = argparse.ArgumentParser(**kwargs)
         self.parser.register('action', 'parsers', AliasedSubParsersAction)
         self.parser.formatter_class.width = 300
+        self.parser.add_argument('-v', '--version', action='version', version=__version__)
+
         self.subparsers = self.parser.add_subparsers(title="commands", metavar="COMMAND")
         self.subparsers.required = True
 
