@@ -1,39 +1,33 @@
 # Maintainer: Samed Beyribey <ras0ir@eventualis.org>
-pkgname=python2-storm
-pkgver=20130521
+pkgname=python-storm
+pkgver=0
 pkgrel=1
 pkgdesc="storm is a command line tool to manage your hosts at sshconfig"
 arch=('any')
 url="https://github.com/emre/storm"
-license=('GPL')
+source=('git://github.com/emre/storm.git')
+sha1sums=('SKIP')
+license=('MIT')
 makedepends=('git')
-depends=('python2-managepy-git' 'python2-paramiko' 'python2-termcolor' 
-    'python2-argparse')
+depends=('python-paramiko' 'python-termcolor' 'python-flask' 'python-six'
+        'python-crypto' 'python-ecdsa' 'python-werkzeug' 'python-jinja' 
+        'python-itsdangerous' 'python-markupsafe')
 
-_gitroot=git://github.com/emre/storm.git
-_gitname=storm
+# See https://wiki.archlinux.org/index.php/VCS_PKGBUILD_Guidelines#Git
+pkgver() {
+    cd "$srcdir/storm"
+      printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+    }
 
 build() {
-  cd "$srcdir"
-  msg "Connecting to GIT server...."
-
-  if [[ -d "$_gitname" ]]; then
-    cd "$_gitname" && git pull origin
-    msg "The local files are updated."
-  else
-    git clone "$_gitroot" "$_gitname"
-  fi
-
-  msg "GIT checkout done or server timeout"
-  msg "Starting build..."
-
-  rm -rf "$srcdir/$_gitname-build"
-  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+    cd "$srcdir/storm"
+    msg 'Building storm...'
+    python setup.py build
 }
 
 package() {
-  cd "$srcdir/$_gitname-build"
-  python2 setup.py install --root="$pkgdir/"
+  cd "$srcdir/storm"
+  python setup.py install --root="$pkgdir/"
 }
 
 # vim:set ts=2 sw=2 et:
