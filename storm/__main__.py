@@ -18,7 +18,6 @@ from storm import web as _web
 from storm.kommandr import *
 
 from termcolor import colored
-from types import ListType
 
 storm_ = Storm()
 
@@ -167,7 +166,7 @@ def list():
                             extra = True
 
                             if isinstance(value, collections.Sequence):
-                                if isinstance(value, ListType):
+                                if hasattr(value, '__iter__'):
                                     value = ",".join(value)
                                 else:
                                     value = value
