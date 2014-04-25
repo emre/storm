@@ -168,8 +168,6 @@ def list():
                             if isinstance(value, collections.Sequence):
                                 if hasattr(value, '__iter__'):
                                     value = ",".join(value)
-                                else:
-                                    value = value
                                     
                             result += "{0}={1} ".format(key, value)
                     if extra:
