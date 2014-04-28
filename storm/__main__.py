@@ -5,6 +5,12 @@ from __future__ import print_function
 
 import sys
 
+
+try:
+    import __builtin__ as builtins
+except ImportError:
+    import builtins
+
 import getpass
 import collections
 
@@ -159,7 +165,7 @@ def list():
                             extra = True
 
                             if isinstance(value, collections.Sequence):
-                                if isinstance(value, list):
+                                if isinstance(value, builtins.list):
                                     value = ",".join(value)
                                     
                             result += "{0}={1} ".format(key, value)
