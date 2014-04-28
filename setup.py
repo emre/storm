@@ -27,9 +27,6 @@ setup(
         "argparse" if sys.version_info[:2] < (2, 7) else None,
         "six",
     ])),
-    test_requires=[
-        "mock"
-    ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

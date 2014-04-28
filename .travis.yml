@@ -5,6 +5,7 @@ python:
   - "3.2"
   - "3.3"
 install:
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install argparse unittest2; fi
-  - pip install -r requirements.txt
-script: python tests.py
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi
+  - pip install -e .
+  - pip install -r requirements-dev.txt
+script: nosetests -v
