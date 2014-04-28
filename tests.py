@@ -25,7 +25,6 @@ class StormCliTestCase(unittest.TestCase):
         rc = process.returncode
         return out, err, rc
 
-    @unittest.expectedFailure
     def test_list_command(self):
         out, err, rc = self.run_cmd('list')
         self.assertEqual(out, b'\x1b[37mlisting entries:\n\n\x1b[0m\n')
