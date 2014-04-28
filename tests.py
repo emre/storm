@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import getpass
 import os
 import shlex
@@ -25,8 +27,8 @@ class StormCliTestCase(unittest.TestCase):
 
     def test_list_command(self):
         out, err, rc = self.run_cmd('list')
-        self.assertEqual(out, '\x1b[37mlisting entries:\n\n\x1b[0m\n')
-        self.assertEqual(err, '')
+        self.assertEqual(out, b'\x1b[37mlisting entries:\n\n\x1b[0m\n')
+        self.assertEqual(err, b'')
         self.assertEqual(rc, 0)
 
 
