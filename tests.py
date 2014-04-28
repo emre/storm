@@ -1,5 +1,8 @@
 import getpass
 import os
+import shlex
+import subprocess
+import sys
 try:
     import unittest2 as unittest
 except ImportError:
@@ -8,6 +11,23 @@ except ImportError:
 from storm import Storm
 from storm.ssh_uri_parser import parse
 from storm.exceptions import StormInvalidPortError
+
+
+class StormCliTestCase(unittest.TestCase):
+
+    def run_cmd(self, cmd):
+        cmd = shlex.split('storm %s' % cmd)
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        out, err = process.communicate()
+        rc = process.returncode
+        return out, err, rc
+
+    def test_list_command(self):
+        out, err, rc = self.run_cmd('list')
+        self.assertEqual(out, '\x1b[37mlisting entries:\n\n\x1b[0m    \x1b[37mfoo\x1b[0m -> foo@bar.com:22\n\n\n')
+        self.assertEqual(err, '')
+        self.assertEqual(rc, 0)
 
 
 class StormTests(unittest.TestCase):
