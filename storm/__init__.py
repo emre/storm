@@ -34,6 +34,7 @@ class Storm(object):
             raise StormValueError('{0} doesn\'t exists in your sshconfig. use storm add command to add.'.format(name))
 
         options = self.get_options(host, user, port, id_file, custom_options)
+
         self.ssh_config.update_host(name, options)
         self.ssh_config.write_to_ssh_config()
 
@@ -104,10 +105,12 @@ class Storm(object):
         if len(custom_options) > 0:
             for custom_option in custom_options:
                 if '=' in custom_option:
-                    key, value = custom_option.split("=")[0:2]
-                options.update({
-                    key: value,
-                })
+                    key, value = custom_option.split("=")
+
+                    options.update({
+                        key: value,
+                    })
+
         return options
 
     def is_host_in(self, host):
