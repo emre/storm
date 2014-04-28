@@ -9,3 +9,5 @@ install:
   - pip install -e .
   - pip install -r requirements-dev.txt
 script: nosetests -v
+notifications:
+  email: false
