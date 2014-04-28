@@ -101,23 +101,16 @@ def update(name, connection_uri="", id_file="", o=[]):
     """
     Enhanced version of the edit command featuring multiple edits using regular expressions to match entries
     """
+    settings = {}
+
+    if id_file != "": 
+        settings['identityfile'] = id_file
+
+    for option in o:
+        k,v = option.split("=")
+        settings[k] = v
+
     try:
-        user, host, port = parse(connection_uri)
-
-        settings = {}
-        settings.setdefault('port', port)
-        settings.setdefault('user', user)
-        
-        if host != "":
-            settings['hostname'] = host
-
-        if id_file != "": 
-            settings['identityfile'] = id_file
-
-        for option in o:
-            k,v = option.split("=")
-            settings[k] = v
-
         storm_.update_entry(name, **settings)
         print(get_formatted_message(
             '"{0}" updated successfully.'.format(
