@@ -7,4 +7,4 @@ python:
 install:
   - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install argparse unittest2; fi
   - pip install -r requirements.txt
-script: python tests
+script: python tests.py
