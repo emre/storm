@@ -6,6 +6,7 @@ from os.path import dirname
 from os.path import expanduser
 from os.path import exists
 from operator import itemgetter
+import re
 
 from paramiko.config import SSHConfig
 import six
