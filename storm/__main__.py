@@ -166,8 +166,9 @@ def list():
                             extra = True
 
                             if isinstance(value, collections.Sequence):
-                                value = ",".join(value)
-
+                                if hasattr(value, '__iter__'):
+                                    value = ",".join(value)
+                                    
                             result += "{0}={1} ".format(key, value)
                     if extra:
                         result = result[0:-1]

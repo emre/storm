@@ -69,7 +69,6 @@ class Storm(object):
 
         if order:
             config_data = sorted(config_data, key=itemgetter("host"))
-
         return config_data
 
     def delete_all_entries(self):
@@ -109,7 +108,6 @@ class Storm(object):
                 options.update({
                     key: value,
                 })
-
         return options
 
     def is_host_in(self, host):
