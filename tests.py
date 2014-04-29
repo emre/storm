@@ -43,10 +43,11 @@ class StormTests(unittest.TestCase):
 
     def test_add_host(self):
         self.storm.add_entry('google', 'google.com', 'root', '22', '/tmp/tmp.pub')
+        self.storm.add_entry('goog', 'google.com', 'root', '22', '/tmp/tmp.pub')
         self.storm.ssh_config.write_to_ssh_config()
 
         for item in self.storm.ssh_config.config_data:
-            if item.get("host") == 'google':
+            if item.get("host") == 'google' or item.get("host") == 'goog':
                 self.assertEqual(item.get("options").get("port"), '22')
                 self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub')
 
