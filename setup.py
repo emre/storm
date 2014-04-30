@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='stormssh',
-    version='0.6.2',
+    version='0.6.3',
     packages=find_packages(),
     package_data={'storm': ['templates/*.html', 'static/css/*.css',
                             'static/css/themes/storm/*.css', 'static/css/themes/storm/img/*.png',
