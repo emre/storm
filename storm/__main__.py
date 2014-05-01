@@ -19,7 +19,6 @@ import six
 from storm import Storm, __version__
 from storm.exceptions import StormValueError
 from storm.ssh_uri_parser import parse
-from storm import web as _web
 from storm.utils import (get_formatted_message, fixed_width, colored)
 from storm.kommandr import *
 
@@ -216,6 +215,7 @@ def delete_all():
 @command('web')
 def web(port=9002, debug=False, ssh_config=None):
     """Starts the web UI."""
+    from storm import web as _web
     _web.run(port, debug, ssh_config)
 
 
