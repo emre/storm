@@ -41,7 +41,7 @@ class Storm(object):
         return True
 
     def update_entry(self, name, **kwargs):
-        if not self.is_host_in(name, regexp_match = True):
+        if not self.is_host_in(name, regexp_match=True):
             raise StormValueError('{0} doesn\'t exists in your sshconfig. use storm add command to add.'.format(name))
 
         self.ssh_config.update_host(name, kwargs)
@@ -113,7 +113,7 @@ class Storm(object):
 
         return options
 
-    def is_host_in(self, host, regexp_match = False):
+    def is_host_in(self, host, regexp_match=False):
         import re
         for host_ in self.ssh_config.config_data:
             if host_.get("host") == host or (regexp_match and re.match(host, host_.get("host"))):
