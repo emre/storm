@@ -10,6 +10,8 @@ try:
 except ImportError:
     import unittest
 
+import six
+
 from storm import Storm
 from storm.ssh_uri_parser import parse
 from storm.exceptions import StormInvalidPortError
@@ -18,7 +20,8 @@ from storm.exceptions import StormInvalidPortError
 class StormCliTestCase(unittest.TestCase):
 
     def run_cmd(self, cmd):
-        cmd = shlex.split(('storm %s' % cmd).encode('utf-8'))
+        cmd = 'storm %s' % cmd
+        cmd = shlex.split(cmd.encode('utf-8') if six.PY2 else cmd)
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
         out, err = process.communicate()
