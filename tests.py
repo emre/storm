@@ -51,6 +51,21 @@ class StormTests(unittest.TestCase):
                 self.assertEqual(item.get("options").get("port"), '22')
                 self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub')
 
+    def test_clone_host(self):
+        self.storm.add_entry('google', 'google.com', 'ops', '24', '/tmp/tmp.pub')
+        self.storm.clone_entry('google', 'yahoo')
+
+        has_yahoo = False
+        for item in self.storm.ssh_config.config_data:
+            if item.get("host") == 'yahoo': 
+                has_yahoo = True
+                break
+
+        self.assertEqual(True, has_yahoo) 
+        self.assertEqual(item.get("options").get("port"), '24')
+        self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub')
+        self.assertEqual(item.get("options").get("user"), 'ops')
+
     def test_edit_host(self):
 
         self.storm.add_entry('google', 'google.com', 'root', '22', '/tmp/tmp.pub')

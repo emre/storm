@@ -62,6 +62,29 @@ def add(name, connection_uri, id_file="", o=[], config=None):
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 
+@command('clone')
+def clone(name, clone_name, config=None):
+    """
+    Clone an entry to the sshconfig.
+    """
+    storm_ = get_storm_instance(config)
+
+    try:
+
+        # validate name
+        if '@' in name:
+            raise StormValueError('invalid value: "@" cannot be used in name.')
+
+        storm_.clone_entry(name, clone_name)
+
+        print(get_formatted_message('{0} added to your ssh config. you can connect it by typing "ssh {0}".'.format(
+            clone_name
+        ), 'success'))
+
+    except StormValueError as error:
+        print(get_formatted_message(error, 'error'), file=sys.stderr)
+
+
 @command('edit')
 def edit(name, connection_uri, id_file="", o=[], config=None):
     """
