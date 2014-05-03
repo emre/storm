@@ -7,7 +7,7 @@ except ImportError:
 
 from storm import Storm
 from storm.ssh_uri_parser import parse
-from storm.exceptions import StormInvalidPortError
+from storm.exceptions import StormInvalidPortError, StormValueError
 
 
 class StormTests(unittest.TestCase):
@@ -65,6 +65,13 @@ class StormTests(unittest.TestCase):
         self.assertEqual(item.get("options").get("port"), '24')
         self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub')
         self.assertEqual(item.get("options").get("user"), 'ops')
+
+    def test_double_clone_exception(self):
+        self.storm.add_entry('google', 'google.com', 'ops', '24', '/tmp/tmp.pub')
+        self.storm.clone_entry('google', 'yahoo')
+
+        with self.assertRaises(StormValueError):
+            self.storm.clone_entry('google', 'yahoo')
 
     def test_edit_host(self):
 
