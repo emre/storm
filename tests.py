@@ -1,13 +1,38 @@
+from __future__ import unicode_literals
+
 import getpass
 import os
+import shlex
+import subprocess
+import sys
 try:
     import unittest2 as unittest
 except ImportError:
     import unittest
 
+import six
+
 from storm import Storm
 from storm.ssh_uri_parser import parse
 from storm.exceptions import StormInvalidPortError
+
+
+class StormCliTestCase(unittest.TestCase):
+
+    def run_cmd(self, cmd):
+        cmd = 'storm %s' % cmd
+        cmd = shlex.split(cmd.encode('utf-8') if six.PY2 else cmd)
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        out, err = process.communicate()
+        rc = process.returncode
+        return out, err, rc
+
+    def test_list_command(self):
+        out, err, rc = self.run_cmd('list')
+        self.assertEqual(out, b'\x1b[37mlisting entries:\n\n\x1b[0m\n')
+        self.assertEqual(err, b'')
+        self.assertEqual(rc, 0)
 
 
 class StormTests(unittest.TestCase):
