@@ -143,10 +143,23 @@ class ConfigParser(object):
 
     def update_host(self, host, options):
         import re
+        host_equals = None
+        host_re = None
         for index, host_entry in enumerate(self.config_data):
-            if host_entry.get("host") == host or re.match(host, host_entry.get("host")):
+            if host_entry.get("host") == host:
+                host_equals = (index, host_entry)
+                break
+            elif re.match(host, host_entry.get("host")):
+                host_re = (index, host_entry)
+        else:
+            if host_re is not None:
+                index, host_entry = host_re
                 self.config_data[index]["options"].update(options)
-  
+
+        if host_equals is not None:
+            index, host_entry = host_equals
+            self.config_data[index]["options"].update(options)
+
         return self
 
     def search_host(self, search_string):
