@@ -29,6 +29,21 @@ class Storm(object):
 
         return True
 
+    
+    def clone_entry(self, name, clone_name):
+        host = self.is_host_in(name, return_match = True)
+        if not host:
+            raise StormValueError('{0} doesn\'t exists in your sshconfig. use storm add command to add.'.format(name))
+
+        # check if an entry with the clone name already exists        
+        if name == clone_name or self.is_host_in(clone_name, return_match =True) is not None:
+            raise StormValueError('{0} already exists in your sshconfig. use storm update to modify.'.format(clone_name))
+       
+        self.ssh_config.add_host(clone_name, host.get('options'))
+        self.ssh_config.write_to_ssh_config()
+
+        return True
+
     def edit_entry(self, name, host, user, port, id_file, custom_options=[]):
         if not self.is_host_in(name):
             raise StormValueError('{0} doesn\'t exists in your sshconfig. use storm add command to add.'.format(name))
@@ -113,9 +128,9 @@ class Storm(object):
 
         return options
 
-    def is_host_in(self, host, regexp_match=False):
+    def is_host_in(self, host, return_match = False, regexp_match=False):
         import re
         for host_ in self.ssh_config.config_data:
             if host_.get("host") == host or (regexp_match and re.match(host, host_.get("host"))):
-                return True
-        return False
+                return True if not return_match else host_
+        return False if not return_match else None
