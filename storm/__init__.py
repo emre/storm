@@ -17,6 +17,7 @@ ERRORS = {
     "not_found": "{0} doesn\'t exists in your sshconfig. use storm add command to add.",
 }
 
+
 class Storm(object):
 
     def __init__(self, ssh_config_file=None):
