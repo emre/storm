@@ -151,14 +151,14 @@ def list(config=None):
     storm_ = get_storm_instance(config)
 
     try:
-        result = colored('listing entries:\n\n', 'white')
+        result = colored('Listing entries:\n\n', 'white')
         result_stack = ""
         for host in storm_.list_entries(True):
 
             if host.get("type") == 'entry':
                 if not host.get("host") == "*":
                     result += "    {0} -> {1}@{2}:{3}".format(
-                        colored(host["host"], 'white'),
+                        colored(host["host"], 'green'),
                         host.get("options").get("user", default_user),
                         host.get("options").get("hostname", "[hostname_not_specified]"),
                         host.get("options").get("port", 22)
