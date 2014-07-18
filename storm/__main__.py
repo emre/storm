@@ -180,8 +180,8 @@ def list(config=None):
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
-@command('search', config=None)
-def search(search_text):
+@command('search')
+def search(search_text, config=None):
     """
     Searches entries by given search text.
     """
@@ -199,8 +199,8 @@ def search(search_text):
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
-@command('delete_all', config=None)
-def delete_all():
+@command('delete_all')
+def delete_all(config=None):
     """
     Deletes all hosts from ssh config.
     """
