@@ -35,7 +35,7 @@ class Storm(object):
 
         options = self.get_options(host, user, port, id_file, custom_options)
 
-        self.ssh_config.update_host(name, options)
+        self.ssh_config.update_host(name, options, use_regex=False)
         self.ssh_config.write_to_ssh_config()
 
         return True
@@ -44,7 +44,7 @@ class Storm(object):
         if not self.is_host_in(name, regexp_match=True):
             raise StormValueError('{0} doesn\'t exists in your sshconfig. use storm add command to add.'.format(name))
 
-        self.ssh_config.update_host(name, kwargs)
+        self.ssh_config.update_host(name, kwargs, use_regex=True)
         self.ssh_config.write_to_ssh_config()
 
         return True
