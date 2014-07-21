@@ -36,7 +36,7 @@ $ [sudo] easy_install stormssh
 
 **web ui**
 
-<a href="http://i.imgur.com/OZkn89p.png"><img src="http://i.imgur.com/OZkn89p.png" width=300></a>
+<a href="http://i.imgur.com/wVtnWxx.png"><img src="http://i.imgur.com/wVtnWxx.png" width=300></a>
 
 
 
