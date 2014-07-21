@@ -21,8 +21,7 @@ from storm.exceptions import StormValueError
 from storm.ssh_uri_parser import parse
 from storm.utils import (get_formatted_message, fixed_width, colored)
 from storm.kommandr import *
-
-default_user = getpass.getuser()
+from storm.defaults import get_default
 
 
 def get_storm_instance(config_file=None):
@@ -49,12 +48,41 @@ def add(name, connection_uri, id_file="", o=[], config=None):
         # validate name
         if '@' in name:
             raise StormValueError('invalid value: "@" cannot be used in name.')
-        user, host, port = parse(connection_uri)
+
+        user, host, port = parse(
+            connection_uri,
+            user=get_default("user", storm_.defaults),
+            port=get_default("port", storm_.defaults)
+        )
+
         storm_.add_entry(name, host, user, port, id_file, o)
 
         print(get_formatted_message('{0} added to your ssh config. you can connect it by typing "ssh {0}".'.format(
 
             name
+        ), 'success'))
+
+    except StormValueError as error:
+        print(get_formatted_message(error, 'error'), file=sys.stderr)
+
+
+@command('clone')
+def clone(name, clone_name, config=None):
+    """
+    Clone an entry to the sshconfig.
+    """
+    storm_ = get_storm_instance(config)
+
+    try:
+
+        # validate name
+        if '@' in name:
+            raise StormValueError('invalid value: "@" cannot be used in name.')
+
+        storm_.clone_entry(name, clone_name)
+
+        print(get_formatted_message('{0} added to your ssh config. you can connect it by typing "ssh {0}".'.format(
+            clone_name
         ), 'success'))
 
     except StormValueError as error:
@@ -72,7 +100,11 @@ def edit(name, connection_uri, id_file="", o=[], config=None):
         if ',' in name:
             name = " ".join(name.split(","))
 
-        user, host, port = parse(connection_uri)
+        user, host, port = parse(
+            connection_uri,
+            user=get_default("user", storm_.defaults),
+            port=get_default("port", storm_.defaults)
+        )
 
         storm_.edit_entry(name, host, user, port, id_file, o)
         print(get_formatted_message(
@@ -127,17 +159,17 @@ def list(config=None):
     storm_ = get_storm_instance(config)
 
     try:
-        result = colored('listing entries:\n\n', 'white')
+        result = colored('Listing entries:', 'white', attrs=["bold", ]) + "\n\n"
         result_stack = ""
         for host in storm_.list_entries(True):
 
             if host.get("type") == 'entry':
                 if not host.get("host") == "*":
                     result += "    {0} -> {1}@{2}:{3}".format(
-                        colored(host["host"], 'white'),
-                        host.get("options").get("user", default_user),
+                        colored(host["host"], 'green', attrs=["bold", ]),
+                        host.get("options").get("user", get_default("user", storm_.defaults)),
                         host.get("options").get("hostname", "[hostname_not_specified]"),
-                        host.get("options").get("port", 22)
+                        host.get("options").get("port", get_default("port", storm_.defaults))
                     )
 
                     extra = False
@@ -159,17 +191,15 @@ def list(config=None):
 
                     result += "\n\n"
                 else:
-                    result_stack = "  (*) -> "
+                    result_stack = colored("   (*) General options: \n", "green", attrs=["bold",])
                     for key, value in six.iteritems(host.get("options")):
                         if isinstance(value, type([])):
-                            result_stack += "{0}:\n".format(key)
-                            for value_ in value:
-                                result_stack += "    {0}\n".format(
-                                    value_
-                                )
+                            result_stack += "\t  {0}: ".format(colored(key, "magenta"))
+                            result_stack += ', '.join(value)
+                            result_stack += "\n"
                         else:
-                            result_stack += "    {0}:{1}\n".format(
-                                key,
+                            result_stack += "\t  {0}: {1}\n".format(
+                                colored(key, "magenta"),
                                 value,
                             )
                     result_stack = result_stack[0:-1] + "\n"
@@ -179,8 +209,8 @@ def list(config=None):
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
-@command('search', config=None)
-def search(search_text):
+@command('search')
+def search(search_text, config=None):
     """
     Searches entries by given search text.
     """
@@ -198,8 +228,8 @@ def search(search_text):
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
-@command('delete_all', config=None)
-def delete_all():
+@command('delete_all')
+def delete_all(config=None):
     """
     Deletes all hosts from ssh config.
     """

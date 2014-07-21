@@ -36,3 +36,6 @@ nosetests.xml
 
 .idea
 .idea/*
+
+# Vagrant 
+.vagrant/*
