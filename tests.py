@@ -79,7 +79,7 @@ class StormCliTestCase(unittest.TestCase):
         with open(self.config_file, 'w+') as f:
             f.write(FAKE_SSH_CONFIG_FOR_CLI_TESTS)
 
-        self.config_arg = '--config={}'.format(self.config_file)
+        self.config_arg = '--config={0}'.format(self.config_file)
 
     def run_cmd(self, cmd):
 
@@ -96,7 +96,7 @@ class StormCliTestCase(unittest.TestCase):
         return out, err, rc
 
     def test_list_command(self):
-        out, err, rc = self.run_cmd('list {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('list {0}'.format(self.config_arg))
 
         self.assertTrue(out.startswith(" Listing entries:\n\n"))
 
@@ -127,162 +127,162 @@ class StormCliTestCase(unittest.TestCase):
         }
 
         for host in hosts:
-            self.assertIn(host, out)
+            self.assertIn(host.encode('ascii'), out)
 
         for custom_option in custom_options:
-            self.assertIn(custom_option, out)
+            self.assertIn(custom_option.encode('ascii'), out)
 
         for general_option, value in general_options.iteritems():
-            self.assertIn("{}: {}".format(general_option, value), out)
+            self.assertIn("{0}: {1}".format(general_option, value).encode('ascii'), out)
 
         self.assertEqual(err, b'')
         self.assertEqual(rc, 0)
 
     def test_version_command(self):
         out, err, rc = self.run_cmd('version')
-        self.assertIn(__version__, out)
+        self.assertIn(__version__.encode('ascii'), out)
 
     def test_basic_add(self):
-        out, err, rc = self.run_cmd('add netscaler ns@42.42.42.42 {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('add netscaler ns@42.42.42.42 {0}'.format(self.config_arg))
 
-        self.assertIn("success", out)
+        self.assertIn(b"success", out)
 
     def test_add_duplicate(self):
-        out, err, rc = self.run_cmd('add aws.apache test@test.com {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('add aws.apache test@test.com {0}'.format(self.config_arg))
 
         self.assertEqual(b'', out)
-        self.assertIn('error', err)
+        self.assertIn(b'error', err)
 
     def test_add_invalid_host(self):
-        out, err, rc = self.run_cmd('add @_@ test.com {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('add @_@ test.com {0}'.format(self.config_arg))
 
         self.assertEqual(b'', out)
-        self.assertIn('error', err)
+        self.assertIn(b'error', err)
 
     def test_advanced_add(self):
-        out, err, rc = self.run_cmd('add postgresql-server postgres@192.168.1.1 {} {}{}'.format(
+        out, err, rc = self.run_cmd('add postgresql-server postgres@192.168.1.1 {0} {1}{2}'.format(
             "--id_file=/tmp/idfilecheck.rsa ",
             '--o "StrictHostKeyChecking=yes" --o "UserKnownHostsFile=/dev/advanced_test" ',
             self.config_arg)
         )
 
-        self.assertIn("success", out)
+        self.assertIn(b"success", out)
 
         with open(self.config_file) as f:
             # check that property is really flushed out to the config?
             content = f.read()
-            self.assertIn("identityfile /tmp/idfilecheck.rsa", content)
-            self.assertIn("stricthostkeychecking yes", content)
-            self.assertIn("userknownhostsfile /dev/advanced_test", content)
+            self.assertIn(b"identityfile /tmp/idfilecheck.rsa", content)
+            self.assertIn(b"stricthostkeychecking yes", content)
+            self.assertIn(b"userknownhostsfile /dev/advanced_test", content)
 
     def test_add_with_idfile(self):
-        out, err, rc = self.run_cmd('add postgresql-server postgres@192.168.1.1 {} {}'.format(
+        out, err, rc = self.run_cmd('add postgresql-server postgres@192.168.1.1 {0} {1}'.format(
             "--id_file=/tmp/idfileonlycheck.rsa",
             self.config_arg)
         )
 
-        self.assertIn("success", out)
+        self.assertIn(b"success", out)
 
         with open(self.config_file) as f:
             content = f.read()
-            self.assertIn("identityfile /tmp/idfileonlycheck.rsa", content)
+            self.assertIn(b"identityfile /tmp/idfileonlycheck.rsa", content)
 
     def test_basic_edit(self):
-        out, err, rc = self.run_cmd('edit aws.apache basic_edit_check@10.20.30.40 {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('edit aws.apache basic_edit_check@10.20.30.40 {0}'.format(self.config_arg))
 
-        self.assertIn("success", out)
+        self.assertIn(b"success", out)
 
         with open(self.config_file) as f:
             content = f.read()
-            self.assertIn("basic_edit_check", content)
-            self.assertIn("10.20.30.40", content)
+            self.assertIn(b"basic_edit_check", content)
+            self.assertIn(b"10.20.30.40", content)
 
     def test_edit_invalid_host(self):
-        out, err, rc = self.run_cmd('edit @missing_host test.com {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('edit @missing_host test.com {0}'.format(self.config_arg))
 
         self.assertEqual(b'', out)
-        self.assertIn('error', err)
+        self.assertIn(b'error', err)
 
     def test_edit_missing_host(self):
-        out, err, rc = self.run_cmd('edit missing_host test.com {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('edit missing_host test.com {0}'.format(self.config_arg))
 
         self.assertEqual(b'', out)
-        self.assertIn('error', err)
+        self.assertIn(b'error', err)
 
     def test_update(self):
-        out, err, rc = self.run_cmd('update aws.apache --o "user=daghan" --o port=42000 {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('update aws.apache --o "user=daghan" --o port=42000 {0}'.format(self.config_arg))
 
-        self.assertIn("success", out)
+        self.assertIn(b"success", out)
 
         with open(self.config_file) as f:
             content = f.read()
-            self.assertIn("user daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
-            self.assertIn("port 42000", content)
+            self.assertIn(b"user daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
+            self.assertIn(b"port 42000", content)
 
     def test_update_regex(self):
 
-        self.run_cmd('add worker alphaworker.com {}'.format(self.config_arg))
+        self.run_cmd('add worker alphaworker.com {0}'.format(self.config_arg))
 
         # add three machines -- hostnames starts with worker-N
-        self.run_cmd('add worker-1 worker1.com {}'.format(self.config_arg))
-        self.run_cmd('add worker-2 worker2.com {}'.format(self.config_arg))
-        self.run_cmd('add worker-4 worker4.com {}'.format(self.config_arg))
+        self.run_cmd('add worker-1 worker1.com {0}'.format(self.config_arg))
+        self.run_cmd('add worker-2 worker2.com {0}'.format(self.config_arg))
+        self.run_cmd('add worker-4 worker4.com {0}'.format(self.config_arg))
 
         # another one -- regex shouldn't capture that one though.
-        self.run_cmd('add worker3 worker3.com {}'.format(self.config_arg))
+        self.run_cmd('add worker3 worker3.com {0}'.format(self.config_arg))
 
-        out, err, rc = self.run_cmd("update 'worker-[1-5]' --o hostname=boss.com {}".format(self.config_arg))
+        out, err, rc = self.run_cmd("update 'worker-[1-5]' --o hostname=boss.com {0}".format(self.config_arg))
 
-        self.assertIn("success", out)
+        self.assertIn(b"success", out)
 
         # edit the alphaworker
-        out, err, rc = self.run_cmd('edit worker alphauser@alphaworker.com {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('edit worker alphauser@alphaworker.com {0}'.format(self.config_arg))
 
         with open(self.config_file) as f:
             content = f.read()
             self.assertNotIn("worker1.com", content)
             self.assertNotIn("worker2.com", content)
             self.assertNotIn("worker4.com", content)
-            self.assertIn("worker3.com", content)
-            self.assertIn("alphauser", content)
+            self.assertIn(b"worker3.com", content)
+            self.assertIn(b"alphauser", content)
 
-        out, err, rc = self.run_cmd("edit worker  {}".format(self.config_arg))
+        out, err, rc = self.run_cmd("edit worker  {0}".format(self.config_arg))
 
     def test_update_invalid_regex(self):
 
-        out, err, rc = self.run_cmd("update 'drogba-[0-5]' --o hostname=boss.com {}".format(self.config_arg))
+        out, err, rc = self.run_cmd("update 'drogba-[0-5]' --o hostname=boss.com {0}".format(self.config_arg))
 
         self.assertEqual(b'', out)
-        self.assertIn('error', err)
+        self.assertIn(b'error', err)
 
     def test_delete(self):
-        out, err, rc = self.run_cmd("delete server1 {}".format(self.config_arg))
-        self.assertIn("success", out)
+        out, err, rc = self.run_cmd("delete server1 {0}".format(self.config_arg))
+        self.assertIn(b"success", out)
 
     def test_delete_invalid_hostname(self):
 
         out, err, rc = self.run_cmd("delete unknown_server".format(self.config_arg))
 
         self.assertEqual(b'', out)
-        self.assertIn('error', err)
+        self.assertIn(b'error', err)
 
     def test_search(self):
 
-        out, err, rc = self.run_cmd("search aws {}".format(self.config_arg))
+        out, err, rc = self.run_cmd("search aws {0}".format(self.config_arg))
 
         self.assertTrue(out.startswith('Listing results for aws:'))
-        self.assertIn('aws.apache', out)
+        self.assertIn(b'aws.apache', out)
 
     def test_invalid_search(self):
 
-        out, err, rc = self.run_cmd("search THEREISNOTHINGRELATEDWITHME {}".format(self.config_arg))
+        out, err, rc = self.run_cmd("search THEREISNOTHINGRELATEDWITHME {0}".format(self.config_arg))
 
-        self.assertIn('no results found.', out)
+        self.assertIn(b'no results found.', out)
 
     def test_delete_all(self):
-        out, err, rc = self.run_cmd('delete_all {}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('delete_all {0}'.format(self.config_arg))
 
-        self.assertIn('all entries deleted', out)
+        self.assertIn(b'all entries deleted', out)
 
 
     def tearDown(self):
