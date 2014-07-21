@@ -19,7 +19,6 @@ import six
 from storm import Storm, __version__
 from storm.exceptions import StormValueError
 from storm.ssh_uri_parser import parse
-from storm import web as _web
 from storm.utils import (get_formatted_message, fixed_width, colored)
 from storm.kommandr import *
 from storm.defaults import get_default
@@ -206,7 +205,7 @@ def list(config=None):
                     result_stack = result_stack[0:-1] + "\n"
 
         result += result_stack
-        print(result)
+        print(get_formatted_message(result, ""))
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
@@ -246,6 +245,7 @@ def delete_all(config=None):
 @command('web')
 def web(port=9002, debug=False, ssh_config=None):
     """Starts the web UI."""
+    from storm import web as _web
     _web.run(port, debug, ssh_config)
 
 

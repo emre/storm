@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from termcolor import colored
+from .exceptions import StormValueError
 
 
 def fixed_width(text, size):
@@ -12,7 +15,24 @@ def fixed_width(text, size):
     return text
 
 
+COLOR_CODES = [
+    "\x1b[1m",
+    "\x1b[37m",
+    "\x1b[0m",
+    "\x1b[32m",
+    "\x1b[35m",
+]
+
+
 def get_formatted_message(message, format_type):
+
+    # required for CLI test suite. see tests.py
+    if 'TESTMODE' in os.environ and not isinstance(message, StormValueError):
+        for color_code in COLOR_CODES:
+            message = message.replace(color_code, "")
+
+        return "{0} {1}".format(format_type, message)
+
     format_typed = fixed_width(format_type, 8)
     all_message = ""
     message = " %s" % message
