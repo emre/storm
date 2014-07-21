@@ -109,7 +109,8 @@ class StormCliTestCase(unittest.TestCase):
         ], [
             "[custom options] identityfile=~/.ssh/aws.apache.key",
             "[custom options] identityfile=~/.ssh/nas01.key",
-            "[custom options] identityfile=~/.ssh/vps1.cyberciti.biz.key localforward=3128 127.0.0.1:3128",
+            "identityfile=~/.ssh/vps1.cyberciti.biz.key",
+            "localforward=3128 127.0.0.1:3128",
             "[custom options] identityfile=/nfs/shared/users/nixcraft/keys/server1/id_rsa,/tmp/x.rsa",
             "[custom options] proxycommand=ssh nixcraft@gateway.uk.cyberciti.biz nc %h %p 2> /dev/null",
         ]
