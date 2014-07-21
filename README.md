@@ -31,7 +31,7 @@ $ [sudo] easy_install stormssh
 
 #### screens
 
-<a href="http://i.imgur.com/uPtQkdw.png"><img src="http://i.imgur.com/uPtQkdw.png" width=300></a>
+<a href="http://i.imgur.com/uPtQkdw.png"><img src="http://i.imgur.com/uPtQkdw.png" width=600></a>
 
 
 **web ui**
