@@ -11,7 +11,7 @@ from .exceptions import StormValueError
 from .defaults import get_default
 
 
-__version__ = '0.6.3'
+__version__ = '0.6.4'
 
 ERRORS = {
     "already_in": "{0} is already in your sshconfig. use storm edit or storm update to modify.",
@@ -132,7 +132,7 @@ class Storm(object):
                     key, value = custom_option.split("=")
 
                     options.update({
-                        key: value,
+                        key.lower() : value,
                     })
 
         return options
