@@ -98,7 +98,7 @@ class StormCliTestCase(unittest.TestCase):
     def test_list_command(self):
         out, err, rc = self.run_cmd('list {0}'.format(self.config_arg))
 
-        self.assertTrue(out.startswith(" Listing entries:\n\n"))
+        self.assertTrue(out.encode('ascii').startswith(" Listing entries:\n\n"))
 
         hosts, custom_options = [
             "aws.apache -> wwwdata@1.2.3.4:22",
@@ -170,7 +170,7 @@ class StormCliTestCase(unittest.TestCase):
 
         with open(self.config_file) as f:
             # check that property is really flushed out to the config?
-            content = f.read()
+            content = f.read().encode('ascii')
             self.assertIn(b"identityfile /tmp/idfilecheck.rsa", content)
             self.assertIn(b"stricthostkeychecking yes", content)
             self.assertIn(b"userknownhostsfile /dev/advanced_test", content)
@@ -184,7 +184,7 @@ class StormCliTestCase(unittest.TestCase):
         self.assertIn(b"success", out)
 
         with open(self.config_file) as f:
-            content = f.read()
+            content = f.read().encode('ascii')
             self.assertIn(b"identityfile /tmp/idfileonlycheck.rsa", content)
 
     def test_basic_edit(self):
@@ -193,7 +193,7 @@ class StormCliTestCase(unittest.TestCase):
         self.assertIn(b"success", out)
 
         with open(self.config_file) as f:
-            content = f.read()
+            content = f.read().encode('ascii')
             self.assertIn(b"basic_edit_check", content)
             self.assertIn(b"10.20.30.40", content)
 
@@ -215,7 +215,7 @@ class StormCliTestCase(unittest.TestCase):
         self.assertIn(b"success", out)
 
         with open(self.config_file) as f:
-            content = f.read()
+            content = f.read().encode('ascii')
             self.assertIn(b"user daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
             self.assertIn(b"port 42000", content)
 
@@ -239,7 +239,7 @@ class StormCliTestCase(unittest.TestCase):
         out, err, rc = self.run_cmd('edit worker alphauser@alphaworker.com {0}'.format(self.config_arg))
 
         with open(self.config_file) as f:
-            content = f.read()
+            content = f.read().encode('ascii')
             self.assertNotIn("worker1.com", content)
             self.assertNotIn("worker2.com", content)
             self.assertNotIn("worker4.com", content)
@@ -270,7 +270,7 @@ class StormCliTestCase(unittest.TestCase):
 
         out, err, rc = self.run_cmd("search aws {0}".format(self.config_arg))
 
-        self.assertTrue(out.startswith('Listing results for aws:'))
+        self.assertTrue(out.encode('ascii').startswith('Listing results for aws:'))
         self.assertIn(b'aws.apache', out)
 
     def test_invalid_search(self):
