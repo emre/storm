@@ -31,7 +31,7 @@ def get_formatted_message(message, format_type):
         for color_code in COLOR_CODES:
             message = message.replace(color_code, "")
 
-        return "{} {}".format(format_type, message)
+        return "{0} {1}".format(format_type, message)
 
     format_typed = fixed_width(format_type, 8)
     all_message = ""
