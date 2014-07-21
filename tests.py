@@ -132,7 +132,7 @@ class StormCliTestCase(unittest.TestCase):
         for custom_option in custom_options:
             self.assertIn(custom_option.encode('ascii'), out)
 
-        for general_option, value in general_options.iteritems():
+        for general_option, value in six.iteritems(general_options):
             self.assertIn("{0}: {1}".format(general_option, value).encode('ascii'), out)
 
         self.assertEqual(err, b'')
