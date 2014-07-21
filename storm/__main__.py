@@ -205,7 +205,7 @@ def list(config=None):
                     result_stack = result_stack[0:-1] + "\n"
 
         result += result_stack
-        print(result)
+        print(get_formatted_message(result, ""))
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
