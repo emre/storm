@@ -38,7 +38,3 @@ $ [sudo] easy_install stormssh
 
 <a href="http://i.imgur.com/wVtnWxx.png"><img src="http://i.imgur.com/wVtnWxx.png"></a>
 
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/emre/storm/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
