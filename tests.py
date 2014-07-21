@@ -98,7 +98,7 @@ class StormCliTestCase(unittest.TestCase):
     def test_list_command(self):
         out, err, rc = self.run_cmd('list {0}'.format(self.config_arg))
 
-        self.assertTrue(out.encode('ascii').startswith(" Listing entries:\n\n"))
+        self.assertTrue(out.startswith(b" Listing entries:\n\n"))
 
         hosts, custom_options = [
             "aws.apache -> wwwdata@1.2.3.4:22",
@@ -240,9 +240,9 @@ class StormCliTestCase(unittest.TestCase):
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
-            self.assertNotIn("worker1.com", content)
-            self.assertNotIn("worker2.com", content)
-            self.assertNotIn("worker4.com", content)
+            self.assertNotIn(b"worker1.com", content)
+            self.assertNotIn(b"worker2.com", content)
+            self.assertNotIn(b"worker4.com", content)
             self.assertIn(b"worker3.com", content)
             self.assertIn(b"alphauser", content)
 
@@ -270,7 +270,7 @@ class StormCliTestCase(unittest.TestCase):
 
         out, err, rc = self.run_cmd("search aws {0}".format(self.config_arg))
 
-        self.assertTrue(out.encode('ascii').startswith('Listing results for aws:'))
+        self.assertTrue(out.startswith(b'Listing results for aws:'))
         self.assertIn(b'aws.apache', out)
 
     def test_invalid_search(self):
