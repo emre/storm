@@ -4,11 +4,12 @@ from __future__ import print_function
 
 from operator import itemgetter
 
-import getpass
 import re
 
 from .ssh_config import ConfigParser
 from .exceptions import StormValueError
+from .defaults import get_default
+
 
 __version__ = '0.6.3'
 
@@ -18,11 +19,13 @@ ERRORS = {
 }
 
 
+
 class Storm(object):
 
     def __init__(self, ssh_config_file=None):
         self.ssh_config = ConfigParser(ssh_config_file)
         self.ssh_config.load()
+        self.defaults = self.ssh_config.defaults
 
     def add_entry(self, name, host, user, port, id_file, custom_options=[]):
         if self.is_host_in(name):
@@ -104,9 +107,9 @@ class Storm(object):
         for host_entry in results:
             formatted_results.append("    {0} -> {1}@{2}:{3}\n".format(
                 host_entry.get("host"),
-                host_entry.get("options").get("user", getpass.getuser()),
-                host_entry.get("options").get("hostname"),
-                host_entry.get("options").get("port", 22),
+                host_entry.get("options").get("user", get_default("user", self.defaults)),
+                host_entry.get("options").get("hostname", "[hostname_not_specified]"),
+                host_entry.get("options").get("port", get_default("port", self.defaults)),
             ))
 
         return formatted_results

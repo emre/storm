@@ -91,6 +91,8 @@ class ConfigParser(object):
         if not ssh_config_file:
             ssh_config_file = self.get_default_ssh_config_file()
 
+        self.defaults = {}
+
         self.ssh_config_file = ssh_config_file
 
         if not exists(self.ssh_config_file):
@@ -109,7 +111,11 @@ class ConfigParser(object):
 
         with open(self.ssh_config_file) as fd:
             config.parse(fd)
+
         for entry in config.__dict__.get("_config"):
+            if entry.get("host") == ["*"]:
+                self.defaults.update(entry.get("config"))
+
             if entry.get("type") in ["comment", "empty_line"]:
                 self.config_data.append(entry)
                 continue
@@ -130,6 +136,7 @@ class ConfigParser(object):
             #"Host *" entries.
             if entry.get("config") and len(entry.get("config")) > 0:
                 self.config_data.append(host_item)
+
         return self.config_data
 
     def add_host(self, host, options):
@@ -152,6 +159,8 @@ class ConfigParser(object):
         results = []
         for host_entry in self.config_data:
             if host_entry.get("type") != 'entry':
+                continue
+            if host_entry.get("host") == "*":
                 continue
 
             searchable_information = host_entry.get("host")
