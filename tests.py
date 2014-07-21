@@ -5,7 +5,6 @@ import os
 import shlex
 import subprocess
 import sys
-from mock import patch
 
 try:
     import unittest2 as unittest
