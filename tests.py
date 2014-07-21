@@ -203,7 +203,7 @@ class StormCliTestCase(unittest.TestCase):
         self.assertEqual(b'', out)
         self.assertIn('error', err)
 
-    def test_edit_invalid_host(self):
+    def test_edit_missing_host(self):
         out, err, rc = self.run_cmd('edit missing_host test.com {}'.format(self.config_arg))
 
         self.assertEqual(b'', out)
