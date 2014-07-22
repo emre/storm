@@ -3,10 +3,9 @@
 from __future__ import print_function
 
 from operator import itemgetter
-
 import re
 
-from .ssh_config import ConfigParser
+from .parsers.ssh_config_parser import ConfigParser
 from .exceptions import StormValueError
 from .defaults import get_default
 

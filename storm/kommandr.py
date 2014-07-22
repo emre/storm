@@ -8,17 +8,16 @@ command-line interfaces using :py:module:``argparse`` in backyard.
 import sys
 import inspect
 import argparse
-from functools import wraps
+
 try:
     from itertools import izip_longest
 except ImportError:
     from itertools import zip_longest as izip_longest
-import textwrap
 import collections
 
 import six
 
-from .storm_config_parser import get_storm_config
+from .parsers.storm_config_parser import get_storm_config
 from . import __version__
 
 

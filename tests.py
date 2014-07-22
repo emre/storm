@@ -4,7 +4,6 @@ import getpass
 import os
 import shlex
 import subprocess
-import sys
 
 try:
     import unittest2 as unittest
@@ -14,8 +13,7 @@ except ImportError:
 import six
 
 from storm import Storm
-from storm.ssh_uri_parser import parse
-from storm.exceptions import StormInvalidPortError, StormValueError
+from storm.parsers.ssh_uri_parser import parse
 from storm import __version__
 
 
@@ -350,7 +348,7 @@ class StormTests(unittest.TestCase):
         self.storm.add_entry('google', 'google.com', 'ops', '24', '/tmp/tmp.pub')
         self.storm.clone_entry('google', 'yahoo')
 
-        with self.assertRaises(StormValueError):
+        with self.assertRaises(ValueError):
             self.storm.clone_entry('google', 'yahoo')
 
     def test_edit_host(self):
@@ -400,7 +398,7 @@ class StormTests(unittest.TestCase):
             self.assertEqual(parse(uri[0]), uri[1])
 
         # false strings
-        self.assertRaises(StormInvalidPortError, parse, 'root@emreyilmaz.me:string-port')
+        self.assertRaises(ValueError, parse, 'root@emreyilmaz.me:string-port')
 
     def test_search_host(self):
         results = self.storm.ssh_config.search_host("netsca")

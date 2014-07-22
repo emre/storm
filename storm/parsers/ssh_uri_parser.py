@@ -3,8 +3,6 @@
 import getpass
 import re
 
-from .exceptions import StormInvalidPortError
-
 
 def parse(uri, user=None, port=22):
     """
@@ -35,7 +33,7 @@ def parse(uri, user=None, port=22):
     try:
         port = int(port)
     except ValueError:
-        raise StormInvalidPortError("port must be numeric.")
+        raise ValueError("port must be numeric.")
 
     # get host
     uri = re.sub(":.*", "", uri)

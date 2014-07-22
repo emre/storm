@@ -5,8 +5,6 @@ from os.path import exists
 
 import json
 
-from .defaults import get_default
-
 
 def get_storm_config():
     config_file = expanduser("~/.stormssh/config")
