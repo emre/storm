@@ -27,7 +27,7 @@ COLOR_CODES = [
 def get_formatted_message(message, format_type):
 
     # required for CLI test suite. see tests.py
-    if 'TESTMODE' in os.environ and not isinstance(message, StormValueError):
+    if 'TESTMODE' in os.environ and not isinstance(message, ValueError):
         for color_code in COLOR_CODES:
             message = message.replace(color_code, "")
 
