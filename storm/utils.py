@@ -3,7 +3,6 @@
 import os
 
 from termcolor import colored
-from .exceptions import StormValueError
 
 
 def fixed_width(text, size):

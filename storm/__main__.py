@@ -10,7 +10,6 @@ except ImportError:
     import builtins
 
 from storm import Storm
-from storm.exceptions import StormValueError
 from storm.parsers.ssh_uri_parser import parse
 from storm.utils import (get_formatted_message, colored)
 from storm.kommandr import *
@@ -41,7 +40,7 @@ def add(name, connection_uri, id_file="", o=[], config=None):
 
         # validate name
         if '@' in name:
-            raise StormValueError('invalid value: "@" cannot be used in name.')
+            raise ValueError('invalid value: "@" cannot be used in name.')
 
         user, host, port = parse(
             connection_uri,
@@ -56,7 +55,7 @@ def add(name, connection_uri, id_file="", o=[], config=None):
             name
         ), 'success'))
 
-    except StormValueError as error:
+    except ValueError as error:
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 
@@ -71,7 +70,7 @@ def clone(name, clone_name, config=None):
 
         # validate name
         if '@' in name:
-            raise StormValueError('invalid value: "@" cannot be used in name.')
+            raise ValueError('invalid value: "@" cannot be used in name.')
 
         storm_.clone_entry(name, clone_name)
 
@@ -79,7 +78,7 @@ def clone(name, clone_name, config=None):
             clone_name
         ), 'success'))
 
-    except StormValueError as error:
+    except ValueError as error:
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 
@@ -105,7 +104,7 @@ def edit(name, connection_uri, id_file="", o=[], config=None):
             '"{0}" updated successfully.'.format(
                 name
             ), 'success'))
-    except StormValueError as error:
+    except ValueError as error:
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('update')
@@ -129,7 +128,7 @@ def update(name, connection_uri="", id_file="", o=[], config=None):
             '"{0}" updated successfully.'.format(
                 name
             ), 'success'))
-    except StormValueError as error:
+    except ValueError as error:
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('delete')

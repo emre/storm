@@ -6,7 +6,6 @@ from operator import itemgetter
 import re
 
 from .parsers.ssh_config_parser import ConfigParser
-from .exceptions import StormValueError
 from .defaults import get_default
 
 
@@ -28,7 +27,7 @@ class Storm(object):
 
     def add_entry(self, name, host, user, port, id_file, custom_options=[]):
         if self.is_host_in(name):
-            raise StormValueError(ERRORS["already_in"].format(name))
+            raise ValueError(ERRORS["already_in"].format(name))
 
         options = self.get_options(host, user, port, id_file, custom_options)
 
@@ -41,11 +40,11 @@ class Storm(object):
     def clone_entry(self, name, clone_name):
         host = self.is_host_in(name, return_match=True)
         if not host:
-            raise StormValueError(ERRORS["not_found"].format(name))
+            raise ValueError(ERRORS["not_found"].format(name))
 
         # check if an entry with the clone name already exists        
         if name == clone_name or self.is_host_in(clone_name, return_match=True) is not None:
-            raise StormValueError(ERRORS["already_in"].format(clone_name))
+            raise ValueError(ERRORS["already_in"].format(clone_name))
        
         self.ssh_config.add_host(clone_name, host.get('options'))
         self.ssh_config.write_to_ssh_config()
@@ -54,7 +53,7 @@ class Storm(object):
 
     def edit_entry(self, name, host, user, port, id_file, custom_options=[]):
         if not self.is_host_in(name):
-            raise StormValueError(ERRORS["not_found"].format(name))
+            raise ValueError(ERRORS["not_found"].format(name))
 
         options = self.get_options(host, user, port, id_file, custom_options)
 
@@ -65,7 +64,7 @@ class Storm(object):
 
     def update_entry(self, name, **kwargs):
         if not self.is_host_in(name, regexp_match=True):
-            raise StormValueError(ERRORS["not_found"].format(name))
+            raise ValueError(ERRORS["not_found"].format(name))
 
         self.ssh_config.update_host(name, kwargs, use_regex=True)
         self.ssh_config.write_to_ssh_config()
