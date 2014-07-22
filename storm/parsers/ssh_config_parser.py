@@ -11,7 +11,6 @@ import re
 from paramiko.config import SSHConfig
 import six
 
-from .exceptions import StormValueError
 
 
 class StormConfig(SSHConfig):
@@ -185,7 +184,7 @@ class ConfigParser(object):
                 found += 1
 
         if found == 0:
-            raise StormValueError('No host found')
+            raise ValueError('No host found')
         return self
 
     def delete_all_hosts(self):

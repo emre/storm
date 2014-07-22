@@ -3,25 +3,19 @@
 
 from __future__ import print_function
 
-import sys
-
 
 try:
     import __builtin__ as builtins
 except ImportError:
     import builtins
 
-import getpass
-import collections
-
-import six
-
-from storm import Storm, __version__
+from storm import Storm
 from storm.exceptions import StormValueError
-from storm.ssh_uri_parser import parse
-from storm.utils import (get_formatted_message, fixed_width, colored)
+from storm.parsers.ssh_uri_parser import parse
+from storm.utils import (get_formatted_message, colored)
 from storm.kommandr import *
 from storm.defaults import get_default
+from storm import __version__
 
 
 def get_storm_instance(config_file=None):
@@ -148,7 +142,7 @@ def delete(name, config=None):
     try:
         storm_.delete_entry(name)
         print(get_formatted_message('hostname "{0}" deleted successfully.'.format(name), 'success'))
-    except StormValueError as error:
+    except ValueError as error:
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('list')

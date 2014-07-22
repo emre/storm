@@ -5,8 +5,9 @@ from flask import (Flask, Response, make_response, jsonify, request,
                    send_from_directory)
 
 from storm import Storm
-from storm.ssh_uri_parser import parse
+from storm.parsers.ssh_uri_parser import parse
 from storm.exceptions import StormValueError
+
 
 app = Flask(__name__)
 
