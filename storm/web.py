@@ -6,7 +6,6 @@ from flask import (Flask, Response, make_response, jsonify, request,
 
 from storm import Storm
 from storm.parsers.ssh_uri_parser import parse
-from storm.exceptions import StormValueError
 
 
 app = Flask(__name__)
@@ -54,7 +53,7 @@ def add():
         user, host, port = parse(connection_uri)
         storm_.add_entry(name, host, user, port, id_file)
         return response(status=201)
-    except StormValueError as exc:
+    except ValueError as exc:
         return jsonify(message=exc.message)
     except (KeyError, TypeError):
         return response(status=400)
@@ -75,7 +74,7 @@ def edit():
         user, host, port = parse(connection_uri)
         storm_.edit_entry(name, host, user, port, id_file)
         return response()
-    except StormValueError as exc:
+    except ValueError as exc:
         return jsonify(message=exc.message), 404
     except (KeyError, TypeError):
         return response(status=400)
@@ -89,9 +88,9 @@ def delete():
         name = request.json['name']
         storm_.delete_entry(name)
         return response()
-    except StormValueError as exc:
+    except ValueError as exc:
         return jsonify(message=exc.message), 404
-    except (TypeError, StormValueError):
+    except (TypeError, ValueError):
         return response(status=400)
 
 
