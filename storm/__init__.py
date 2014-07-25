@@ -9,7 +9,7 @@ from .parsers.ssh_config_parser import ConfigParser
 from .defaults import get_default
 
 
-__version__ = '0.6.4'
+__version__ = '0.6.5'
 
 ERRORS = {
     "already_in": "{0} is already in your sshconfig. use storm edit or storm update to modify.",
