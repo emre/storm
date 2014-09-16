@@ -39,3 +39,6 @@ nosetests.xml
 
 # Vagrant 
 .vagrant/*
+
+# vim 
+[._]*.s[a-w][a-z]
