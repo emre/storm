@@ -41,7 +41,7 @@ def ssh(connection_uri, id_file="", config=None):
     if len(storm_.search_host(host)) == 0:
         storm_.add_entry(host, host, user, port, id_file)
 
-    subprocess.call(["ssh", host])
+    subprocess.call(["ssh", connection_uri])
 	
 
 @command('add')
