@@ -193,7 +193,7 @@ class ConfigParser(object):
 
         return self
 
-    def dump(self):
+    def dump(self, pretty=True):
         if len(self.config_data) < 1:
             return
 
@@ -209,21 +209,25 @@ class ConfigParser(object):
                 if isinstance(value, list):
                     sub_content = ""
                     for value_ in value:
+                        key = key.title() if pretty else key
                         sub_content += "    {0} {1}\n".format(
-                            key.title(), value_
+                            key, value_
                         )
                     host_item_content += sub_content
                 else:
+                    key = key.title() if pretty else key
                     host_item_content += "    {0} {1}\n".format(
-                        key.title(), value
+                        key, value
                     )
-            file_content += host_item_content + "\n"
+            if pretty:
+                host_item_content += "\n"
+            file_content += host_item_content
 
         return file_content
 
-    def write_to_ssh_config(self):
+    def write_to_ssh_config(self, pretty=True):
         with open(self.ssh_config_file, 'w+') as f:
-            data = self.dump()
+            data = self.dump(pretty)
             if data:
                 f.write(data)
         return self
