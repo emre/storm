@@ -210,14 +210,14 @@ class ConfigParser(object):
                     sub_content = ""
                     for value_ in value:
                         sub_content += "    {0} {1}\n".format(
-                            key, value_
+                            key.title(), value_
                         )
                     host_item_content += sub_content
                 else:
                     host_item_content += "    {0} {1}\n".format(
-                        key, value
+                        key.title(), value
                     )
-            file_content += host_item_content
+            file_content += host_item_content + "\n"
 
         return file_content
 
