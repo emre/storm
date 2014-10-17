@@ -193,7 +193,7 @@ class ConfigParser(object):
 
         return self
 
-    def dump(self, pretty=True):
+    def dump(self, pretty=False):
         if len(self.config_data) < 1:
             return
 
@@ -225,7 +225,7 @@ class ConfigParser(object):
 
         return file_content
 
-    def write_to_ssh_config(self, pretty=True):
+    def write_to_ssh_config(self, pretty=False):
         with open(self.ssh_config_file, 'w+') as f:
             data = self.dump(pretty)
             if data:
