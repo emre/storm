@@ -205,6 +205,9 @@ class ConfigParser(object):
         file_content = ""
         self.config_data = sorted(self.config_data, key=itemgetter("order"))
 
+        if pretty:
+            entries = []
+
         for host_item in self.config_data:
             if host_item.get("type") in ['comment', 'empty_line']:
                 file_content += host_item.get("value") + "\n"
@@ -225,9 +228,12 @@ class ConfigParser(object):
                         key, value
                     )
             if pretty:
-                host_item_content += "\n"
-            file_content += host_item_content
+                entries.append(host_item_content)
+            else:
+                file_content += host_item_content
 
+        if pretty:
+            file_content = '\n'.join(entries)
         return file_content
 
     def write_to_ssh_config(self, pretty=False):
