@@ -154,6 +154,11 @@ class ConfigParser(object):
   
         return self
 
+    def strict_search(self, search_string):
+        for host_entry in self.config_data:
+            if host_entry.get("host") == search_string:
+                return host_entry
+
     def search_host(self, search_string):
         results = []
         for host_entry in self.config_data:
