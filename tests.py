@@ -67,6 +67,22 @@ FAKE_SSH_CONFIG_FOR_CLI_TESTS = """
         User breakfree
         IdentityFile ~/.ssh/vps1.cyberciti.biz.key
         LocalForward 3128 127.0.0.1:3128
+
+    # A main 'nat' host on aws through which we tunnel into test-db-01 below.
+    # Note the 'tcnat1' shorthand name for the host.
+    host test-nat-01 tnat1
+        user ubuntu
+        hostname 55.173.103.202
+        proxycommand none
+        batchmode yes
+        passwordauthentication no
+
+    # Use test-nat-01 as the proxy for this host.
+    # Note the 'tcdb1' and 'pg_primary' shorthand names for the host.
+    host test-db-01 tdb1 pg_primary
+        hostname 10.0.7.10
+        user root
+        proxycommand ssh -qaYy test-nat-01 'nc -w 14400 %h %p'
 """
 
 

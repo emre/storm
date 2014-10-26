@@ -157,13 +157,18 @@ class ConfigParser(object):
     def search_host(self, search_string):
         results = []
         for host_entry in self.config_data:
+
             if host_entry.get("type") != 'entry':
                 continue
-            if host_entry.get("host") == "*":
-                continue
 
-            searchable_information = host_entry.get("host")
+            if host_entry.get("host") == "*":
+                searchable_information = ''
+            else:
+                searchable_information = host_entry.get("host")
+
             for key, value in six.iteritems(host_entry.get("options")):
+                if key == 'proxycommand':
+                    continue
                 if isinstance(value, list):
                     value = " ".join(value)
                 if isinstance(value, int):
@@ -221,8 +226,10 @@ class ConfigParser(object):
 
         return file_content
 
-    def write_to_ssh_config(self):
-        with open(self.ssh_config_file, 'w+') as f:
+    def write_to_ssh_config(self,ssh_config_file=None):
+        ssh_config_file = ssh_config_file or self.ssh_config_file
+
+        with open(ssh_config_file, 'w+') as f:
             data = self.dump()
             if data:
                 f.write(data)
