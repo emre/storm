@@ -236,7 +236,9 @@ def delete_all(config=None):
 
 
 @command('web')
-def web(port=9002, debug=False, ssh_config=None):
+@arg('port', nargs='?', default=9002, type=int)
+@arg('debug', action='store_true', default=False)
+def web(port, debug=False, ssh_config=None):
     """Starts the web UI."""
     from storm import web as _web
     _web.run(port, debug, ssh_config)
