@@ -211,6 +211,9 @@ class ConfigParser(object):
         for host_item in self.config_data:
             if host_item.get("type") in ['comment', 'empty_line']:
                 file_content += host_item.get("value") + "\n"
+                if host_item.get("type") == 'comment':
+                    entries.append(host_item.get("value"))
+                    continue
                 continue
             host_item_content = "Host {0}\n".format(host_item.get("host"))
             for key, value in six.iteritems(host_item.get("options")):
