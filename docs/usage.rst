@@ -141,5 +141,8 @@ web ui
 you can also use the web ui instead of commandline interface::
 
     $ storm web
-    $ storm web --port 3333
-    $ storm web --debug True
+    $ storm web 3333
+    $ storm web --debug
+
+.. versionchanged:: 0.7
+   *--port* option was removed. *--debug* option is now defaults to ``False``.
