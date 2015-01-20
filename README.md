@@ -25,6 +25,11 @@ or if you like 90s:
 $ [sudo] easy_install stormssh
 ```
 
+or if you like homebrew:
+```bash
+$ brew install stormssh
+```
+
 ####usage & documentation
 
 <a href='http://stormssh.readthedocs.org/en/master/'>http://stormssh.readthedocs.org/en/master/</a>
