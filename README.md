@@ -15,6 +15,9 @@ storm is a command line tool to manage your ssh connections.
 - scriptable as a python library.
 - user interfaces besides cli. (web ui, wxpython, unity(ubuntu) indicator.)
 
+####dependencies
+On Debian systems, install header files and a static library for Python (python3.4-dev or python2.7-dev)
+
 ####installation
 
 ```bash
