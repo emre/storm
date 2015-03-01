@@ -30,6 +30,16 @@ or if you like homebrew:
 $ brew install stormssh
 ```
 
+####troubleshooting installation
+
+```
+clang: error: unknown argument: '-mno-fused-madd'
+
+error: command 'cc' failed with exit status 1
+```
+
+See [#73](https://github.com/emre/storm/issues/73). If the issue persists, see also [#76](https://github.com/emre/storm/issues/96) .
+
 ####usage & documentation
 
 <a href='http://stormssh.readthedocs.org/en/master/'>http://stormssh.readthedocs.org/en/master/</a>
