@@ -15,6 +15,9 @@ storm is a command line tool to manage your ssh connections.
 - scriptable as a python library.
 - user interfaces besides cli. (web ui, wxpython, unity(ubuntu) indicator.)
 
+####dependencies
+On Debian systems, install header files and a static library for Python (python3.4-dev or python2.7-dev)
+
 ####installation
 
 ```bash
@@ -29,6 +32,16 @@ or if you like homebrew:
 ```bash
 $ brew install stormssh
 ```
+
+####troubleshooting installation
+
+```
+clang: error: unknown argument: '-mno-fused-madd'
+
+error: command 'cc' failed with exit status 1
+```
+
+See [#73](https://github.com/emre/storm/issues/73). If the issue persists, see also [#76](https://github.com/emre/storm/issues/96) .
 
 ####usage & documentation
 
