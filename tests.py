@@ -174,6 +174,23 @@ class StormCliTestCase(unittest.TestCase):
             self.assertIn(b"stricthostkeychecking yes", content)
             self.assertIn(b"userknownhostsfile /dev/advanced_test", content)
 
+    def test_advanced_add_pretty(self):
+        out, err, rc = self.run_cmd('add postgresql-server postgres@192.168.1.1 {0} {1}{2} {3}'.format(
+            "--id_file=/tmp/idfilecheck.rsa ",
+            '--o "StrictHostKeyChecking=yes" --o "UserKnownHostsFile=/dev/advanced_test" ',
+            '--pretty',
+            self.config_arg)
+        )
+
+        self.assertIn(b"success", out)
+
+        with open(self.config_file) as f:
+            # check that property is really flushed out to the config?
+            content = f.read().encode('ascii')
+            self.assertIn(b"Identityfile /tmp/idfilecheck.rsa", content)
+            self.assertIn(b"Stricthostkeychecking yes", content)
+            self.assertIn(b"Userknownhostsfile /dev/advanced_test", content)
+
     def test_add_with_idfile(self):
         out, err, rc = self.run_cmd('add postgresql-server postgres@192.168.1.1 {0} {1}'.format(
             "--id_file=/tmp/idfileonlycheck.rsa",
@@ -185,6 +202,19 @@ class StormCliTestCase(unittest.TestCase):
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
             self.assertIn(b"identityfile /tmp/idfileonlycheck.rsa", content)
+
+    def test_add_with_idfile_pretty(self):
+        out, err, rc = self.run_cmd('add postgresql-server postgres@192.168.1.1 {0} {1} {2}'.format(
+            "--id_file=/tmp/idfileonlycheck.rsa",
+            '--pretty',
+            self.config_arg)
+        )
+
+        self.assertIn(b"success", out)
+
+        with open(self.config_file) as f:
+            content = f.read().encode('ascii')
+            self.assertIn(b"Identityfile /tmp/idfileonlycheck.rsa", content)
 
     def test_basic_edit(self):
         out, err, rc = self.run_cmd('edit aws.apache basic_edit_check@10.20.30.40 {0}'.format(self.config_arg))
@@ -217,6 +247,16 @@ class StormCliTestCase(unittest.TestCase):
             content = f.read().encode('ascii')
             self.assertIn(b"user daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
             self.assertIn(b"port 42000", content)
+
+    def test_update_pretty(self):
+        out, err, rc = self.run_cmd('update aws.apache --o "user=daghan" --o port=42000 --pretty {0}'.format(self.config_arg))
+
+        self.assertIn(b"success", out)
+
+        with open(self.config_file) as f:
+            content = f.read().encode('ascii')
+            self.assertIn(b"User daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
+            self.assertIn(b"Port 42000", content)
 
     def test_update_regex(self):
 
@@ -315,6 +355,13 @@ class StormTests(unittest.TestCase):
             with open('/tmp/ssh_config') as fd:
                 self.assertIn(search_str, fd.read())
 
+    def test_config_dump_pretty(self):
+        self.storm.ssh_config.write_to_ssh_config(pretty=True)
+
+        for search_str in ("Hostname 1.1.1.1", "Host netscaler", "Host *"):
+            with open('/tmp/ssh_config') as fd:
+                self.assertIn(search_str, fd.read())
+
     def test_update_host(self):
         self.storm.ssh_config.update_host("netscaler", {"hostname": "2.2.2.2"})
         self.assertEqual(self.storm.ssh_config.config_data[4]["options"]["hostname"], '2.2.2.2')
@@ -369,7 +416,7 @@ class StormTests(unittest.TestCase):
         self.storm.add_entry('google-02', 'google.com', 'root', '23', '/tmp/tmp.pub')
         self.storm.ssh_config.write_to_ssh_config()
 
-        self.storm.update_entry('google-[0-2]', port='24', identityfile='/tmp/tmp.pub1')
+        self.storm.update_entry('google-[0-2]', port='24', pretty=False, identityfile='/tmp/tmp.pub1')
 
         for item in self.storm.ssh_config.config_data:
             if re.match(r"google*", item.get("host")):

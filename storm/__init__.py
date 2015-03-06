@@ -25,14 +25,14 @@ class Storm(object):
         self.ssh_config.load()
         self.defaults = self.ssh_config.defaults
 
-    def add_entry(self, name, host, user, port, id_file, custom_options=[]):
+    def add_entry(self, name, host, user, port, id_file, custom_options=[], pretty=False):
         if self.is_host_in(name):
             raise ValueError(ERRORS["already_in"].format(name))
 
         options = self.get_options(host, user, port, id_file, custom_options)
 
         self.ssh_config.add_host(name, options)
-        self.ssh_config.write_to_ssh_config()
+        self.ssh_config.write_to_ssh_config(pretty)
 
         return True
 
@@ -62,12 +62,12 @@ class Storm(object):
 
         return True
 
-    def update_entry(self, name, **kwargs):
+    def update_entry(self, name, pretty, **kwargs):
         if not self.is_host_in(name, regexp_match=True):
             raise ValueError(ERRORS["not_found"].format(name))
 
         self.ssh_config.update_host(name, kwargs, use_regex=True)
-        self.ssh_config.write_to_ssh_config()
+        self.ssh_config.write_to_ssh_config(pretty)
 
         return True
 

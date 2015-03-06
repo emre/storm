@@ -154,6 +154,11 @@ class ConfigParser(object):
   
         return self
 
+    def strict_search(self, search_string):
+        for host_entry in self.config_data:
+            if host_entry.get("host") == search_string:
+                return host_entry
+
     def search_host(self, search_string):
         results = []
         for host_entry in self.config_data:
@@ -193,37 +198,50 @@ class ConfigParser(object):
 
         return self
 
-    def dump(self):
+    def dump(self, pretty=False):
         if len(self.config_data) < 1:
             return
 
         file_content = ""
         self.config_data = sorted(self.config_data, key=itemgetter("order"))
 
+        if pretty:
+            entries = []
+
         for host_item in self.config_data:
             if host_item.get("type") in ['comment', 'empty_line']:
                 file_content += host_item.get("value") + "\n"
+                if host_item.get("type") == 'comment':
+                    entries.append(host_item.get("value"))
+                    continue
                 continue
             host_item_content = "Host {0}\n".format(host_item.get("host"))
             for key, value in six.iteritems(host_item.get("options")):
                 if isinstance(value, list):
                     sub_content = ""
                     for value_ in value:
+                        key = key.title() if pretty else key
                         sub_content += "    {0} {1}\n".format(
                             key, value_
                         )
                     host_item_content += sub_content
                 else:
+                    key = key.title() if pretty else key
                     host_item_content += "    {0} {1}\n".format(
                         key, value
                     )
-            file_content += host_item_content
+            if pretty:
+                entries.append(host_item_content)
+            else:
+                file_content += host_item_content
 
+        if pretty:
+            file_content = '\n'.join(entries)
         return file_content
 
-    def write_to_ssh_config(self):
+    def write_to_ssh_config(self, pretty=False):
         with open(self.ssh_config_file, 'w+') as f:
-            data = self.dump()
+            data = self.dump(pretty)
             if data:
                 f.write(data)
         return self

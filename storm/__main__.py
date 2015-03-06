@@ -30,7 +30,7 @@ def version():
 
 
 @command('add')
-def add(name, connection_uri, id_file="", o=[], config=None):
+def add(name, connection_uri, id_file="", o=[], config=None, pretty=False):
     """
     Adds a new entry to sshconfig.
     """
@@ -48,7 +48,7 @@ def add(name, connection_uri, id_file="", o=[], config=None):
             port=get_default("port", storm_.defaults)
         )
 
-        storm_.add_entry(name, host, user, port, id_file, o)
+        storm_.add_entry(name, host, user, port, id_file, o, pretty)
 
         print(get_formatted_message('{0} added to your ssh config. you can connect it by typing "ssh {0}".'.format(
 
@@ -108,7 +108,7 @@ def edit(name, connection_uri, id_file="", o=[], config=None):
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('update')
-def update(name, connection_uri="", id_file="", o=[], config=None):
+def update(name, connection_uri="", id_file="", o=[], config=None, pretty=False):
     """
     Enhanced version of the edit command featuring multiple edits using regular expressions to match entries
     """
@@ -123,7 +123,7 @@ def update(name, connection_uri="", id_file="", o=[], config=None):
         settings[k] = v
 
     try:
-        storm_.update_entry(name, **settings)
+        storm_.update_entry(name, pretty, **settings)
         print(get_formatted_message(
             '"{0}" updated successfully.'.format(
                 name

@@ -143,6 +143,7 @@ class prog(object):
                                           reversed(spec.defaults or []),
                                           fillvalue=self._POSITIONAL())))
         for k, v in opts:
+            # print k,v
             argopts = getattr(func, 'argopts', {})
             args, kwargs = argopts.get(k, ([], {}))
             args = list(args)
@@ -152,6 +153,9 @@ class prog(object):
                 kwargs.update({
                     'action': 'append',
                 })
+            if k == "pretty":
+                args = ['--pretty']
+                kwargs.update({'action': 'store_true', 'default': False})
             if is_positional:
                 if options:
                     args = options
