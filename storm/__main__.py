@@ -81,6 +81,33 @@ def clone(name, clone_name, config=None):
     except ValueError as error:
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
+@command('move')
+def move(name, entry_name, config=None):
+    """
+    Move an entry to the sshconfig.
+    """
+    storm_ = get_storm_instance(config)
+
+    try:
+
+        # validate name
+        if '@' in name:
+            raise ValueError('invalid value: "@" cannot be used in name.')
+
+        storm_.clone_entry(name, entry_name, keep_original=False)
+
+        print(
+            get_formatted_message(
+                '{0} moved in ssh config. you can '
+                'connect it by typing "ssh {0}".'.format(
+                    entry_name
+                ),
+            'success')
+        )
+
+    except ValueError as error:
+        print(get_formatted_message(error, 'error'), file=sys.stderr)
+
 
 @command('edit')
 def edit(name, connection_uri, id_file="", o=[], config=None):
@@ -234,6 +261,16 @@ def delete_all(config=None):
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
+@command('backup')
+def backup(target_file, config=None):
+    """
+    Backups the main ssh configuration into target file.
+    """
+    storm_ = get_storm_instance(config)
+    try:
+        storm_.backup(target_file)
+    except Exception as error:
+        print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
 @command('web')
 @arg('port', nargs='?', default=9002, type=int)
