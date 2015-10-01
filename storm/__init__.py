@@ -37,8 +37,7 @@ class Storm(object):
 
         return True
 
-    
-    def clone_entry(self, name, clone_name):
+    def clone_entry(self, name, clone_name, keep_original=True):
         host = self.is_host_in(name, return_match=True)
         if not host:
             raise ValueError(ERRORS["not_found"].format(name))
@@ -48,6 +47,8 @@ class Storm(object):
             raise ValueError(ERRORS["already_in"].format(clone_name))
        
         self.ssh_config.add_host(clone_name, host.get('options'))
+        if not keep_original:
+            self.ssh_config.delete_host(name)
         self.ssh_config.write_to_ssh_config()
 
         return True
