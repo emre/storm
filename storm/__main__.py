@@ -234,6 +234,17 @@ def delete_all(config=None):
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
+@command('backup')
+def backup(target_file, config=None):
+    """
+    Backups the main ssh configuration into target file.
+    """
+    storm_ = get_storm_instance(config)
+    try:
+        storm_.backup(target_file)
+    except Exception as error:
+        print(get_formatted_message(str(error), 'error'), file=sys.stderr)
+
 
 @command('web')
 @arg('port', nargs='?', default=9002, type=int)

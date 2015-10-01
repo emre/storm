@@ -4,6 +4,7 @@ from __future__ import print_function
 
 from operator import itemgetter
 import re
+from shutil import copyfile
 
 from .parsers.ssh_config_parser import ConfigParser
 from .defaults import get_default
@@ -140,3 +141,6 @@ class Storm(object):
             if host_.get("host") == host or (regexp_match and re.match(host, host_.get("host"))):
                 return True if not return_match else host_
         return False if not return_match else None
+
+    def backup(self, target_file):
+        return copyfile(self.ssh_config.ssh_config_file, target_file)
