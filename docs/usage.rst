@@ -13,11 +13,14 @@ adding hosts
 
 where `-h`, `id_file` are optional arguments.
 
-example::
+example ::
 
     $ storm add my_vps root@emreyilmaz.me:22
     my_vps added to your ssh config. you can connect it by typing "ssh my_vps".
 
+example with id file::
+    $ storm add my_vps root@emreyilmaz.me:22 --id_file=--id_file=/Users/myusername/mykey.pem
+    my_vps added to your ssh config. you can connect it by typing "ssh my_vps".
 
 editing hosts
 +++++++++++++
