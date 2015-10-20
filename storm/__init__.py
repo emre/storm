@@ -13,10 +13,11 @@ from .defaults import get_default
 __version__ = '0.6.5'
 
 ERRORS = {
-    "already_in": "{0} is already in your sshconfig. use storm edit or storm update to modify.",
-    "not_found": "{0} doesn\'t exists in your sshconfig. use storm add command to add.",
+    "already_in": "{0} is already in your sshconfig. "
+                  "use storm edit or storm update to modify.",
+    "not_found": "{0} doesn\'t exists in your sshconfig. "
+                 "use storm add command to add.",
 }
-
 
 
 class Storm(object):
@@ -43,7 +44,8 @@ class Storm(object):
             raise ValueError(ERRORS["not_found"].format(name))
 
         # check if an entry with the clone name already exists        
-        if name == clone_name or self.is_host_in(clone_name, return_match=True) is not None:
+        if name == clone_name \
+                or self.is_host_in(clone_name, return_match=True) is not None:
             raise ValueError(ERRORS["already_in"].format(clone_name))
        
         self.ssh_config.add_host(clone_name, host.get('options'))
@@ -107,9 +109,15 @@ class Storm(object):
         for host_entry in results:
             formatted_results.append("    {0} -> {1}@{2}:{3}\n".format(
                 host_entry.get("host"),
-                host_entry.get("options").get("user", get_default("user", self.defaults)),
-                host_entry.get("options").get("hostname", "[hostname_not_specified]"),
-                host_entry.get("options").get("port", get_default("port", self.defaults)),
+                host_entry.get("options").get(
+                    "user", get_default("user", self.defaults)
+                ),
+                host_entry.get("options").get(
+                    "hostname", "[hostname_not_specified]"
+                ),
+                host_entry.get("options").get(
+                    "port", get_default("port", self.defaults)
+                ),
             ))
 
         return formatted_results
@@ -139,7 +147,8 @@ class Storm(object):
 
     def is_host_in(self, host, return_match = False, regexp_match=False):
         for host_ in self.ssh_config.config_data:
-            if host_.get("host") == host or (regexp_match and re.match(host, host_.get("host"))):
+            if host_.get("host") == host\
+                    or (regexp_match and re.match(host, host_.get("host"))):
                 return True if not return_match else host_
         return False if not return_match else None
 

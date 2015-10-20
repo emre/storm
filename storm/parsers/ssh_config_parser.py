@@ -12,7 +12,6 @@ from paramiko.config import SSHConfig
 import six
 
 
-
 class StormConfig(SSHConfig):
     def parse(self, file_obj):
         """
@@ -66,11 +65,13 @@ class StormConfig(SSHConfig):
             if key == 'host':
                 self._config.append(host)
                 value = value.split()
-                host = {key: value, 'config': {}, 'type': 'entry', 'order': order}
+                host = {
+                    key: value,
+                    'config': {},
+                    'type': 'entry',
+                    'order': order
+                }
                 order += 1
-            #identityfile is a special case, since it is allowed to be
-            # specified multiple times and they should be tried in order
-            # of specification.
             elif key in ['identityfile', 'localforward', 'remoteforward']:
                 if key in host['config']:
                     host['config'][key].append(value)
@@ -149,7 +150,8 @@ class ConfigParser(object):
 
     def update_host(self, host, options, use_regex=False):
         for index, host_entry in enumerate(self.config_data):
-            if host_entry.get("host") == host or (use_regex and re.match(host, host_entry.get("host"))):
+            if host_entry.get("host") == host or \
+                    (use_regex and re.match(host, host_entry.get("host"))):
                 self.config_data[index]["options"].update(options)
   
         return self

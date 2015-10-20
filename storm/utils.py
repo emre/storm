@@ -41,4 +41,4 @@ def get_formatted_message(message, format_type):
     if format_type == 'success':
         all_message = colored(format_typed, 'white', 'on_green')
 
-    return all_message+message
+    return all_message + message
