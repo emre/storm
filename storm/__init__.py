@@ -142,6 +142,7 @@ class Storm(object):
                     options.update({
                         key.lower() : value,
                     })
+        options = self._quote_options(options)
 
         return options
 
@@ -154,3 +155,11 @@ class Storm(object):
 
     def backup(self, target_file):
         return copyfile(self.ssh_config.ssh_config_file, target_file)
+
+    def _quote_options(self, options):
+        keys_should_be_quoted = ["identityfile", ]
+        for key in keys_should_be_quoted:
+            if key in options:
+                options[key] = '"{0}"'.format(options[key].strip('"'))
+
+        return options

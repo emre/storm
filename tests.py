@@ -170,7 +170,7 @@ class StormCliTestCase(unittest.TestCase):
         with open(self.config_file) as f:
             # check that property is really flushed out to the config?
             content = f.read().encode('ascii')
-            self.assertIn(b"identityfile /tmp/idfilecheck.rsa", content)
+            self.assertIn(b'identityfile "/tmp/idfilecheck.rsa"', content)
             self.assertIn(b"stricthostkeychecking yes", content)
             self.assertIn(b"userknownhostsfile /dev/advanced_test", content)
 
@@ -184,7 +184,7 @@ class StormCliTestCase(unittest.TestCase):
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
-            self.assertIn(b"identityfile /tmp/idfileonlycheck.rsa", content)
+            self.assertIn(b'identityfile "/tmp/idfileonlycheck.rsa"', content)
 
     def test_basic_edit(self):
         out, err, rc = self.run_cmd('edit aws.apache basic_edit_check@10.20.30.40 {0}'.format(self.config_arg))
@@ -332,7 +332,7 @@ class StormTests(unittest.TestCase):
         for item in self.storm.ssh_config.config_data:
             if item.get("host") == 'google' or item.get("host") == 'goog':
                 self.assertEqual(item.get("options").get("port"), '22')
-                self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub')
+                self.assertEqual(item.get("options").get("identityfile"), '"/tmp/tmp.pub"')
 
     def test_clone_host(self):
         self.storm.add_entry('google', 'google.com', 'ops', '24', '/tmp/tmp.pub')
@@ -346,7 +346,7 @@ class StormTests(unittest.TestCase):
 
         self.assertEqual(True, has_yahoo) 
         self.assertEqual(item.get("options").get("port"), '24')
-        self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub')
+        self.assertEqual(item.get("options").get("identityfile"), '"/tmp/tmp.pub"')
         self.assertEqual(item.get("options").get("user"), 'ops')
 
     def test_move_host(self):
@@ -368,7 +368,7 @@ class StormTests(unittest.TestCase):
         self.assertEqual(True, has_yahoo)
         self.assertEqual(False, has_google)
         self.assertEqual(item.get("options").get("port"), '24')
-        self.assertEqual(item.get("options").get("identityfile"), '/tmp/tmp.pub')
+        self.assertEqual(item.get("options").get("identityfile"), '"/tmp/tmp.pub"')
         self.assertEqual(item.get("options").get("user"), 'ops')
 
     def test_backup(self):
