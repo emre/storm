@@ -105,9 +105,6 @@ def run(port, debug, ssh_config=None):
     port = int(port)
     debug = bool(debug)
 
-    # in order to make web interface testable, ssh_config_file should be an argument.
-    # is there a better way?
-
     def get_storm():
         return Storm(ssh_config)
 

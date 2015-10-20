@@ -81,9 +81,16 @@ class prog(object):
         self.parser = argparse.ArgumentParser(**kwargs)
         self.parser.register('action', 'parsers', AliasedSubParsersAction)
         self.parser.formatter_class.width = 300
-        self.parser.add_argument('-v', '--version', action='version', version=__version__)
+        self.parser.add_argument(
+            '-v',
+            '--version',
+            action='version',
+            version=__version__
+        )
 
-        self.subparsers = self.parser.add_subparsers(title="commands", metavar="COMMAND")
+        self.subparsers = self.parser.add_subparsers(
+            title="commands", metavar="COMMAND"
+        )
         self.subparsers.required = True
 
     def command(self, *args, **kwargs):
@@ -129,7 +136,8 @@ class prog(object):
         storm_config = get_storm_config()
         aliases, additional_kwarg = None, None
         if 'aliases' in storm_config:
-            for command, alias_list in six.iteritems(storm_config.get("aliases")):
+            for command, alias_list in \
+                    six.iteritems(storm_config.get("aliases")):
                 if func_pointer == command:
                     aliases = alias_list
                     break
