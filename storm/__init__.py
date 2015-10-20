@@ -160,6 +160,6 @@ class Storm(object):
         keys_should_be_quoted = ["identityfile", ]
         for key in keys_should_be_quoted:
             if key in options:
-                options[key] = '"{}"'.format(options[key].strip('"'))
+                options[key] = '"{0}"'.format(options[key].strip('"'))
 
         return options
