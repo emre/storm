@@ -124,7 +124,7 @@ class ConfigParser(object):
                 'host': entry["host"][0],
                 'options': entry.get("config"),
                 'type': 'entry',
-                'order': entry.get("order"),
+                'order': entry.get("order", 0),
             }
 
             if len(entry["host"]) > 1:
