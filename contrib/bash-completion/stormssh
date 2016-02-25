@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+__stormssh(){
+    local cur prev options storm_command
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    __stormssh_get_command
+    if [[ $cur = -* ]]; then
+        if [[ -z $storm_command ]]; then
+            options="$options -v --version -h --help"
+        fi
+        if [[ $storm_command ]]; then
+            common_options="-h --config"
+            add_edit_options="$common_options --id_file --o"
+            if [[ $storm_command = clone ||
+                  $storm_command = move ||
+                  $storm_command = backup ||
+                  $storm_command = delete ||
+                  $storm_command = list ||
+                  $storm_command = search ||
+                  $storm_command = delete_all ]]; then
+                options="$common_options"
+            fi
+            if [[ $storm_command = add || $storm_command = edit ]]; then
+                options="$add_edit_options"
+            fi
+            if [[ $storm_command = update ]]; then
+                options="$add_edit_options --connection_uri"
+            fi
+            if [[ $storm_command = web ]]; then
+                options="-h --debug --ssh_config"
+            fi
+        fi
+    else
+        if [[ -z $storm_command ]]; then
+            options="add backup clone delete delete_all edit list move search update version web"
+        fi
+        if [[ $storm_command ]]; then
+            if [[ $storm_command = clone || 
+                  $storm_command = delete || 
+                  $storm_command = edit || 
+                  $storm_command = move || 
+                  $storm_command = update ]]; then
+                options=$(storm list | grep "\->" | tr -d " " | awk -F"->" '{print $1}' | xargs | tr -d "[:cntrl:]" | sed 's/\[[0132]*m//g')
+            fi
+        fi
+    fi
+    COMPREPLY=($(compgen -W "$options" -- "$cur"))
+}
+__stormssh_get_command(){
+    local i
+    for ((i=1; i < $COMP_CWORD; ++i)); do
+        local arg=${COMP_WORDS[$i]}
+        case $arg in
+        [^-]*)
+            storm_command=$arg
+            return;;
+        --version)
+            storm_command=-
+            return;;
+        --help)
+            storm_command=help
+            return;;
+        esac
+    done
+}
+complete -F __stormssh -o bashdefault -o default storm
