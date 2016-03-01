@@ -189,8 +189,11 @@ class ConfigParser(object):
             raise ValueError('No host found')
         return self
 
-    def delete_all_hosts(self):
+    def delete_all_hosts(self, dry_run=None):
         self.config_data = []
+        if dry_run:
+            return self.dump()
+
         self.write_to_ssh_config()
 
         return self
