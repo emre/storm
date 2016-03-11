@@ -1,6 +1,8 @@
 <img src="https://raw.github.com/emre/storm/master/resources/logos/storm-logo.png" height="80">
 ---
 
+[![Join the chat at https://gitter.im/emre/storm](https://badges.gitter.im/emre/storm.svg)](https://gitter.im/emre/storm?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 <img src="https://api.travis-ci.org/emre/storm.png?branch=master"> 
 
 storm is a command line tool to manage your ssh connections.
