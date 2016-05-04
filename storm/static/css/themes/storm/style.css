@@ -228,7 +228,14 @@ footer section input:nth-child(1) {
 }
 
 footer section input:nth-child(2) {
-  width: 530px;
+  width: 300px;
+  border-radius: 0 0 0 0;
+  border-left: 1px dashed #999;
+  padding-left: 10px;
+}
+
+footer section input:nth-child(3) {
+  width: 217px;
   border-radius: 0 4px 0 0;
   border-left: 1px dashed #999;
   padding-left: 10px;

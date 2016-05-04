@@ -59,12 +59,13 @@ function Storm($scope, $http) {
 
     if ($scope.state.editIndex > -1) {
       $scope.isDisabled = false;
-      $http.put('/edit', JSON.stringify({name: $scope.title, connection_uri: $scope.uri})).
+      $http.put('/edit', JSON.stringify({name: $scope.title, connection_uri: $scope.uri, id_file: $scope.id_file})).
         success(function(data, status) {
           if (status == 200) {
             $scope.servers[$scope.state.editIndex] = {
               name: $scope.title,
-              connection_uri: $scope.uri
+              connection_uri: $scope.uri,
+              id_file: $scope.id_file
             }
             $scope.title = $scope.uri = "";
             $scope.state.editIndex = -1;
@@ -80,12 +81,13 @@ function Storm($scope, $http) {
         });
 
     } else {
-      $http.post('/add', JSON.stringify({name: $scope.title, connection_uri: $scope.uri})).
+      $http.post('/add', JSON.stringify({name: $scope.title, connection_uri: $scope.uri, id_file: $scope.id_file})).
         success(function (data, status) {
           if (status == 201) {
             $scope.servers.push({
               title: $scope.title,
-              uri: $scope.uri
+              uri: $scope.uri,
+              id_file: $scope.id_file
             });
             $scope.title = $scope.uri = "";
             $scope.state.action = "add new";
