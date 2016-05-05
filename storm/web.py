@@ -9,13 +9,18 @@ from storm.parsers.ssh_uri_parser import parse
 
 
 app = Flask(__name__)
+__THEME__ = "modern"
 
-
-def render(template):
+def render(template, theme):
     static_dir = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(static_dir, 'templates', template)
     with open(path) as fobj:
         content = fobj.read()
+
+    if 'theme' in request.args:
+        theme = request.args.get('theme')
+
+    content = content.replace("__THEME__", theme)
     return make_response(content)
 
 
@@ -25,7 +30,7 @@ def response(resp=None, status=200, content_type='application/json'):
 
 @app.route('/')
 def index():
-    return render('index.html')
+    return render('index.html', __THEME__)
 
 
 @app.route('/list', methods=['GET'])
@@ -101,9 +106,11 @@ def favicon():
                                mimetype='image/vnd.microsoft.icon')
 
 
-def run(port, debug, ssh_config=None):
+def run(port, debug, theme, ssh_config=None):
+    global __THEME__
     port = int(port)
     debug = bool(debug)
+    __THEME__ = theme
 
     def get_storm():
         return Storm(ssh_config)

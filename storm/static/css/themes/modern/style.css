@@ -1,0 +1,298 @@
+@import url("../storm/normalize.min.css");
+
+input:focus {
+  outline: 0;
+}
+
+body {
+  background-color: #f5f5f5;
+}
+
+body > #main {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 2px;
+  margin-bottom: 70px;
+}
+
+header {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+header #logo {
+  background: url("../storm/img/logo.png") no-repeat;
+  background-size: contain;
+  text-indent: -9999px;
+  height: 20px;
+  width: 75px;
+}
+
+header small {
+  position: absolute;
+  top: 5px;
+  left: 80px;
+  color: #ccc;
+}
+
+header .total {
+  position: absolute;
+  right: 0;
+  color: #555;
+  font-size: 13px;
+  border: 0;
+  background: transparent;
+  text-align: right;
+  width: 300px;
+  top: -3px;
+}
+
+section#list {
+  display: table;
+  font-size: 14px;
+  width: 100%;
+}
+
+section#list article {
+  border-top: 1px solid #eee;
+  min-height: 60px;
+  clear: both;
+}
+
+section#list article:last-of-type {
+  border-bottom: 1px solid #eee;
+}
+
+section#list article.filtered-false {
+  display: none;
+}
+
+section#list article label,
+section#list article code,
+section#list article .actions {
+  vertical-align: middle;
+  margin: 10px 0;
+}
+
+section#list article code {
+  font-family: Menlo, Inconsolata, monospace;
+}
+
+section#list article label {
+  width: 250px;
+  font-weight: bold;
+  float: left;
+}
+
+section#list article label code {
+  display: block;
+  background-color: #555;
+  margin: 0 20px 0 0;
+  padding: 12px;
+  color: #f0f0f0;
+  font-weight: normal;
+}
+
+section#list article label code::before {
+  content: "$ ssh ";
+}
+
+section#list article > code {
+  float: left;
+  line-height: 20px;
+}
+
+section#list article .actions {
+  float: right;
+}
+
+section#list article > code .custom {
+  display: block;
+  font-size: 10px;
+}
+
+section#list article .actions button {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  background-size: cover;
+  text-indent: -9999px;
+  border: 0;
+  opacity: 0.3;
+  margin: 5px;
+}
+
+section#list article.editing-true label,
+section#list article.editing-true code {
+  opacity: 0.4;
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms;
+}
+
+section#list article.editing-true::before {
+  content: "EDIT";
+  position: absolute;
+  background-color: #FF7A7A;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 5px;
+  margin-top: -1px;
+  width: 75px;
+  right: 20px;
+  line-height: 52px;
+  text-align: center;
+  margin-left: -42px;
+}
+
+section#list article.editing-true .actions {
+  visibility: hidden;
+}
+
+section#list article .actions button:active {
+  transform: scale(0.8);
+  transition-duration: 100ms;
+}
+
+section#list article .actions button:focus {
+  outline: none;
+}
+
+section#list article .actions button:hover {
+  opacity: 1;
+}
+
+section#list article .actions button.edit {
+  background-image: url("../storm/img/edit.png");
+}
+
+section#list article .actions button.delete {
+  background-image: url("../storm/img/delete.png");
+}
+
+section#list article .actions button.info {
+  background-image: url("../storm/img/info.png");
+}
+
+footer header {
+  -webkit-user-select: none;
+}
+
+footer header,
+footer section {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-left: -20px;
+  box-sizing: border-box;
+  background-color: #444;
+}
+
+-moz-document() {
+  footer section {
+    width: 30px;
+  }
+}
+
+footer header h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+}
+
+footer header {
+  bottom: 18px;
+  padding: 5px 10px 20px;
+  background-color: #eee;
+  color: #666;
+  border-top: 3px solid #aaa;
+}
+
+footer section input {
+  height: 40px;
+  border: 0;
+  font-family: Menlo, Inconsolata, monospace;
+  background-color: transparent;
+  border: 0;
+  color: #f0f0f0;
+}
+
+footer section input:nth-child(1) {
+  padding: 0 0 0 10px;
+  border-radius: 4px 0 0 0;
+  width: 250px;
+}
+
+footer section input:nth-child(2) {
+  width: calc(100% - 540px);
+  border-radius: 0 0 0 0;
+  border-left: 1px dashed #999;
+  padding-left: 10px;
+  display: table-cell;
+}
+
+footer section input:nth-child(3) {
+  width: 250px;
+  border-radius: 0 4px 0 0;
+  border-left: 1px dashed #999;
+  padding-left: 10px;
+  float: right;
+}
+
+footer section input:focus {
+  outline: 0;
+}
+
+#main.top {
+  margin-top: 78px;
+  margin-bottom: 0;
+}
+
+#main.top footer section,
+#main.top footer header {
+  top: 0px;
+  bottom: auto;
+  border-top: 0;
+  border-bottom: 3px solid #aaa;
+}
+
+#main.top footer section {
+  top: 34px;
+}
+
+#main.top section article:last-of-type {
+  border-bottom: 0;
+}
+
+#main #notfound {
+  display: none;
+  position: fixed;
+  top: 160px;
+  font-size: 40px;
+  text-align: center;
+  width: 100%;
+  color: #ccc;
+}
+
+#main.top #notfound {
+  top: 200px;
+}
+
+#main.list-0 #notfound {
+  display: block;
+}
+
+#main.list-0 > header {
+  height: 28px;
+}
+
+#main.list-0 header .total {
+  display: none;
+}
+
+.subm {
+  visibility: hidden;
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+

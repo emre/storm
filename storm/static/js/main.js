@@ -67,7 +67,7 @@ function Storm($scope, $http) {
               connection_uri: $scope.uri,
               id_file: $scope.id_file
             }
-            $scope.title = $scope.uri = "";
+            $scope.title = $scope.uri = $scope.id_file = "";
             $scope.state.editIndex = -1;
             $scope.state.action = "add new";
             $scope.reset();
@@ -89,7 +89,7 @@ function Storm($scope, $http) {
               uri: $scope.uri,
               id_file: $scope.id_file
             });
-            $scope.title = $scope.uri = "";
+            $scope.title = $scope.uri = $scope.id_file = "";
             $scope.state.action = "add new";
             focus();
             fetch(plural);
@@ -129,6 +129,7 @@ function Storm($scope, $http) {
     $scope.state.editIndex = index;
     $scope.state.action = "edit " + server.host;
     $scope.title = server.host;
+    $scope.id_file = (server.options.identityfile||"").toString().replace(/^"|"$/g, "");
     $scope.uri = urify(server.options.user, server.options.hostname, server.options.port);
     $scope.reset();
     server.editing = true;
@@ -140,7 +141,7 @@ function Storm($scope, $http) {
       success(function () {
         fetch(function () {
           plural();
-          $scope.title = $scope.uri = "";
+          $scope.title = $scope.uri = $scope.id_file = "";
           $scope.reset();
         });
       })

@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <title>Storm SSH: Manage your SSH like a boss.</title>
   <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="stylesheet" id="theme" href="static/css/themes/__THEME__/style.css">
   <script src="static/js/core/angular.min.js"></script>
   <script src="static/js/main.js"></script>
 </head>
-<body>
-  <div id="main" ng-controller="Storm" class="list-{{servers.length}} {{state.position}}">
+<body ng-controller="Storm">
+  <div id="main" class="list-{{servers.length}} {{state.position}}">
     <header>
       <figure id="logo">storm</figure>
       <small>v{{version}}</small>
