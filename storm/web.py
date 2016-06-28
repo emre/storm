@@ -11,16 +11,15 @@ from storm.parsers.ssh_uri_parser import parse
 app = Flask(__name__)
 __THEME__ = "modern"
 
+
 def render(template, theme):
     static_dir = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(static_dir, 'templates', template)
     with open(path) as fobj:
         content = fobj.read()
 
-    if 'theme' in request.args:
-        theme = request.args.get('theme')
+    content = content.replace('__THEME__', request.args.get('theme', theme))
 
-    content = content.replace("__THEME__", theme)
     return make_response(content)
 
 
