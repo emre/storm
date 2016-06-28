@@ -4,7 +4,7 @@ import os.path
 from flask import (Flask, Response, make_response, jsonify, request,
                    send_from_directory)
 
-from storm import Storm
+from storm import Storm, DELETED_SIGN
 from storm.parsers.ssh_uri_parser import parse
 
 
@@ -27,7 +27,6 @@ def response(resp=None, status=200, content_type='application/json'):
 def index():
     return render('index.html')
 
-
 @app.route('/list', methods=['GET'])
 def list_keys():
     storm_ = app.get_storm()
@@ -41,10 +40,9 @@ def add():
     try:
         name = request.json['name']
         connection_uri = request.json['connection_uri']
+        id_file = None
         if 'id_file' in request.json:
             id_file = request.json['id_file']
-        else:
-            id_file = ''
 
         if '@' in name:
             msg = 'invalid value: "@" cannot be used in name.'
@@ -66,10 +64,11 @@ def edit():
     try:
         name = request.json['name']
         connection_uri = request.json['connection_uri']
+        id_file = None
         if 'id_file' in request.json:
             id_file = request.json['id_file']
-        else:
-            id_file = ''
+            if id_file == '':
+                id_file = DELETED_SIGN
 
         user, host, port = parse(connection_uri)
         storm_.edit_entry(name, host, user, port, id_file)

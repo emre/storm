@@ -19,6 +19,8 @@ ERRORS = {
                  "use storm add command to add.",
 }
 
+DELETED_SIGN = "DELETED"
+
 
 class Storm(object):
 
@@ -60,7 +62,6 @@ class Storm(object):
             raise ValueError(ERRORS["not_found"].format(name))
 
         options = self.get_options(host, user, port, id_file, custom_options)
-
         self.ssh_config.update_host(name, options, use_regex=False)
         self.ssh_config.write_to_ssh_config()
 
@@ -129,10 +130,13 @@ class Storm(object):
             'port': port,
         }
 
-        if id_file:
-            options.update({
-                'identityfile': id_file,
-            })
+        if id_file == DELETED_SIGN:
+            options['deleted_fields'] = ["identityfile"]
+        else:
+            if id_file:
+                options.update({
+                    'identityfile': id_file,
+                })
 
         if len(custom_options) > 0:
             for custom_option in custom_options:
@@ -140,7 +144,7 @@ class Storm(object):
                     key, value = custom_option.split("=")
 
                     options.update({
-                        key.lower() : value,
+                        key.lower(): value,
                     })
         options = self._quote_options(options)
 
