@@ -18,15 +18,9 @@ storm is a command line tool to manage your ssh connections.
 
 ####dependencies
 On Debian systems, install header files and a static library for Python (python3.4-dev or python2.7-dev)
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
 On Ubuntu 16.04, you need install libssl-dev (sudo apt-get install libssl-dev)
 >>>>>>> cc540cc... Update dependencies for Ubuntu 16.04
-=======
-On Ubuntu 16.04, you need install libssl-dev (sudo apt-get install libssl-dev)
->>>>>>> c5245be... Update dependencies for Ubuntu 16.04
 
 ####installation
 
