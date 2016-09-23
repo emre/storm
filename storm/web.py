@@ -104,10 +104,11 @@ def favicon():
                                mimetype='image/vnd.microsoft.icon')
 
 
-def run(port, debug, theme, ssh_config=None):
+def run(host, port, debug, theme, ssh_config=None):
     global __THEME__
     port = int(port)
     debug = bool(debug)
+    host = str(host)
     __THEME__ = theme
 
     def get_storm():
@@ -115,4 +116,4 @@ def run(port, debug, theme, ssh_config=None):
 
     app.get_storm = get_storm
 
-    app.run(port=port, debug=debug)
+    app.run(host=host, port=port, debug=debug)
