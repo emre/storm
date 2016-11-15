@@ -153,12 +153,14 @@ class ConfigParser(object):
             if host_entry.get("host") == host or \
                     (use_regex and re.match(host, host_entry.get("host"))):
 
+                opts = self.config_data[index]["options"]
                 if 'deleted_fields' in options:
                     deleted_fields = options.pop("deleted_fields")
                     for deleted_field in deleted_fields:
-                        del self.config_data[index]["options"][deleted_field]
+                        if deleted_field in opts:
+                            del opts[deleted_field]
 
-                self.config_data[index]["options"].update(options)
+                opts.update(options)
 
         return self
 
