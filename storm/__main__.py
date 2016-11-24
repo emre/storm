@@ -180,8 +180,75 @@ def delete(name, config=None):
     except ValueError as error:
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
+def format_host(host,defaults,with_tags=False):
+    result = ""
+    result_stack = ""
+    if host.get("type") == 'entry':
+        if not host.get("host") == "*":
+            result += "    {0} -> {1}@{2}:{3}".format(
+                colored(host["host"], 'green', attrs=["bold", ]),
+                host.get("options").get(
+                    "user", get_default("user", defaults)
+                ),
+                host.get("options").get(
+                    "hostname", "[hostname_not_specified]"
+                ),
+                host.get("options").get(
+                    "port", get_default("port", defaults)
+                )
+            )
+            extra = False
+            for key, value in six.iteritems(host.get("options")):
+
+                if not key in ["user", "hostname", "port"]:
+                    if not extra:
+                        custom_options = colored(
+                            '\n\t[custom options] ', 'white'
+                        )
+                        result += " {0}".format(custom_options)
+                    extra = True
+
+                    if isinstance(value, collections.Sequence):
+                        if isinstance(value, builtins.list):
+                            value = ",".join(value)
+
+                    result += "{0}={1} ".format(key, value)
+            if extra:
+                result = result[0:-1]
+
+            if with_tags:
+                if len(host.get('tags')) > 0:
+                    tags = colored(
+                                '\n\t[tags] ', 'white'
+                    )
+                    result += " {0}".format(tags)
+                    value = ", ".join(host.get('tags'))
+                    result += "{0} ".format(value)
+
+            result += "\n\n"
+        elif host.get("options") != {}:
+            result_stack = colored(
+                "   (*) General options: \n", "green", attrs=["bold",]
+            )
+            for key, value in six.iteritems(host.get("options")):
+                if isinstance(value, type([])):
+                    result_stack += "\t  {0}: ".format(
+                        colored(key, "magenta")
+                    )
+                    result_stack += ', '.join(value)
+                    result_stack += "\n"
+                else:
+                    result_stack += "\t  {0}: {1}\n".format(
+                        colored(key, "magenta"),
+                        value,
+                    )
+            result_stack = result_stack[0:-1] + "\n"
+        result += result_stack
+    return result
+
 @command('list')
-def list(config=None):
+@arg('with_tags', '-t', action='store_true', dest='with_tags', help='displays tags for each host')
+def list(with_tags=False,config=None):
     """
     Lists all hosts from ssh config.
     """
@@ -189,63 +256,34 @@ def list(config=None):
 
     try:
         result = colored('Listing entries:', 'white', attrs=["bold", ]) + "\n\n"
-        result_stack = ""
         for host in storm_.list_entries(True):
+            result += format_host(host,storm_.defaults,with_tags)
+        print(get_formatted_message(result, ""))
+    except Exception as error:
+        print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
-            if host.get("type") == 'entry':
-                if not host.get("host") == "*":
-                    result += "    {0} -> {1}@{2}:{3}".format(
-                        colored(host["host"], 'green', attrs=["bold", ]),
-                        host.get("options").get(
-                            "user", get_default("user", storm_.defaults)
-                        ),
-                        host.get("options").get(
-                            "hostname", "[hostname_not_specified]"
-                        ),
-                        host.get("options").get(
-                            "port", get_default("port", storm_.defaults)
-                        )
-                    )
+@command('list-tag')
+@arg('tags', nargs='*', default=[], type=str, help='a tag name to filter displayed hosts, if no tag is supplied all tags are displayed')
+def list(tags,config=None):
+    """
+    Lists hosts from ssh config with a specific TAG or all tags.
+    """
+    storm_ = get_storm_instance(config)
 
-                    extra = False
-                    for key, value in six.iteritems(host.get("options")):
-
-                        if not key in ["user", "hostname", "port"]:
-                            if not extra:
-                                custom_options = colored(
-                                    '\n\t[custom options] ', 'white'
-                                )
-                                result += " {0}".format(custom_options)
-                            extra = True
-
-                            if isinstance(value, collections.Sequence):
-                                if isinstance(value, builtins.list):
-                                    value = ",".join(value)
-                                    
-                            result += "{0}={1} ".format(key, value)
-                    if extra:
-                        result = result[0:-1]
-
-                    result += "\n\n"
-                else:
-                    result_stack = colored(
-                        "   (*) General options: \n", "green", attrs=["bold",]
-                    )
-                    for key, value in six.iteritems(host.get("options")):
-                        if isinstance(value, type([])):
-                            result_stack += "\t  {0}: ".format(
-                                colored(key, "magenta")
-                            )
-                            result_stack += ', '.join(value)
-                            result_stack += "\n"
-                        else:
-                            result_stack += "\t  {0}: {1}\n".format(
-                                colored(key, "magenta"),
-                                value,
-                            )
-                    result_stack = result_stack[0:-1] + "\n"
-
-        result += result_stack
+    try:
+        result = ""
+        tags = ["@" + tag for tag in tags]
+        tags = set(tags) # remove duplicates
+        all_tags = set(storm_.ssh_config.hosts_per_tag.keys())
+        if len(tags) == 0:
+            tags = all_tags
+        else:
+            tags = tags & all_tags # get only existing tags
+     
+        for tag in tags:
+            result += colored('Listing entries for tag', 'white', attrs=["bold", ]) + " {0}".format(tag) + "\n\n"
+            for host in storm_.ssh_config.hosts_per_tag[tag]:
+                result += format_host(host,storm_.defaults)
         print(get_formatted_message(result, ""))
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
