@@ -180,7 +180,7 @@ def delete(name, config=None):
     except ValueError as error:
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
-def format_host(host,defaults,with_tags=False):
+def format_host(host,defaults,with_tags=False,compact_tags=False):
     result = ""
     result_stack = ""
     if host.get("type") == 'entry':
@@ -218,12 +218,21 @@ def format_host(host,defaults,with_tags=False):
 
             if with_tags:
                 if len(host.get('tags')) > 0:
-                    tags = colored(
-                                '\n\t[tags] ', 'white'
-                    )
-                    result += " {0}".format(tags)
-                    value = ", ".join(host.get('tags'))
-                    result += "{0} ".format(value)
+                    if compact_tags:
+                        result += " {0}".format('')
+                        value = " ".join(
+                            map(lambda tag: colored(tag,'green', attrs=["bold", ]),
+                                host.get('tags')
+                                )
+                            )
+                        result += "{0} ".format(value)
+                    else:
+                        tags = colored(
+                                    '\n\t[tags] ', 'white'
+                        )
+                        result += " {0}".format(tags)
+                        value = ", ".join(host.get('tags'))
+                        result += "{0} ".format(value)
 
             result += "\n\n"
         elif host.get("options") != {}:
@@ -258,7 +267,8 @@ def list(with_tags=False,config=None):
         result = colored('Listing entries:', 'white', attrs=["bold", ]) + "\n\n"
         for host in storm_.list_entries(True):
             result += format_host(host,storm_.defaults,with_tags)
-        print(get_formatted_message(result, ""))
+        if len(result) != 0:
+          print(get_formatted_message(result, ""))
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
@@ -272,19 +282,25 @@ def list(tags,config=None):
 
     try:
         result = ""
-        tags = ["@" + tag for tag in tags]
-        tags = set(tags) # remove duplicates
-        all_tags = set(storm_.ssh_config.hosts_per_tag.keys())
-        if len(tags) == 0:
-            tags = all_tags
+        input_tags = ["@" + tag for tag in tags]
+        input_tags = set(input_tags) # remove duplicates
+        all_tags = storm_.ssh_config.hosts_per_tag.keys()
+
+        if len(input_tags) == 0: # if tags given, display all
+            found_tags = all_tags
         else:
-            tags = tags & all_tags # get only existing tags
-     
-        for tag in tags:
+            found_tags = set()
+            for tag in input_tags:
+                found_tags = found_tags | set(filter(lambda existing_tag: tag in existing_tag, all_tags))
+
+       
+
+        for tag in found_tags:
             result += colored('Listing entries for tag', 'white', attrs=["bold", ]) + " {0}".format(tag) + "\n\n"
             for host in storm_.ssh_config.hosts_per_tag[tag]:
-                result += format_host(host,storm_.defaults)
-        print(get_formatted_message(result, ""))
+                result += format_host(host,storm_.defaults,with_tags=True,compact_tags=True)
+        if len(result) != 0:
+          print(get_formatted_message(result, ""))
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
