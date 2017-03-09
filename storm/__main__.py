@@ -154,6 +154,13 @@ def update(name, connection_uri="", id_file="", o=[], config=None):
         k, v = option.split("=")
         settings[k] = v
 
+    options = parse(
+        connection_uri,
+        user=get_default("user"),
+        port=get_default("port")
+    )
+    settings.update(dict(zip(["user", "hostname", "port"], options)))
+
     try:
         storm_.update_entry(name, **settings)
         print(get_formatted_message(
