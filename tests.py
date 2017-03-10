@@ -218,6 +218,28 @@ class StormCliTestCase(unittest.TestCase):
             self.assertIn(b"user daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
             self.assertIn(b"port 42000", content)
 
+    def test_update_scheme(self):
+        out, err, rc = self.run_cmd('update aws.apache --connection_uri jimmy@example.com:123 {0}'.format(self.config_arg))
+
+        self.assertIn(b"success", out)
+
+        with open(self.config_file) as f:
+            content = f.read().encode('ascii')
+            self.assertIn(b"user jimmy", content)
+            self.assertIn(b"hostname example.com", content)
+            self.assertIn(b"port 123", content)
+
+    def test_update_precedence(self):
+        out, err, rc = self.run_cmd('update aws.apache --o port=42000 {0}'.format(self.config_arg))
+
+        self.assertIn(b"success", out)
+
+        with open(self.config_file) as f:
+            content = f.read().encode('ascii')
+            self.assertIn(b"user wwwdata", content)
+            self.assertIn(b"hostname 1.2.3.4", content)
+            self.assertIn(b"port 42000", content)
+
     def test_update_regex(self):
 
         self.run_cmd('add worker alphaworker.com {0}'.format(self.config_arg))
