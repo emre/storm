@@ -16,10 +16,10 @@ from storm.kommandr import *
 from storm.defaults import get_default
 from storm import __version__
 
+import subprocess 
 
 def get_storm_instance(config_file=None):
     return Storm(config_file)
-
 
 @command('version')
 def version():
@@ -28,6 +28,21 @@ def version():
     """
     print(__version__)
 
+@command('ssh')
+def ssh(connection_uri, id_file="", config=None):
+    storm_ = get_storm_instance(config)
+
+    user, host, port = parse(
+        connection_uri,
+        user=get_default("user", storm_.defaults),
+        port=get_default("port", storm_.defaults)
+    )
+
+    if len(storm_.search_host(host)) == 0:
+        storm_.add_entry(host, host, user, port, id_file)
+
+    subprocess.call(["ssh", connection_uri])
+	
 
 @command('add')
 def add(name, connection_uri, id_file="", o=[], config=None):
