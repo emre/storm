@@ -29,18 +29,23 @@ class Storm(object):
         self.ssh_config.load()
         self.defaults = self.ssh_config.defaults
 
-    def add_entry(self, name, host, user, port, id_file, custom_options=[]):
+    def add_entry(self, name, host, user, port, id_file,
+                  custom_options=[], dry_run=None):
         if self.is_host_in(name):
             raise ValueError(ERRORS["already_in"].format(name))
 
         options = self.get_options(host, user, port, id_file, custom_options)
 
         self.ssh_config.add_host(name, options)
+
+        if dry_run:
+            return self.ssh_config.dump()
+
         self.ssh_config.write_to_ssh_config()
 
         return True
 
-    def clone_entry(self, name, clone_name, keep_original=True):
+    def clone_entry(self, name, clone_name, keep_original=True, dry_run=None):
         host = self.is_host_in(name, return_match=True)
         if not host:
             raise ValueError(ERRORS["not_found"].format(name))
@@ -53,16 +58,25 @@ class Storm(object):
         self.ssh_config.add_host(clone_name, host.get('options'))
         if not keep_original:
             self.ssh_config.delete_host(name)
+
+        if dry_run:
+            return self.ssh_config.dump()
+
         self.ssh_config.write_to_ssh_config()
 
         return True
 
-    def edit_entry(self, name, host, user, port, id_file, custom_options=[]):
+    def edit_entry(self, name, host, user, port, id_file,
+                   custom_options=[], dry_run=None):
         if not self.is_host_in(name):
             raise ValueError(ERRORS["not_found"].format(name))
 
         options = self.get_options(host, user, port, id_file, custom_options)
         self.ssh_config.update_host(name, options, use_regex=False)
+
+        if dry_run:
+            return self.ssh_config.dump()
+
         self.ssh_config.write_to_ssh_config()
 
         return True
@@ -72,12 +86,18 @@ class Storm(object):
             raise ValueError(ERRORS["not_found"].format(name))
 
         self.ssh_config.update_host(name, kwargs, use_regex=True)
+        if kwargs.get("dry_run"):
+            return self.ssh_config.dump()
+
         self.ssh_config.write_to_ssh_config()
 
         return True
 
-    def delete_entry(self, name):
+    def delete_entry(self, name, dry_run=None):
         self.ssh_config.delete_host(name)
+        if dry_run:
+            return self.ssh_config.dump()
+
         self.ssh_config.write_to_ssh_config()
 
         return True
@@ -99,16 +119,16 @@ class Storm(object):
             config_data = sorted(config_data, key=itemgetter("host"))
         return config_data
 
-    def delete_all_entries(self):
-        self.ssh_config.delete_all_hosts()
+    def delete_all_entries(self, dry_run=None):
+        config_data = self.ssh_config.delete_all_hosts(dry_run=dry_run)
 
-        return True
+        return config_data
 
     def search_host(self, search_string):
         results = self.ssh_config.search_host(search_string)
         formatted_results = []
         for host_entry in results:
-            formatted_results.append("    {0} -> {1}@{2}:{3}\n".format(
+            formatted_results.append("     {0} -> {1}@{2}:{3}\n".format(
                 host_entry.get("host"),
                 host_entry.get("options").get(
                     "user", get_default("user", self.defaults)

@@ -16,9 +16,24 @@ from storm.kommandr import *
 from storm.defaults import get_default
 from storm import __version__
 
+DEBUG_SEPERATOR = "-" * 42
 
 def get_storm_instance(config_file=None):
     return Storm(config_file)
+
+def print_sshconfig_data(data):
+    if isinstance(data, bool):
+        print(DEBUG_SEPERATOR)
+        print(data)
+        print(DEBUG_SEPERATOR)
+
+    return
+
+def validate_name(name):
+    if '@' in name:
+        raise ValueError('invalid value: "@" cannot be used in name.')
+
+    return True
 
 
 @command('version')
@@ -30,7 +45,7 @@ def version():
 
 
 @command('add')
-def add(name, connection_uri, id_file="", o=[], config=None):
+def add(name, connection_uri, id_file="", o=[], config=None, dry_run=None):
     """
     Adds a new entry to sshconfig.
     """
@@ -38,9 +53,7 @@ def add(name, connection_uri, id_file="", o=[], config=None):
 
     try:
 
-        # validate name
-        if '@' in name:
-            raise ValueError('invalid value: "@" cannot be used in name.')
+        validate_name(name)
 
         user, host, port = parse(
             connection_uri,
@@ -48,7 +61,18 @@ def add(name, connection_uri, id_file="", o=[], config=None):
             port=get_default("port", storm_.defaults)
         )
 
-        storm_.add_entry(name, host, user, port, id_file, o)
+        config_data = storm_.add_entry(
+            name,
+            host,
+            user,
+            port,
+            id_file,
+            o,
+            dry_run
+        )
+
+        if config_data:
+            print_sshconfig_data(config_data)
 
         print(
             get_formatted_message(
@@ -62,7 +86,7 @@ def add(name, connection_uri, id_file="", o=[], config=None):
 
 
 @command('clone')
-def clone(name, clone_name, config=None):
+def clone(name, clone_name, config=None, dry_run=None):
     """
     Clone an entry to the sshconfig.
     """
@@ -70,11 +94,11 @@ def clone(name, clone_name, config=None):
 
     try:
 
-        # validate name
-        if '@' in name:
-            raise ValueError('invalid value: "@" cannot be used in name.')
+        validate_name(name)
 
-        storm_.clone_entry(name, clone_name)
+        config_data = storm_.clone_entry(name, clone_name, dry_run=dry_run)
+        if config_data:
+            print_sshconfig_data(config_data)
 
         print(
             get_formatted_message(
@@ -87,7 +111,7 @@ def clone(name, clone_name, config=None):
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('move')
-def move(name, entry_name, config=None):
+def move(name, entry_name, config=None, dry_run=None):
     """
     Move an entry to the sshconfig.
     """
@@ -95,10 +119,17 @@ def move(name, entry_name, config=None):
 
     try:
 
-        if '@' in name:
-            raise ValueError('invalid value: "@" cannot be used in name.')
+        validate_name(name)
 
-        storm_.clone_entry(name, entry_name, keep_original=False)
+        config_data = storm_.clone_entry(
+            name,
+            entry_name,
+            keep_original=False,
+            dry_run=dry_run
+        )
+
+        if config_data:
+            print_sshconfig_data(config_data)
 
         print(
             get_formatted_message(
@@ -114,23 +145,28 @@ def move(name, entry_name, config=None):
 
 
 @command('edit')
-def edit(name, connection_uri, id_file="", o=[], config=None):
+def edit(name, connection_uri, id_file="", o=[], config=None, dry_run=None):
     """
     Edits the related entry in ssh config.
     """
     storm_ = get_storm_instance(config)
 
     try:
-        if ',' in name:
-            name = " ".join(name.split(","))
 
+        validate_name(name)
         user, host, port = parse(
             connection_uri,
             user=get_default("user", storm_.defaults),
             port=get_default("port", storm_.defaults)
         )
 
-        storm_.edit_entry(name, host, user, port, id_file, o)
+        config_data = storm_.edit_entry(
+            name, host, user, port, id_file, o, dry_run=dry_run
+        )
+
+        if config_data:
+            print_sshconfig_data(config_data)
+
         print(get_formatted_message(
             '"{0}" updated successfully.'.format(
                 name
@@ -139,13 +175,16 @@ def edit(name, connection_uri, id_file="", o=[], config=None):
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('update')
-def update(name, connection_uri="", id_file="", o=[], config=None):
+def update(name, connection_uri="", id_file="", o=[], config=None,
+           dry_run=None):
     """
     Enhanced version of the edit command featuring multiple
     edits using regular expressions to match entries
     """
     storm_ = get_storm_instance(config)
-    settings = {}
+    settings = {
+        "dry_run": dry_run
+    }
 
     if id_file != "": 
         settings['identityfile'] = id_file
@@ -155,7 +194,10 @@ def update(name, connection_uri="", id_file="", o=[], config=None):
         settings[k] = v
 
     try:
-        storm_.update_entry(name, **settings)
+        config_data = storm_.update_entry(name, **settings)
+        if config_data:
+            print_sshconfig_data(config_data)
+
         print(get_formatted_message(
             '"{0}" updated successfully.'.format(
                 name
@@ -164,14 +206,18 @@ def update(name, connection_uri="", id_file="", o=[], config=None):
         print(get_formatted_message(error, 'error'), file=sys.stderr)
 
 @command('delete')
-def delete(name, config=None):
+def delete(name, config=None, dry_run=None):
     """
     Deletes a single host.
     """
     storm_ = get_storm_instance(config)
 
     try:
-        storm_.delete_entry(name)
+        config_data = storm_.delete_entry(name, dry_run=dry_run)
+
+        if config_data:
+            print_sshconfig_data(config_data)
+
         print(
             get_formatted_message(
                 'hostname "{0}" deleted successfully.'.format(name),
@@ -270,14 +316,17 @@ def search(search_text, config=None):
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
 
 @command('delete_all')
-def delete_all(config=None):
+def delete_all(config=None, dry_run=None):
     """
     Deletes all hosts from ssh config.
     """
     storm_ = get_storm_instance(config)
 
     try:
-        storm_.delete_all_entries()
+        config_data = storm_.delete_all_entries(dry_run=dry_run)
+        if config_data:
+            print_sshconfig_data(config_data)
+
         print(get_formatted_message('all entries deleted.', 'success'))
     except Exception as error:
         print(get_formatted_message(str(error), 'error'), file=sys.stderr)
