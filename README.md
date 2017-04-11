@@ -16,12 +16,16 @@ storm is a command line tool to manage your ssh connections.
 - scriptable as a python library.
 - user interfaces besides cli. (web ui, wxpython, unity(ubuntu) indicator.)
 
-####dependencies
-On Debian systems, install header files and a static library for Python (python3.4-dev or python2.7-dev)
+**dependencies**
 
-On Ubuntu 16.04, you need install libssl-dev and libffi-dev (sudo apt-get install libssl-dev libffi-dev)
+Debian:
+- Header files: `sudo apt-get install linux-headers-$(uname -r)`
+- Static Python library: `sudo apt-get install python3.4-dev` **OR** `sudo apt-get install python2.7-dev` 
 
-####installation
+Ubuntu 16.04:
+- libssl-dev && libffi-dev: `sudo apt-get install libssl-dev libffi-dev`
+
+**installation**
 
 ```bash
 $ [sudo] pip install stormssh
@@ -44,7 +48,7 @@ or if you use archlinux or opensuse:
 | Opensuse           | <a href="http://rpm.pbone.net/index.php3?stat=3&search=python-stormssh&srodzaj=3">python-stormssh</a>     |
 
 
-####troubleshooting installation
+**troubleshooting installation**
 
 ```
 clang: error: unknown argument: '-mno-fused-madd'
@@ -54,11 +58,11 @@ error: command 'cc' failed with exit status 1
 
 See [#73](https://github.com/emre/storm/issues/73). If the issue persists, see also [#76](https://github.com/emre/storm/issues/96) .
 
-####usage & documentation
+**usage & documentation**
 
 <a href='http://stormssh.readthedocs.org/en/master/'>http://stormssh.readthedocs.org/en/master/</a>
 
-#### screens
+**screens**
 
 <a href="http://i.imgur.com/qIc1mDx.png"><img src="http://i.imgur.com/qIc1mDx.png"></a>
 
