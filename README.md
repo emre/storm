@@ -16,12 +16,12 @@ storm is a command line tool to manage your ssh connections.
 - scriptable as a python library.
 - user interfaces besides cli. (web ui, wxpython, unity(ubuntu) indicator.)
 
-####dependencies
+#### dependencies
 On Debian systems, install header files and a static library for Python (python3.4-dev or python2.7-dev)
 
 On Ubuntu 16.04, you need install libssl-dev and libffi-dev (sudo apt-get install libssl-dev libffi-dev)
 
-####installation
+#### installation
 
 ```bash
 $ [sudo] pip install stormssh
@@ -44,7 +44,7 @@ or if you use archlinux or opensuse:
 | Opensuse           | <a href="http://rpm.pbone.net/index.php3?stat=3&search=python-stormssh&srodzaj=3">python-stormssh</a>     |
 
 
-####troubleshooting installation
+#### troubleshooting installation
 
 ```
 clang: error: unknown argument: '-mno-fused-madd'
@@ -54,7 +54,7 @@ error: command 'cc' failed with exit status 1
 
 See [#73](https://github.com/emre/storm/issues/73). If the issue persists, see also [#76](https://github.com/emre/storm/issues/96) .
 
-####usage & documentation
+#### usage & documentation
 
 <a href='http://stormssh.readthedocs.org/en/master/'>http://stormssh.readthedocs.org/en/master/</a>
 
