@@ -10,7 +10,7 @@ except ImportError:
     import builtins
 
 from storm import Storm
-from storm.parsers.ssh_uri_parser import parse
+from storm.parsers import parse
 from storm.utils import (get_formatted_message, colored)
 from storm.kommandr import *
 from storm.defaults import get_default
