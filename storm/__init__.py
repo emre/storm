@@ -6,7 +6,7 @@ from operator import itemgetter
 import re
 from shutil import copyfile
 
-from .parsers.ssh_config_parser import ConfigParser
+from .parsers import ConfigParser
 from .defaults import get_default
 
 
