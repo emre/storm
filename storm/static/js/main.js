@@ -12,7 +12,7 @@ function Storm($scope, $http) {
   }
 
   function fetch(callback) {
-    $http.get("/list").success(function (data) {
+    $http.get("/servers").success(function (data) {
       $scope.servers = data.map(function (host) {
         var port = host.options.port;
         var hostname = host.options.hostname;
@@ -59,7 +59,7 @@ function Storm($scope, $http) {
 
     if ($scope.state.editIndex > -1) {
       $scope.isDisabled = false;
-      $http.put('/edit', JSON.stringify({name: $scope.title, connection_uri: $scope.uri, id_file: $scope.id_file})).
+      $http.put('/servers/' + $scope.title, JSON.stringify({connection_uri: $scope.uri, id_file: $scope.id_file})).
         success(function(data, status) {
           if (status == 200) {
             $scope.servers[$scope.state.editIndex] = {
@@ -81,7 +81,7 @@ function Storm($scope, $http) {
         });
 
     } else {
-      $http.post('/add', JSON.stringify({name: $scope.title, connection_uri: $scope.uri, id_file: $scope.id_file})).
+      $http.post('/servers/'+$scope.title, JSON.stringify({connection_uri: $scope.uri, id_file: $scope.id_file})).
         success(function (data, status) {
           if (status == 201) {
             $scope.servers.push({
@@ -137,7 +137,7 @@ function Storm($scope, $http) {
   };
 
   $scope.delete = function (serverToDelete) {
-    $http.post("/delete", JSON.stringify({name: serverToDelete.host})).
+    $http.delete("/servers/" + serverToDelete.host).
       success(function () {
         fetch(function () {
           plural();
