@@ -140,23 +140,27 @@ class StormCliTestCase(unittest.TestCase):
     def test_version_command(self):
         out, err, rc = self.run_cmd('version')
         self.assertIn(__version__.encode('ascii'), out)
+        self.assertEqual(rc, 0)
 
     def test_basic_add(self):
         out, err, rc = self.run_cmd('add netscaler ns@42.42.42.42 {0}'.format(self.config_arg))
 
         self.assertIn(b"success", out)
+        self.assertEqual(rc, 0)
 
     def test_add_duplicate(self):
         out, err, rc = self.run_cmd('add aws.apache test@test.com {0}'.format(self.config_arg))
 
         self.assertEqual(b'', out)
         self.assertIn(b'error', err)
+        self.assertNotEqual(rc, 0)
 
     def test_add_invalid_host(self):
         out, err, rc = self.run_cmd('add @_@ test.com {0}'.format(self.config_arg))
 
         self.assertEqual(b'', out)
         self.assertIn(b'error', err)
+        self.assertNotEqual(rc, 0)
 
     def test_advanced_add(self):
         out, err, rc = self.run_cmd('add postgresql-server postgres@192.168.1.1 {0} {1}{2}'.format(
@@ -166,6 +170,7 @@ class StormCliTestCase(unittest.TestCase):
         )
 
         self.assertIn(b"success", out)
+        self.assertEqual(rc, 0)
 
         with open(self.config_file) as f:
             # check that property is really flushed out to the config?
@@ -181,6 +186,7 @@ class StormCliTestCase(unittest.TestCase):
         )
 
         self.assertIn(b"success", out)
+        self.assertEqual(rc, 0)
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
@@ -190,6 +196,7 @@ class StormCliTestCase(unittest.TestCase):
         out, err, rc = self.run_cmd('edit aws.apache basic_edit_check@10.20.30.40 {0}'.format(self.config_arg))
 
         self.assertIn(b"success", out)
+        self.assertEqual(rc, 0)
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
@@ -201,17 +208,20 @@ class StormCliTestCase(unittest.TestCase):
 
         self.assertEqual(b'', out)
         self.assertIn(b'error', err)
+        self.assertNotEqual(rc, 0)
 
     def test_edit_missing_host(self):
         out, err, rc = self.run_cmd('edit missing_host test.com {0}'.format(self.config_arg))
 
         self.assertEqual(b'', out)
         self.assertIn(b'error', err)
+        self.assertNotEqual(rc, 0)
 
     def test_update(self):
         out, err, rc = self.run_cmd('update aws.apache --o "user=daghan" --o port=42000 {0}'.format(self.config_arg))
 
         self.assertIn(b"success", out)
+        self.assertEqual(rc, 0)
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
@@ -233,9 +243,11 @@ class StormCliTestCase(unittest.TestCase):
         out, err, rc = self.run_cmd("update 'worker-[1-5]' --o hostname=boss.com {0}".format(self.config_arg))
 
         self.assertIn(b"success", out)
+        self.assertEqual(rc, 0)
 
         # edit the alphaworker
         out, err, rc = self.run_cmd('edit worker alphauser@alphaworker.com {0}'.format(self.config_arg))
+        self.assertEqual(rc, 0)
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
@@ -247,16 +259,19 @@ class StormCliTestCase(unittest.TestCase):
 
         out, err, rc = self.run_cmd("edit worker  {0}".format(self.config_arg))
 
+
     def test_update_invalid_regex(self):
 
         out, err, rc = self.run_cmd("update 'drogba-[0-5]' --o hostname=boss.com {0}".format(self.config_arg))
 
         self.assertEqual(b'', out)
         self.assertIn(b'error', err)
+        self.assertNotEqual(rc, 0)
 
     def test_delete(self):
         out, err, rc = self.run_cmd("delete server1 {0}".format(self.config_arg))
         self.assertIn(b"success", out)
+        self.assertEqual(rc, 0)
 
     def test_delete_invalid_hostname(self):
 
@@ -264,6 +279,7 @@ class StormCliTestCase(unittest.TestCase):
 
         self.assertEqual(b'', out)
         self.assertIn(b'error', err)
+        self.assertNotEqual(rc, 0)
 
     def test_search(self):
 
@@ -271,23 +287,27 @@ class StormCliTestCase(unittest.TestCase):
 
         self.assertTrue(out.startswith(b'Listing results for aws:'))
         self.assertIn(b'aws.apache', out)
+        self.assertEqual(rc, 0)
 
     def test_backup(self):
         out, err, rc = self.run_cmd("backup /tmp/ssh_backup {0}".format(
             self.config_arg))
 
         self.assertEqual(True, os.path.exists("/tmp/ssh_backup"))
+        self.assertEqual(rc, 0)
 
     def test_invalid_search(self):
 
         out, err, rc = self.run_cmd("search THEREISNOTHINGRELATEDWITHME {0}".format(self.config_arg))
 
         self.assertIn(b'no results found.', out)
+        self.assertEqual(rc, 0)
 
     def test_delete_all(self):
         out, err, rc = self.run_cmd('delete_all {0}'.format(self.config_arg))
 
         self.assertIn(b'all entries deleted', out)
+        self.assertEqual(rc, 0)
 
     def tearDown(self):
         os.unlink('/tmp/ssh_config_cli_tests')
