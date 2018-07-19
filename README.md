@@ -36,13 +36,13 @@ or if you like homebrew:
 $ brew install stormssh
 ```
 
-or if you use archlinux or opensuse:
+or if prefer using a package manager in your distro:
 
-| Distro        | Package    
-| ------------- |---------------|                     
-| Archlinux       | <a href="https://aur.archlinux.org/packages/python-stormssh/">python-stormssh</a>       |
-| Opensuse           | <a href="http://rpm.pbone.net/index.php3?stat=3&search=python-stormssh&srodzaj=3">python-stormssh</a>     |
-
+| Distro        | Package
+| ------------- |---------------|
+| Archlinux     | <a href="https://aur.archlinux.org/packages/python-stormssh/">python-stormssh</a> |
+| Opensuse      | <a href="http://rpm.pbone.net/index.php3?stat=3&search=python-stormssh&srodzaj=3">python-stormssh</a> |
+| Void Linux    | <a href="https://github.com/voidlinux/void-packages/tree/master/srcpkgs/python-stormssh">python-stormssh</a> |
 
 #### troubleshooting installation
 
