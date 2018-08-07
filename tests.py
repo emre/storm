@@ -175,7 +175,7 @@ class StormCliTestCase(unittest.TestCase):
         with open(self.config_file) as f:
             # check that property is really flushed out to the config?
             content = f.read().encode('ascii')
-            self.assertIn(b'identityfile "/tmp/idfilecheck.rsa"', content)
+            self.assertIn(b'IdentityFile "/tmp/idfilecheck.rsa"', content)
             self.assertIn(b"stricthostkeychecking yes", content)
             self.assertIn(b"userknownhostsfile /dev/advanced_test", content)
 
@@ -190,7 +190,7 @@ class StormCliTestCase(unittest.TestCase):
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
-            self.assertIn(b'identityfile "/tmp/idfileonlycheck.rsa"', content)
+            self.assertIn(b'IdentityFile "/tmp/idfileonlycheck.rsa"', content)
 
     def test_basic_edit(self):
         out, err, rc = self.run_cmd('edit aws.apache basic_edit_check@10.20.30.40 {0}'.format(self.config_arg))
@@ -225,8 +225,8 @@ class StormCliTestCase(unittest.TestCase):
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
-            self.assertIn(b"user daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
-            self.assertIn(b"port 42000", content)
+            self.assertIn(b"User daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
+            self.assertIn(b"Port 42000", content)
 
     def test_update_regex(self):
 

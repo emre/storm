@@ -13,6 +13,10 @@ import six
 
 
 class StormConfig(SSHConfig):
+    def __init__(self, *a, **kw):
+        super(StormConfig, self).__init__(*a, **kw)
+        self.lower_to_original = {}
+
     def parse(self, file_obj):
         """
         Read an OpenSSH config from the given file object.
@@ -49,10 +53,10 @@ class StormConfig(SSHConfig):
                 if line.lower().strip().startswith('proxycommand'):
                     proxy_re = re.compile(r"^(proxycommand)\s*=*\s*(.*)", re.I)
                     match = proxy_re.match(line)
-                    key, value = match.group(1).lower(), match.group(2)
+                    key, value = match.group(1), match.group(2)
                 else:
                     key, value = line.split('=', 1)
-                    key = key.strip().lower()
+                    key = key.strip()
             else:
                 # find first whitespace, and split there
                 i = 0
@@ -60,8 +64,10 @@ class StormConfig(SSHConfig):
                     i += 1
                 if i == len(line):
                     raise Exception('Unparsable line: %r' % line)
-                key = line[:i].lower()
+                key = line[:i]
                 value = line[i:].lstrip()
+            self.lower_to_original[key.lower()] = key
+            key = key.lower()
             if key == 'host':
                 self._config.append(host)
                 value = value.split()
@@ -92,6 +98,7 @@ class ConfigParser(object):
             ssh_config_file = self.get_default_ssh_config_file()
 
         self.defaults = {}
+        self.lower_to_original = {}
 
         self.ssh_config_file = ssh_config_file
 
@@ -111,6 +118,7 @@ class ConfigParser(object):
 
         with open(self.ssh_config_file) as fd:
             config.parse(fd)
+        self.lower_to_original = config.lower_to_original
 
         for entry in config.__dict__.get("_config"):
             if entry.get("host") == ["*"]:
@@ -218,12 +226,12 @@ class ConfigParser(object):
                     sub_content = ""
                     for value_ in value:
                         sub_content += "    {0} {1}\n".format(
-                            key, value_
+                            self.lower_to_original.get(key) or key, value_
                         )
                     host_item_content += sub_content
                 else:
                     host_item_content += "    {0} {1}\n".format(
-                        key, value
+                        self.lower_to_original.get(key) or key, value
                     )
             file_content += host_item_content
 
