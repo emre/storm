@@ -5,7 +5,7 @@ from flask import (Flask, Response, make_response, jsonify, request,
                    send_from_directory)
 
 from storm import Storm, DELETED_SIGN
-from storm.parsers.ssh_uri_parser import parse
+from storm.parsers import parse
 
 
 app = Flask(__name__)
@@ -28,16 +28,17 @@ def response(resp=None, status=200, content_type='application/json'):
 
 
 @app.route('/')
+@app.route('/index')
 def index():
     return render('index.html', __THEME__)
 
-@app.route('/list', methods=['GET'])
+@app.route('/servers', methods=['GET'])
 def list_keys():
     storm_ = app.get_storm()
     return response(json.dumps(storm_.list_entries(True, only_servers=True)))
 
 
-@app.route('/add', methods=['POST'])
+@app.route('/servers', methods=['POST'])
 def add():
     storm_ = app.get_storm()
 
@@ -60,13 +61,17 @@ def add():
     except (KeyError, TypeError):
         return response(status=400)
 
+@app.route('/servers/<name>', methods=['GET'])
+def list_keys(name):
+    storm_ = app.get_storm()
+    return response(json.dumps(storm_.list_entries(True, only_servers=True).get(name)))
+      
 
-@app.route('/edit', methods=['PUT'])
-def edit():
+@app.route('/servers/<name>', methods=['PUT','POST'])
+def edit(name):
     storm_ = app.get_storm()
 
     try:
-        name = request.json['name']
         connection_uri = request.json['connection_uri']
         id_file = None
         if 'id_file' in request.json:
@@ -82,13 +87,11 @@ def edit():
     except (KeyError, TypeError):
         return response(status=400)
 
-
-@app.route('/delete', methods=['POST'])
-def delete():
+@app.route('/servers/<name>', methods=['DELETE'])
+def delete(name):
     storm_ = app.get_storm()
 
     try:
-        name = request.json['name']
         storm_.delete_entry(name)
         return response()
     except ValueError as exc:
