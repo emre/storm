@@ -28,6 +28,7 @@ build() {
 package() {
   cd "$srcdir/storm"
   python setup.py install --root="$pkgdir/"
+  install -Dm644 $srcdir/storm/contrib/bash-completion/stormssh $pkgdir/usr/share/bash-completion/completions/storm
 }
 
 # vim:set ts=2 sw=2 et:
