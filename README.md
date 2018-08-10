@@ -49,7 +49,7 @@ or if prefer using a package manager in your distro:
 | Void Linux    | <a href="https://github.com/voidlinux/void-packages/tree/master/srcpkgs/python-stormssh">python-stormssh</a> |
 
 
-#### troubleshooting installation
+**troubleshooting installation**
 
 ```
 clang: error: unknown argument: '-mno-fused-madd'
