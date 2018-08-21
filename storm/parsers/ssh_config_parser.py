@@ -21,7 +21,7 @@ class StormConfig(SSHConfig):
         @type file_obj: file
         """
         order = 1
-        host = {"host": ['*'], "config": {}, }
+        host = {"host": ['*'], "config": {}, "tags" : [] }
         for line in file_obj:
             line = line.rstrip('\n').lstrip()
             if line == '':
@@ -34,7 +34,7 @@ class StormConfig(SSHConfig):
                 order += 1
                 continue
 
-            if line.startswith('#'):
+            if line.startswith('#') and not line.startswith('#@'):
                 self._config.append({
                     'type': 'comment',
                     'value': line,
@@ -53,6 +53,11 @@ class StormConfig(SSHConfig):
                 else:
                     key, value = line.split('=', 1)
                     key = key.strip().lower()
+            elif line.lower().strip().startswith('#@'):
+                line_with_tags=line[1:]
+                tags_re = re.compile(r"@\S+")
+                match = tags_re.findall(line_with_tags)
+                key, value = "tags", match
             else:
                 # find first whitespace, and split there
                 i = 0
@@ -62,6 +67,7 @@ class StormConfig(SSHConfig):
                     raise Exception('Unparsable line: %r' % line)
                 key = line[:i].lower()
                 value = line[i:].lstrip()
+
             if key == 'host':
                 self._config.append(host)
                 value = value.split()
@@ -69,7 +75,8 @@ class StormConfig(SSHConfig):
                     key: value,
                     'config': {},
                     'type': 'entry',
-                    'order': order
+                    'order': order,
+                    'tags': [],
                 }
                 order += 1
             elif key in ['identityfile', 'localforward', 'remoteforward']:
@@ -77,10 +84,11 @@ class StormConfig(SSHConfig):
                     host['config'][key].append(value)
                 else:
                     host['config'][key] = [value]
+            elif key == 'tags':
+                host['tags'] += value
             elif key not in host['config']:
                 host['config'].update({key: value})
         self._config.append(host)
-
 
 class ConfigParser(object):
     """
@@ -102,6 +110,7 @@ class ConfigParser(object):
             chmod(self.ssh_config_file, 0o600)
 
         self.config_data = []
+        self.hosts_per_tag = {}
 
     def get_default_ssh_config_file(self):
         return expanduser("~/.ssh/config")
@@ -125,12 +134,19 @@ class ConfigParser(object):
                 'options': entry.get("config"),
                 'type': 'entry',
                 'order': entry.get("order", 0),
+                'tags': entry.get("tags")
             }
 
             if len(entry["host"]) > 1:
                 host_item.update({
                     'host': " ".join(entry["host"]),
                 })
+
+            for tag in host_item['tags']:
+                if not tag in self.hosts_per_tag:
+                    self.hosts_per_tag[tag] = []
+                if not host_item in self.hosts_per_tag[tag]:
+                    self.hosts_per_tag[tag].append(host_item)
 
             # minor bug in paramiko.SSHConfig that duplicates
             #"Host *" entries.

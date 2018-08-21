@@ -34,6 +34,7 @@ FAKE_SSH_CONFIG_FOR_CLI_TESTS = """
 
     ## override as per host ##
     Host server1
+         #@private
          HostName server1.cyberciti.biz
          User nixcraft
          Port 4242
@@ -42,6 +43,7 @@ FAKE_SSH_CONFIG_FOR_CLI_TESTS = """
 
     ## Home nas server ##
     Host nas01
+         #@private
          HostName 192.168.1.100
          User root
          IdentityFile ~/.ssh/nas01.key
@@ -55,6 +57,7 @@ FAKE_SSH_CONFIG_FOR_CLI_TESTS = """
     ## Login to internal lan server at 192.168.0.251 via our public uk office ssh based gateway using ##
     ## $ ssh uk.gw.lan ##
     Host uk.gw.lan uk.lan
+         #@uk @gw
          HostName 192.168.0.251
          User nixcraft
          ProxyCommand  ssh nixcraft@gateway.uk.cyberciti.biz nc %h %p 2> /dev/null
@@ -94,11 +97,11 @@ class StormCliTestCase(unittest.TestCase):
         return out, err, rc
 
     def test_list_command(self):
-        out, err, rc = self.run_cmd('list {0}'.format(self.config_arg))
+        out, err, rc = self.run_cmd('list {0} {1}'.format(self.config_arg, '-t'))
 
         self.assertTrue(out.startswith(b" Listing entries:\n\n"))
 
-        hosts, custom_options = [
+        hosts, custom_options, tags = [
             "aws.apache -> wwwdata@1.2.3.4:22",
             "nas01 -> root@192.168.1.100:22",
             "proxyus -> breakfree@vps1.cyberciti.biz:22",
@@ -111,6 +114,13 @@ class StormCliTestCase(unittest.TestCase):
             "localforward=3128 127.0.0.1:3128",
             "[custom options] identityfile=/nfs/shared/users/nixcraft/keys/server1/id_rsa,/tmp/x.rsa",
             "[custom options] proxycommand=ssh nixcraft@gateway.uk.cyberciti.biz nc %h %p 2> /dev/null",
+        ], [
+            "",
+            "[tags] @private",
+            "",
+            "",
+            "[tags] @private",
+            "[tags] @uk, @gw",
         ]
 
         general_options = {
@@ -130,6 +140,9 @@ class StormCliTestCase(unittest.TestCase):
 
         for custom_option in custom_options:
             self.assertIn(custom_option.encode('ascii'), out)
+
+        for tag in tags:
+            self.assertIn(tag.encode('ascii'), out)
 
         for general_option, value in six.iteritems(general_options):
             self.assertIn("{0}: {1}".format(general_option, value).encode('ascii'), out)
