@@ -146,6 +146,8 @@ you can also use the web ui instead of commandline interface::
     $ storm web
     $ storm web 3333
     $ storm web --debug
+    $ storm web --host 0.0.0.0
 
 .. versionchanged:: 0.7
    *--port* option was removed. *--debug* option is now defaults to ``False``.
+   *--host* option was added.
