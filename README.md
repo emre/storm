@@ -24,7 +24,7 @@ On Ubuntu 16.04, you need install libssl-dev and libffi-dev (sudo apt-get instal
 #### installation
 
 ```bash
-$ [sudo] pip install stormssh
+$ pip install --user stormssh
 ```
 or if you like 90s:
 ```bash
