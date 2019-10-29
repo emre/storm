@@ -20,12 +20,12 @@ setup(
             'storm = storm.__main__:main',
         ],
     },
-    install_requires=list(filter(None, [
-        "paramiko",
-        "termcolor",
-        "flask",
-        "six",
-    ])),
+    install_requires=[
+        "Flask>=0.10.1",
+        "paramiko>=1.13.0",
+        "six>=1.12.0",
+        "termcolor>-1.1.0",
+    ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

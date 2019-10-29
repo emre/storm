@@ -1,4 +1,0 @@
-paramiko==1.13.0
-termcolor
-Flask==0.10.1
-six
