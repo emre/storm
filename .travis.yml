@@ -11,6 +11,6 @@ install:
   - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi
   - pip install -e .
   - pip install -r requirements-dev.txt
-script: nosetests -v
+script: pytest -x tests.py
 notifications:
   email: false
