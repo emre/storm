@@ -20,13 +20,12 @@ setup(
             'storm = storm.__main__:main',
         ],
     },
-    install_requires=list(filter(None, [
-        "paramiko",
-        "termcolor",
-        "flask",
-        "argparse" if sys.version_info[:2] < (2, 7) else None,
-        "six",
-    ])),
+    install_requires=[
+        "Flask>=0.10.1",
+        "paramiko>=1.13.0",
+        "six>=1.12.0",
+        "termcolor>-1.1.0",
+    ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
@@ -35,9 +34,10 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'License :: OSI Approved :: MIT License',
         'Topic :: System :: Systems Administration',
     ]
