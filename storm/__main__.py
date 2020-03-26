@@ -11,7 +11,8 @@ except ImportError:
 
 from storm import Storm
 from storm.parsers.ssh_uri_parser import parse
-from storm.utils import (get_formatted_message, colored)
+from storm.parsers.ssh_config_parser import lower_config_map
+from storm.utils import get_formatted_message, colored
 from storm.kommandr import *
 from storm.defaults import get_default
 from storm import __version__
@@ -227,7 +228,8 @@ def list(config=None):
                             if isinstance(value, collections.Sequence):
                                 if isinstance(value, builtins.list):
                                     value = ",".join(value)
-                                    
+
+                            key = lower_config_map.get(key.lower(), key)
                             result += "{0}={1} ".format(key, value)
                     if extra:
                         result = result[0:-1]
@@ -238,6 +240,7 @@ def list(config=None):
                         "   (*) General options: \n", "green", attrs=["bold",]
                     )
                     for key, value in six.iteritems(host.get("options")):
+                        key = lower_config_map.get(key.lower(), key)
                         if isinstance(value, type([])):
                             result_stack += "\t  {0}: ".format(
                                 colored(key, "magenta")
