@@ -1,0 +1,6 @@
+setuptools>18.5,<46;python_version<'3.5'
+zipp<2;python_version<'3.6'
+coverage==3.7.1;python_version<'3.8'
+coverage>=5.0.0;python_version>='3.8'
+tox<=3.14.0;python_version<'3.4'
+tox>3.14.0;python_version>='3.4'

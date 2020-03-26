@@ -82,6 +82,104 @@ class StormConfig(SSHConfig):
         self._config.append(host)
 
 
+# Current as of OpenSSH 8.2
+# Source: https://man.openbsd.org/ssh_config
+config_options = [
+    "Host",
+    "Match",
+    "AddKeysToAgent",
+    "AddressFamily",
+    "BatchMode",
+    "BindAddress",
+    "BindInterface",
+    "CanonicalDomains",
+    "CanonicalizeFallbackLocal",
+    "CanonicalizeHostname",
+    "CanonicalizeMaxDots",
+    "CanonicalizePermittedCNAMEs",
+    "CASignatureAlgorithms",
+    "CertificateFile",
+    "ChallengeResponseAuthentication",
+    "CheckHostIP",
+    "Ciphers",
+    "ClearAllForwardings",
+    "Compression",
+    "ConnectionAttempts",
+    "ConnectTimeout",
+    "ControlMaster",
+    "ControlPath",
+    "ControlPersist",
+    "DynamicForward",
+    "EnableSSHKeysign",
+    "EscapeChar",
+    "ExitOnForwardFailure",
+    "FingerprintHash",
+    "ForwardAgent",
+    "ForwardX11",
+    "ForwardX11Timeout",
+    "ForwardX11Trusted",
+    "GatewayPorts",
+    "GlobalKnownHostsFile",
+    "GSSAPIAuthentication",
+    "GSSAPIDelegateCredentials",
+    "HashKnownHosts",
+    "HostbasedAuthentication",
+    "HostbasedKeyTypes",
+    "HostKeyAlgorithms",
+    "HostKeyAlias",
+    "Hostname",
+    "IdentitiesOnly",
+    "IdentityAgent",
+    "IdentityFile",
+    "IgnoreUnknown",
+    "Include",
+    "IPQoS",
+    "KbdInteractiveAuthentication",
+    "KbdInteractiveDevices",
+    "KexAlgorithms",
+    "LocalCommand",
+    "LocalForward",
+    "LogLevel",
+    "MACs",
+    "NoHostAuthenticationForLocalhost",
+    "NumberOfPasswordPrompts",
+    "PasswordAuthentication",
+    "PermitLocalCommand",
+    "Port",
+    "PreferredAuthentications",
+    "ProxyCommand",
+    "ProxyJump",
+    "ProxyUseFdpass",
+    "PubkeyAcceptedKeyTypes",
+    "PubkeyAuthentication",
+    "RekeyLimit",
+    "RemoteCommand",
+    "RemoteForward",
+    "RequestTTY",
+    "RevokedHostKeys",
+    "SecurityKeyProvider",
+    "SendEnv",
+    "ServerAliveCountMax",
+    "ServerAliveInterval",
+    "SetEnv",
+    "StreamLocalBindMask",
+    "StreamLocalBindUnlink",
+    "StrictHostKeyChecking",
+    "SyslogFacility",
+    "TCPKeepAlive",
+    "Tunnel",
+    "TunnelDevice",
+    "UpdateHostKeys",
+    "User",
+    "UserKnownHostsFile",
+    "VerifyHostKeyDNS",
+    "VisualHostKey",
+    "XAuthLocation",
+]
+
+lower_config_map = {x.lower(): x for x in config_options}
+
+
 class ConfigParser(object):
     """
     Config parser for ~/.ssh/config files.
@@ -214,6 +312,7 @@ class ConfigParser(object):
                 continue
             host_item_content = "Host {0}\n".format(host_item.get("host"))
             for key, value in six.iteritems(host_item.get("options")):
+                key = lower_config_map.get(key.lower(), key)
                 if isinstance(value, list):
                     sub_content = ""
                     for value_ in value:

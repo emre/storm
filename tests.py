@@ -105,24 +105,24 @@ class StormCliTestCase(unittest.TestCase):
             "server1 -> nixcraft@server1.cyberciti.biz:4242",
             "uk.gw.lan uk.lan -> nixcraft@192.168.0.251:22",
         ], [
-            "[custom options] identityfile=~/.ssh/aws.apache.key",
-            "[custom options] identityfile=~/.ssh/nas01.key",
-            "identityfile=~/.ssh/vps1.cyberciti.biz.key",
-            "localforward=3128 127.0.0.1:3128",
-            "[custom options] identityfile=/nfs/shared/users/nixcraft/keys/server1/id_rsa,/tmp/x.rsa",
-            "[custom options] proxycommand=ssh nixcraft@gateway.uk.cyberciti.biz nc %h %p 2> /dev/null",
+            "[custom options] IdentityFile=~/.ssh/aws.apache.key",
+            "[custom options] IdentityFile=~/.ssh/nas01.key",
+            "IdentityFile=~/.ssh/vps1.cyberciti.biz.key",
+            "LocalForward=3128 127.0.0.1:3128",
+            "[custom options] IdentityFile=/nfs/shared/users/nixcraft/keys/server1/id_rsa,/tmp/x.rsa",
+            "[custom options] ProxyCommand=ssh nixcraft@gateway.uk.cyberciti.biz nc %h %p 2> /dev/null",
         ]
 
         general_options = {
-            "forwardx11": "no",
+            "ForwardX11": "no",
             "protocol": "2",
-            "user": "nixcraft",
-            "forwardagent": "no",
-            "forwardx11trusted": "yes",
-            "serveralivecountmax": "30",
-            "serveraliveinterval": "60",
-            "port": "22",
-            "localforward": "3128 127.0.0.1:3128, 3129 127.0.0.1:3128",
+            "User": "nixcraft",
+            "ForwardAgent": "no",
+            "ForwardX11Trusted": "yes",
+            "ServerAliveCountMax": "30",
+            "ServerAliveInterval": "60",
+            "Port": "22",
+            "LocalForward": "3128 127.0.0.1:3128, 3129 127.0.0.1:3128",
         }
 
         for host in hosts:
@@ -175,9 +175,9 @@ class StormCliTestCase(unittest.TestCase):
         with open(self.config_file) as f:
             # check that property is really flushed out to the config?
             content = f.read().encode('ascii')
-            self.assertIn(b'identityfile "/tmp/idfilecheck.rsa"', content)
-            self.assertIn(b"stricthostkeychecking yes", content)
-            self.assertIn(b"userknownhostsfile /dev/advanced_test", content)
+            self.assertIn(b'IdentityFile "/tmp/idfilecheck.rsa"', content)
+            self.assertIn(b"StrictHostKeyChecking yes", content)
+            self.assertIn(b"UserKnownHostsFile /dev/advanced_test", content)
 
     def test_add_with_idfile(self):
         out, err, rc = self.run_cmd('add postgresql-server postgres@192.168.1.1 {0} {1}'.format(
@@ -190,7 +190,7 @@ class StormCliTestCase(unittest.TestCase):
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
-            self.assertIn(b'identityfile "/tmp/idfileonlycheck.rsa"', content)
+            self.assertIn(b'IdentityFile "/tmp/idfileonlycheck.rsa"', content)
 
     def test_basic_edit(self):
         out, err, rc = self.run_cmd('edit aws.apache basic_edit_check@10.20.30.40 {0}'.format(self.config_arg))
@@ -225,8 +225,8 @@ class StormCliTestCase(unittest.TestCase):
 
         with open(self.config_file) as f:
             content = f.read().encode('ascii')
-            self.assertIn(b"user daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
-            self.assertIn(b"port 42000", content)
+            self.assertIn(b"User daghan", content)  # see daghan: http://instagram.com/p/lfPMW_qVja
+            self.assertIn(b"Port 42000", content)
 
     def test_update_regex(self):
 
@@ -336,7 +336,7 @@ class StormTests(unittest.TestCase):
     def test_config_dump(self):
         self.storm.ssh_config.write_to_ssh_config()
 
-        for search_str in ("hostname 1.1.1.1", "Host netscaler", "Host *"):
+        for search_str in ("Hostname 1.1.1.1", "Host netscaler", "Host *"):
             with open('/tmp/ssh_config') as fd:
                 self.assertIn(search_str, fd.read())
 
@@ -360,11 +360,11 @@ class StormTests(unittest.TestCase):
 
         has_yahoo = False
         for item in self.storm.ssh_config.config_data:
-            if item.get("host") == 'yahoo': 
+            if item.get("host") == 'yahoo':
                 has_yahoo = True
                 break
 
-        self.assertEqual(True, has_yahoo) 
+        self.assertEqual(True, has_yahoo)
         self.assertEqual(item.get("options").get("port"), '24')
         self.assertEqual(item.get("options").get("identityfile"), '"/tmp/tmp.pub"')
         self.assertEqual(item.get("options").get("user"), 'ops')
