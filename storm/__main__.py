@@ -17,6 +17,10 @@ from storm.defaults import get_default
 from storm import __version__
 
 import sys
+try:
+    import collections.abc as collections_abc
+except ImportError:
+    import collections as collections_abc
 
 def get_storm_instance(config_file=None):
     return Storm(config_file)
@@ -224,7 +228,7 @@ def list(config=None):
                                 result += " {0}".format(custom_options)
                             extra = True
 
-                            if isinstance(value, collections.Sequence):
+                            if isinstance(value, collections_abc.Sequence):
                                 if isinstance(value, builtins.list):
                                     value = ",".join(value)
                                     
