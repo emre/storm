@@ -13,7 +13,10 @@ try:
     from itertools import izip_longest
 except ImportError:
     from itertools import zip_longest as izip_longest
-import collections
+try:
+    import collections.abc as collections_abc
+except ImportError:
+    import collections as collections_abc
 
 import six
 
@@ -95,7 +98,7 @@ class prog(object):
 
     def command(self, *args, **kwargs):
         """Convenient decorator simply creates corresponding command"""
-        if len(args) == 1 and isinstance(args[0], collections.Callable):
+        if len(args) == 1 and isinstance(args[0], collections_abc.Callable):
             return self._generate_command(args[0])
         else:
             def _command(func):
