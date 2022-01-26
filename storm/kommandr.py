@@ -20,6 +20,8 @@ import six
 from .parsers.storm_config_parser import get_storm_config
 from . import __version__
 
+# Function removed in 3.10 see https://docs.python.org/3/whatsnew/3.10.html#removed
+collections.Callable = collections.abc.Callable
 
 class AliasedSubParsersAction(argparse._SubParsersAction):
 
