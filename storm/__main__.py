@@ -224,7 +224,7 @@ def list(config=None):
                                 result += " {0}".format(custom_options)
                             extra = True
 
-                            if isinstance(value, collections.Sequence):
+                            if isinstance(value, collections.abc.Sequence):
                                 if isinstance(value, builtins.list):
                                     value = ",".join(value)
                                     
